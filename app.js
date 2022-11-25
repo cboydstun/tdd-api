@@ -1,9 +1,14 @@
 const express = require("express");
 const app = express();
 
-app.get("/", (req, res) => {
-  //send a string as a response that says "Hello World!" in the body of the response
-  res.json({ message: "Hello World!" });
+//health check route
+app.get("/health", (req, res) => {
+  res.json({ status: "✅" });
+});
+
+//create 404 route
+app.use((req, res) => {
+  res.status(404).json({ error: "404 unknown route" });
 });
 
 
