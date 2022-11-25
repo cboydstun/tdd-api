@@ -2,6 +2,19 @@
 const request = require("supertest");
 const app = require("./app");
 
+//test the "hello world" route
+describe("GET /", () => {
+    it("should return a 200 status code", async () => {
+        const response = await request(app).get("/");
+        expect(response.statusCode).toBe(200);
+    });
+    it("should return a JSON object from the GET route", async () => {
+        const response = await request(app).get("/");
+        expect(response.body).toEqual({ message: "Hello World!" });
+    });
+});
+
+
 //test the health path
 describe("GET /health", () => {
     test("It should respond with a 200 status code", async () => {
@@ -44,6 +57,6 @@ describe("any page that returns a 404", () => {
 
     test("It should return an error property with the value 'Not found'", async () => {
         const response = await request(app).get("/foo");
-        expect(response.body.error).toBe("Not found");
+        expect(response.body.error).toBe("404 unknown route");
     });
 });
