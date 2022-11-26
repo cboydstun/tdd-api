@@ -8,7 +8,7 @@ export default function App() {
 
     //useEffect hook to fetch records
     useEffect(() => {
-        fetch('/api/listings')
+        fetch('/api/v1/listings')
             .then(res => res.json())
             .then(listings => setListings(listings));
     }, []);
