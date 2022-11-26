@@ -4,59 +4,44 @@ const app = require("./app");
 
 //test the "hello world" route
 describe("GET /", () => {
-    it("should return a 200 status code", async () => {
+    test("should return a 200 status code", async () => {
         const response = await request(app).get("/");
         expect(response.statusCode).toBe(200);
-    });
-    it("should return a JSON object from the GET route", async () => {
-        const response = await request(app).get("/");
         expect(response.body).toEqual({ message: "Hello World!" });
     });
 });
 
-
-//test the health path
-describe("GET /health", () => {
-    test("It should respond with a 200 status code", async () => {
-        const response = await request(app).get("/health");
-        expect(response.statusCode).toBe(200);
-    });
-
-    test("It should return an object", async () => {
-        const response = await request(app).get("/health");
-        expect(typeof response.body).toBe("object");
-    });
-
-    test("It should return a status property", async () => {
-        const response = await request(app).get("/health");
-        expect(response.body.status).toBeDefined();
-    });
-
-    test("It should return a status property with the value 'UP'", async () => {
-        const response = await request(app).get("/health");
-        expect(response.body.status).toBe("✅");
+// TEST - @ GET /api/health - should return a 200 status code and a JSON object with a status property with the value '"✅'
+describe("GET /api/health", () => {
+    test("should return a 200 status code", async () => {
+    const response = await request(app).get("/api/health");
+    expect(response.statusCode).toBe(200);
+    expect(typeof response.body).toBe("object");
+    expect(response.body.status).toBeDefined();
+    expect(response.body.status).toBe("✅");
     });
 });
 
-//test the 404 path
+// TEST - @ any unknown route - should return a 404 status code and a JSON object with an error property with the value '"404 unknown route'
 describe("any page that returns a 404", () => {
-    test("It should respond with a 404 status code", async () => {
+    test("any unknown route", async () => {
         const response = await request(app).get("/foo");
+        //should return a 404 status code
         expect(response.statusCode).toBe(404);
-    });
-
-    test("It should return an object", async () => {
-        const response = await request(app).get("/foo");
+        //should return a JSON object with an error property with the value '"404 unknown route'
         expect(typeof response.body).toBe("object");
-    });
-
-    test("It should return an error property", async () => {
-        const response = await request(app).get("/foo");
         expect(response.body.error).toBeDefined();
-    });
-
-    test("It should return an error property with the value 'Not found'", async () => {
-        const response = await request(app).get("/foo");
         expect(response.body.error).toBe("404 unknown route");
+    });
+});
+
+//error handling for any 500 errors
+describe("any page that returns a 500", () => {
+    test("It should respond with a 500 status code", async () => {
+        const response = await request(app).get("/api/bugsalot");
+        expect(response.statusCode).toBe(500);
+        expect(typeof response.body).toBe("object");
+        expect(response.body.error).toBeDefined();
+        expect(response.body.error).toBe("Something broke!");
     });
 });
