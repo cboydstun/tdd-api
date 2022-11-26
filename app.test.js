@@ -13,12 +13,12 @@ describe("GET /", () => {
 
 // TEST - @ GET /api/health - should return a 200 status code and a JSON object with a status property with the value '"✅'
 describe("GET /api/health", () => {
-    test("should return a 200 status code", async () => {
-    const response = await request(app).get("/api/health");
-    expect(response.statusCode).toBe(200);
-    expect(typeof response.body).toBe("object");
-    expect(response.body.status).toBeDefined();
-    expect(response.body.status).toBe("✅");
+    test("should return a 200 status code with an object including a green checkmark emoji", async () => {
+        const response = await request(app).get("/api/health");
+        expect(response.statusCode).toBe(200);
+        expect(typeof response.body).toBe("object");
+        expect(response.body.status).toBeDefined();
+        expect(response.body.status).toBe("✅");
     });
 });
 
@@ -39,7 +39,8 @@ describe("any page that returns a 404", () => {
 describe("any page that returns a 500", () => {
     test("It should respond with a 500 status code", async () => {
         const response = await request(app).get("/api/bugsalot");
-        expect(response.statusCode).toBe(500);
+        expect(response.statusCode).toBe(500);cccccbbthcclehjbdldgcbhlccjlkelbhnvtdbikghhh
+
         expect(typeof response.body).toBe("object");
         expect(response.body.error).toBeDefined();
         expect(response.body.error).toBe("Something broke!");
