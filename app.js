@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+let bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // define react app as static folder
 const reactBuild = path.join(__dirname, "client", "build");
@@ -11,8 +14,10 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(reactBuild, "index.html"));
 });
 
-// import routes
-app.use(require('./routes/record'));
+// import blog router
+const blogRouter = require("./routes/blogRouter");
+// use blog router
+app.use("/api/v1/blogs", blogRouter);
 
 //health check route
 app.get("/api/health", (req, res) => {

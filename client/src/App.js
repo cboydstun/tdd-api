@@ -1,26 +1,33 @@
 import React from 'react'
-//import state and useEffect hooks
-import { useState, useEffect } from 'react';
+//bring in useEffect and useState
+import { useEffect, useState } from 'react'
 
 export default function App() {
-    //define state for records
-    const [listings, setListings] = useState(null);
+  //define state as data
+  const [data, setData] = useState(null);
 
-    //useEffect hook to fetch records
-    useEffect(() => {
-        fetch('/api/v1/listings')
-            .then(res => res.json())
-            .then(listings => setListings(listings));
-    }, []);
-          
+  //define async function to fetch data from api/v1/blogs
+  const fetchData = async () => {
+    const response = await fetch("/api/v1/blogs");
+    const data = await response.json();
+    setData(data);
+  }
+
+  //call fetchData function
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div>
-        <h1>Listings</h1>
-        {listings && listings.map(listing => (
-            <div key={listing._id}>
-                <h2>{listing._id}</h2>
+        <h1>Blogs</h1>
+        {data && data.map(blog => (
+            <div key={blog.id}>
+                <h2>{blog.title}</h2>
+                <h6>{blog.author}</h6>
+                <p>{blog.content}</p>
             </div>
         ))}
     </div>
-  )
+  );
 }
