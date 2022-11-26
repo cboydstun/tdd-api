@@ -7,7 +7,8 @@ describe("GET /", () => {
     test("should return a 200 status code", async () => {
         const response = await request(app).get("/");
         expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual({ message: "Hello World!" });
+        //should serve up an index.html file
+        expect(response.text).toContain("<!DOCTYPE html>");
     });
 });
 
@@ -39,7 +40,7 @@ describe("any page that returns a 404", () => {
 describe("any page that returns a 500", () => {
     test("It should respond with a 500 status code", async () => {
         const response = await request(app).get("/api/bugsalot");
-        expect(response.statusCode).toBe(500);cccccbbthcclehjbdldgcbhlccjlkelbhnvtdbikghhh
+        expect(response.statusCode).toBe(500);
 
         expect(typeof response.body).toBe("object");
         expect(response.body.error).toBeDefined();

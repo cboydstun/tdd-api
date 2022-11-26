@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 
-// "hello world" route
+// @ GET / - should serve a static public/index.html file
 app.get("/", (req, res) => {
-    res.json({ message: "Hello World!" });
+    res.sendFile(__dirname + "/public/index.html");
 });
 
 //health check route
