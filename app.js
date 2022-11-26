@@ -11,6 +11,9 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(reactBuild, "index.html"));
 });
 
+// import routes
+app.use(require('./routes/record'));
+
 //health check route
 app.get("/api/health", (req, res) => {
   res.json({ status: "✅" });
