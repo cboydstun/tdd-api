@@ -1,7 +1,11 @@
 const express = require("express");
 const app = express();
+
+// import path to grab build folder
 const path = require("path");
-let bodyParser = require("body-parser");
+
+// import bodyparser middleware
+const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
