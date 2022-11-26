@@ -1,9 +1,13 @@
 const express = require("express");
 const app = express();
+const path = require("path");
 
-// @ GET / - should serve a static public/index.html file
+const reactBuild = path.join(__dirname, "client", "build");
+app.use(express.static(reactBuild));
+
+// GET / - should serve up the index.html file
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/public/index.html");
+    res.sendFile(path.join(reactBuild, "index.html"));
 });
 
 //health check route
@@ -18,8 +22,6 @@ app.get("/api/bugsalot", (req, res) => {
 
 //handle errors
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  //if the error is a 500 error
   res.status(500).json({ error: "Something broke!", stack: err.stack});
 });
 

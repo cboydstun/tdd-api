@@ -8,7 +8,11 @@ describe("GET /", () => {
         const response = await request(app).get("/");
         expect(response.statusCode).toBe(200);
         //should serve up an index.html file
-        expect(response.text).toContain("<!DOCTYPE html>");
+        expect(response.text).toContain("<!doctype html>");
+        //should have a title of "React App"
+        expect(response.text).toContain("<title>React App</title>");
+        //should have a div with an id of "root"
+        expect(response.text).toContain('<div id="root"></div>');
     });
 });
 
