@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 
+// define react app as static folder
 const reactBuild = path.join(__dirname, "client", "build");
 app.use(express.static(reactBuild));
 

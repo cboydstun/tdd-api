@@ -2,7 +2,7 @@
 const request = require("supertest");
 const app = require("./app");
 
-//test the "hello world" route
+// @GET / - should serve up the React SPA index.html file
 describe("GET /", () => {
     test("should return a 200 status code", async () => {
         const response = await request(app).get("/");
@@ -16,7 +16,7 @@ describe("GET /", () => {
     });
 });
 
-// TEST - @ GET /api/health - should return a 200 status code and a JSON object with a status property with the value '"✅'
+// @GET /api/health - should return a 200 status code and a JSON object with a status property with the value '"✅'
 describe("GET /api/health", () => {
     test("should return a 200 status code with an object including a green checkmark emoji", async () => {
         const response = await request(app).get("/api/health");
@@ -27,7 +27,7 @@ describe("GET /api/health", () => {
     });
 });
 
-// TEST - @ any unknown route - should return a 404 status code and a JSON object with an error property with the value '"404 unknown route'
+// any unknown route - should return a 404 status code and a JSON object with an error property with the value '"404 unknown route'
 describe("any page that returns a 404", () => {
     test("any unknown route", async () => {
         const response = await request(app).get("/foo");
@@ -40,7 +40,7 @@ describe("any page that returns a 404", () => {
     });
 });
 
-//error handling for any 500 errors
+// error handling for any 500 errors
 describe("any page that returns a 500", () => {
     test("It should respond with a 500 status code", async () => {
         const response = await request(app).get("/api/bugsalot");
