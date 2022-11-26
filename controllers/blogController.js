@@ -5,7 +5,7 @@ const Blog = require('../models/blogSchema');
 const getAllBlogs = async (req, res) => {
     try {
         const blogs = await Blog.find({});
-        res.json(blogs);
+        res.status(200).json(blogs);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -16,7 +16,9 @@ const getBlogById = async (req, res) => {
 
     try {
         const blog = await Blog.findById(req.params.id);
-        res.json(blog);
+        //return status 200 and the blog
+        res.status(200).json(blog);
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -48,7 +50,7 @@ const updateBlog = async (req, res) => {
         blog.content = req.body.content;
         //save the blog
         await blog.save();
-        res.json(blog);
+        res.status(200).json(blog);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -58,7 +60,7 @@ const updateBlog = async (req, res) => {
 const deleteBlog = async (req, res) => {
     try {
         const blog = await Blog.findByIdAndDelete(req.params.id);
-        res.json(blog);
+        res.status(200).json(blog);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
