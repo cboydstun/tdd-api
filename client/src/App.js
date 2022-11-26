@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+//import state and useEffect hooks
+import { useState, useEffect } from 'react';
 
-function App() {
+export default function App() {
+    //define state for records
+    const [listings, setListings] = useState(null);
+
+    //useEffect hook to fetch records
+    useEffect(() => {
+        fetch('/api/listings')
+            .then(res => res.json())
+            .then(listings => setListings(listings));
+    }, []);
+          
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+        <h1>Listings</h1>
+        {listings && listings.map(listing => (
+            <div key={listing._id}>
+                <h2>{listing._id}</h2>
+            </div>
+        ))}
     </div>
-  );
+  )
 }
-
-export default App;
