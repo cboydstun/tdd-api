@@ -9,7 +9,7 @@ const recordRoutes = express.Router();
 const dbo = require('../db/conn');
 
 // This section will help you get a list of all the records.
-recordRoutes.route('/listings').get(async function (_req, res) {
+recordRoutes.route('/api/listings').get(async function (_req, res) {
   const dbConnect = dbo.getDb();
 
   dbConnect
@@ -26,7 +26,7 @@ recordRoutes.route('/listings').get(async function (_req, res) {
 });
 
 // This section will help you create a new record.
-recordRoutes.route('/listings/recordSwipe').post(function (req, res) {
+recordRoutes.route('/api/listings/recordSwipe').post(function (req, res) {
   const dbConnect = dbo.getDb();
   const matchDocument = {
     listing_id: req.body.id,
@@ -48,7 +48,7 @@ recordRoutes.route('/listings/recordSwipe').post(function (req, res) {
 });
 
 // This section will help you update a record by id.
-recordRoutes.route('/listings/updateLike').post(function (req, res) {
+recordRoutes.route('/api/listings/updateLike').post(function (req, res) {
   const dbConnect = dbo.getDb();
   const listingQuery = { _id: req.body.id };
   const updates = {
@@ -71,7 +71,7 @@ recordRoutes.route('/listings/updateLike').post(function (req, res) {
 });
 
 // This section will help you delete a record.
-recordRoutes.route('/listings/delete/:id').delete((req, res) => {
+recordRoutes.route('/api/listings/delete/:id').delete((req, res) => {
   const dbConnect = dbo.getDb();
   const listingQuery = { listing_id: req.body.id };
 
