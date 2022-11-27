@@ -70,28 +70,34 @@ const deleteUser = async (req, res) => {
 const loginUser = async (req, res) => {
     try {
         //must have a email and password
-        if (!req.body.email || !req.body.password) {
-            res.status(400).json({ error: "Please provide an email and password" });
+        if (!req.body.email) {
+            res.status(400).json({ error: "Please provide an email" }
+            );
+        } else if (!req.body.password) {
+            res.status(400).json({ error: "Please provide a password" }
+            );
         } else {
             //find the user
             const user = await User
                 .findOne({ email: req.body.email })
-                .exec();
-            //compare the password
-            const isMatch = await bcrypt.compare(req.body.password, user.password);
-            //if the password is a match
-            if (isMatch) {
-                //create a token
-                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-                //add the token to the user
-                user.token = token;
-                //save the user
-                await user.save();
-                //return the user and the token
-                res.status(200).json({ user, token });
-            } else {
-                res.status(400).json({ error: "Invalid email or password" });
-            }
+
+            //if the user exists
+            user ? (
+                //compare the password
+                bcrypt.compare(req.body.password, user.password, (err, result) => {
+                    //if the password is correct
+                    if (result) {
+                        //create a token
+                        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+                        //return the token
+                        res.status(200).json({ token: token });
+                    } else {
+                        res.status(400).json({ error: "Incorrect password" });
+                    }
+                })
+            ) : (
+                res.status(400).json({ error: "User not found" })
+            );
         }
     } catch (err) {
         res.status(500).json({ error: err.message });
