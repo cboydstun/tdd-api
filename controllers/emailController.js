@@ -22,7 +22,7 @@ const getEmailById = async (req, res) => {
 };
 
 // @POST - /emails - Create a new email
-const createEmail = async (req, res) => {
+const createEmail = async (req, res, next) => {
     try {
         if (!req.body.from || !req.body.subject || !req.body.text) {
             res.status(400).json({ error: "Please provide all required fields" });

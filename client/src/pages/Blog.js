@@ -22,7 +22,7 @@ export default function Blog() {
     <div>
         <h1>Blogs</h1>
         {data && data.map(blog => (
-            <div key={blog.id}>
+            <div key={blog._id}>
                 <h2>{blog.title}</h2>
                 <h6>{blog.author}</h6>
                 <p>{blog.content}</p>
