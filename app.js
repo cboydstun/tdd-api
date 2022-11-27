@@ -7,8 +7,18 @@ const cors = require("cors");
 app.use(cors(
   {origin: "http://localhost:3000", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false},
   {origin: "http://localhost:3001", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false},
-  {origin: "http://localhost:8080", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false},
+  {origin: "http://34.235.15.185:8080/", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false}
 ));
+
+const corsOptions = function(req, res, next){ 
+  res.header('Access-Control-Allow-Origin', '*'); 
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 
+  'Content-Type, Authorization, Content-Length, X-Requested-With');
+   next();
+}
+
+app.use(corsOptions);
 
 // import bodyparser middleware
 const bodyParser = require("body-parser");

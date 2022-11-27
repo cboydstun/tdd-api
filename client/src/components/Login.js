@@ -30,7 +30,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(LOGIN_URL, { email, password });
+            const response = await axios.post(LOGIN_URL, { email, password, origin: window.location.origin });
             setAuth(response.data.token);
             //save the token to local storage
             localStorage.setItem('token', response.data.token);
