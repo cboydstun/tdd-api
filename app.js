@@ -5,7 +5,9 @@ const app = express();
 // import and use CORS to allow cross-origin requests
 const cors = require("cors");
 app.use(cors(
-  {origin: "http://localhost:3001", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false}
+  {origin: "http://localhost:3000", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false},
+  {origin: "http://localhost:3001", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false},
+  {origin: "http://localhost:8080", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false},
 ));
 
 // import bodyparser middleware
