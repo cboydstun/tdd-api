@@ -45,7 +45,6 @@ describe("any page that returns a 500", () => {
     test("It should respond with a 500 status code", async () => {
         const response = await request(app).get("/api/bugsalot");
         expect(response.statusCode).toBe(500);
-
         expect(typeof response.body).toBe("object");
         expect(response.body.error).toBeDefined();
         expect(response.body.error).toBe("Something broke!");

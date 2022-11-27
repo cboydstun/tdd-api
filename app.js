@@ -1,3 +1,4 @@
+// import express and initialize app
 const express = require("express");
 const app = express();
 
@@ -13,14 +14,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const reactBuild = path.join(__dirname, "client", "build");
 app.use(express.static(reactBuild));
 
+// import jwt middleware
+const authMiddleware = require("./middlewares/jwtMiddleware");
+
 // GET / - should serve up the index.html file
 app.get("/", (req, res) => {
     res.sendFile(path.join(reactBuild, "index.html"));
 });
 
-// import blog router
+// import routers
+const userRouter = require("./routes/userRouter");
 const blogRouter = require("./routes/blogRouter");
-// use blog router
+// use routers
+app.use("/api/v1/users", userRouter);
 app.use("/api/v1/blogs", blogRouter);
 
 //health check route
@@ -31,6 +37,11 @@ app.get("/api/health", (req, res) => {
 //buggy route to test the 500 route error handler
 app.get("/api/bugsalot", (req, res) => {
   throw new Error("Buggy route");  
+});
+
+// protected route
+app.get("/api/protected", authMiddleware, (req, res) => {
+  res.json({ message: "You are authorized" });
 });
 
 //handle errors

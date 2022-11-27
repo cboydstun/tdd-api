@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-// import blog controller
 const blogController = require('../controllers/blogController');
 
 // define routes
