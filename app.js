@@ -22,12 +22,10 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(reactBuild, "index.html"));
 });
 
-// import routers
-const userRouter = require("./routes/userRouter");
-const blogRouter = require("./routes/blogRouter");
-// use routers
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/blogs", blogRouter);
+// import routes
+const router = require("./routes/index");
+// use routes
+app.use("/api/v1", router);
 
 //health check route
 app.get("/api/health", (req, res) => {
