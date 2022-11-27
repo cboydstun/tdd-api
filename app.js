@@ -2,13 +2,19 @@
 const express = require("express");
 const app = express();
 
-// import path to grab build folder
-const path = require("path");
+// import and use CORS to allow cross-origin requests
+const cors = require("cors");
+app.use(cors(
+  {origin: "http://localhost:3001", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false}
+));
 
 // import bodyparser middleware
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// import path to grab build folder
+const path = require("path");
 
 // define react app as static folder
 const reactBuild = path.join(__dirname, "client", "build");

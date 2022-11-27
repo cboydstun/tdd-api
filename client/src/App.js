@@ -1,52 +1,58 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
+// import Register from './components/Register';
+import Login from './components/Login';
+import Home from './components/Home';
+import Layout from './components/Layout';
+import Editor from './components/Editor';
+import Admin from './components/Admin';
+import Missing from './components/Missing';
+import Unauthorized from './components/Unauthorized';
+import Lounge from './components/Lounge';
+import LinkPage from './components/LinkPage';
+import RequireAuth from './components/RequireAuth';
+import { Routes, Route } from 'react-router-dom';
+import About from './components/About';
+import Contact from './components/Contact';
+import Blog from './components/Blog';
 
-import TopBar from "./components/TopBar";
+const ROLES = {
+  'User': 2001,
+  'Editor': 1984,
+  'Admin': 5150
+}
 
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Login from "./pages/Login";
-import Blog from "./pages/Blog";
-
-export default function App() {
+function App() {
   return (
-    <div>
-      <Router>
-        <TopBar />
-        <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/contact">
-            <Contact />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/blog">
-            <Blog />
-          </Route>
-          <Route path="/test">
-            <Test />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* public routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="login" element={<Login />} />
+        {/* <Route path="register" element={<Register />} /> */}
+        <Route path="linkpage" element={<LinkPage />} />
+        <Route path="unauthorized" element={<Unauthorized />} />
+        <Route path="about" element={<About />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="blog" element={<Blog />} />
+
+        {/* we want to protect these routes */}
+        <Route element={<RequireAuth allowedRoles={[ROLES.Editor]} />}>
+          <Route path="editor" element={<Editor />} />
+        </Route>
+
+
+        <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+          <Route path="admin" element={<Admin />} />
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
+          <Route path="lounge" element={<Lounge />} />
+        </Route>
+
+        {/* catch all */}
+        <Route path="*" element={<Missing />} />
+      </Route>
+    </Routes>
   );
 }
 
-function Test() {
-  return (
-    <div>
-      <h1>Test</h1>
-    </div>
-  )
-}
+export default App;

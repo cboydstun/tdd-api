@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 // bearer token authentication middleware
 const authMiddleware = (req, res, next) => {
     // get the token from the request header
-    const token = req.header("Authorization");
+    const token = req.headers['Authorization'] = `Bearer ${newAccessToken}`;
     // check if there is a token
     if (!token) {
         res.status(401).json({ error: "Unauthorized: No token provided" });
