@@ -5,9 +5,10 @@ const app = express();
 // import and use CORS to allow cross-origin requests
 const cors = require("cors");
 app.use(cors(
-  {origin: "http://localhost:3000", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false},
+  {origin: "http://127.0.0.1:3000", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false},
   {origin: "http://localhost:3001", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false},
-  {origin: "http://34.235.15.185:8080/", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false}
+  {origin: "http://34.235.15.185:8080/", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false},
+  {origin: "https://www.codingcurricula.com/", credentials: true, optionsSuccessStatus: 200, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", preflightContinue: false},
 ));
 
 const corsOptions = function(req, res, next){ 
@@ -47,7 +48,7 @@ app.use("/api/v1", router);
 
 //health check route
 app.get("/api/health", (req, res) => {
-  res.json({ status: "✅" });
+  res.status(200).json({ status: "✅" });
 });
 
 //buggy route to test the 500 route error handler
