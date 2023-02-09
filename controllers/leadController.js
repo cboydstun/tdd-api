@@ -39,8 +39,17 @@ const createLead = async (req, res, next) => {
             let mailOptions = {
                 from: req.body.email,
                 to: process.env.EMAIL,
-                subject: "New Lead",
-                text: `Name: ${req.body.name}, Email: ${req.body.email}, Phone: ${req.body.phone}, Address: ${req.body.address}, Zip Code: ${req.body.zipCode}`
+                subject: `New Bounce Lead ${req.body.name} for ${req.body.date}`,
+                text:
+                    `
+                Name: ${req.body.name}
+                Email: ${req.body.email}
+                Phone: ${req.body.phone}
+                Choice: ${req.body.choices}
+                Address: ${req.body.address}
+                Zip Code: ${req.body.zipCode}
+                Message: ${req.body.message}
+                `
             };
 
             transporter.sendMail(mailOptions, (err, data) => {
