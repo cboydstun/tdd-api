@@ -1,14 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
+const authMiddleware = require("../middlewares/jwtMiddleware");
+
 const emailController = require("../controllers/emailController");
 
 // define data routes
-router.get('/', emailController.getAllEmails);
-router.get('/:id', emailController.getEmailById);
-router.post('/', emailController.createEmail);
-router.put('/:id', emailController.updateEmail);
-router.delete('/:id', emailController.deleteEmail);
+router.get('/', authMiddleware, emailController.getAllEmails);
+router.get('/:id', authMiddleware, emailController.getEmailById);
+router.post('/', emailController.createEmail); // PUBLIC
+router.put('/:id', authMiddleware, emailController.updateEmail);
+router.delete('/:id', authMiddleware, emailController.deleteEmail);
 
 // export router
 module.exports = router;

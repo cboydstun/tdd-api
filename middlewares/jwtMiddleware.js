@@ -1,26 +1,26 @@
+// Node.js and Express.js JWT middleware:
+
 require("dotenv").config();
 const jwt = require('jsonwebtoken')
 
 // bearer token authentication middleware
 const authMiddleware = (req, res, next) => {
-    // get the token from the request header
-    const token = req.header('Authorization')?.split(' ')[1];
-    // check if there is a token
+    const token = req.headers.authorization;
     if (!token) {
-        res.status(401).json({ error: "Unauthorized: No token provided" });
-    } else {
-        // verify the token
-        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-            // if there is an error
-            if (err) {
-                res.status(401).json({ error: "Unauthorized: Invalid token" });
-            } else {
-                // if the token is valid
-                req.user = decoded;
-                next();
-            }
+        return res.status(401).json({
+            error: 'Unauthorized, Token not provided'
         });
     }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(403).json({
+                error: 'Unauthorized, Token invalid'
+            });
+        }
+        req.decoded = decoded;
+        next();
+    });
 };
- 
+
 module.exports = authMiddleware;

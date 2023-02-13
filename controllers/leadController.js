@@ -1,6 +1,14 @@
 const Lead = require("../models/leadSchema");
 const nodemailer = require('nodemailer');
 
+const { formatDate } = require("../utils/formatDate");
+
+require("dotenv").config();
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const twilioClient = require("twilio")(accountSid, authToken);
+
 // @GET - /leads - Get all leads
 const getAllLeads = async (req, res) => {
     try {
@@ -21,7 +29,6 @@ const getLeadById = async (req, res) => {
     }
 };
 
-
 // @POST - /leads - Create a new lead - require name, email, phone, address, zipCode
 const createLead = async (req, res, next) => {
     try {
@@ -39,9 +46,10 @@ const createLead = async (req, res, next) => {
             let mailOptions = {
                 from: req.body.email,
                 to: process.env.EMAIL,
-                subject: `New Bounce Lead ${req.body.name} for ${req.body.date}`,
+                subject: `New Bounce Lead ${req.body.name.toUpperCase()} for ${formatDate(req.body.date)}`,
                 text:
                     `
+                Incoming bounce house lead from ${req.body.name.toUpperCase()} for ${formatDate(req.body.date)}.
                 Name: ${req.body.name}
                 Email: ${req.body.email}
                 Phone: ${req.body.phone}
@@ -57,6 +65,15 @@ const createLead = async (req, res, next) => {
                     return res.status(500).json({ error: err.message });
                 }
             });
+
+            twilioClient.messages
+                .create({
+                    body: `Your ${req.body.choices.toUpperCase()} bounce house reservation for ${formatDate(req.body.date)} has been received. We will contact you shortly. Thank you for choosing SATX Bounce!`,
+                    from: "+18449773588",
+                    to: req.body.phone
+                })
+                .then(message => console.log(message.sid));
+
             const lead = await Lead.create(req.body);
             res.status(201).json(lead);
         }
