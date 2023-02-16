@@ -12,7 +12,6 @@ export default function Routes() {
     return (
         <div>
             <Switch>
-
                 <Route path="/home">
                     <Home />
                 </Route>

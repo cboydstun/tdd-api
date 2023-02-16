@@ -25,7 +25,7 @@ const LoginForm = (props) => {
   //POST request
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch('http://localhost:8080/api/v1/users/login', {
+    fetch('https://rockettestserver.xyz/api/v1/users/login', {
       method: 'POST',
       body: JSON.stringify(formInfo),
       headers: {

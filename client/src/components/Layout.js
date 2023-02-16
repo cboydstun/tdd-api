@@ -4,7 +4,7 @@ import Sidebar from './Sidebar'
 import Dashboard from './Dashboard'
 
 export default function Layout(props) {
-    console.log(props)
+    // console.log("Layout component props:", props)
 
   return (
     <div>

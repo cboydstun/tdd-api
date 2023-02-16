@@ -6,6 +6,14 @@ const app = express();
 const cors = require("cors");
 app.use(cors("*"));
 
+// import and use morgan to log requests
+const morgan = require("morgan");
+app.use(morgan("dev"));
+
+// import and use helmet to secure headers
+const helmet = require("helmet");
+app.use(helmet());
+
 // import bodyparser middleware
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());

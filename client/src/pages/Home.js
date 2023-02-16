@@ -8,6 +8,7 @@ export default function Home() {
   const history = useHistory()
   // must have a token to access this page
   const token = localStorage.getItem('token')
+
   if (!token) {
     history.push('/')
   }

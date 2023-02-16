@@ -1,6 +1,6 @@
-import { Route, Switch, Link } from 'react-router-dom';
-
 import Routes from './utils/Routes'
+
+import './App.css';
 
 function App() {
 
@@ -15,14 +15,6 @@ function App() {
     <div className="App">
       <nav>
         <ul>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-
-          <li>
-            <Link to="/home">Home</Link>
-          </li>
-
           <li>
             <button onClick={logout}>Logout</button>
           </li>
