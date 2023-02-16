@@ -6,6 +6,19 @@ const app = express();
 const cors = require("cors");
 app.use(cors("*"));
 
+// cors options
+const corsOptions = {
+  origin: "https://www.codingcurricula.com",
+  optionsSuccessStatus: 200,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  credentials: true,
+  allowedHeaders: "Content-Type, Authorization, X-Requested-With",
+  exposedHeaders: "Content-Range, X-Content-Range",
+};
+
+app.use(cors(corsOptions));
+
 // import and use morgan to log requests
 const morgan = require("morgan");
 app.use(morgan("dev"));
