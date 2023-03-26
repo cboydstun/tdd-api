@@ -13,8 +13,8 @@ router.post('/', userController.createUser); // PUBLIC
 router.put('/:id', authMiddleware, userController.updateUser);
 router.delete('/:id', authMiddleware, userController.deleteUser);
 
-// define login route - PUBLIC
-router.post('/login', userController.loginUser);
+// define login route
+router.post('/login', userController.loginUser); // PUBLIC
 
 // export router
 module.exports = router;

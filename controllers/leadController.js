@@ -102,11 +102,69 @@ const deleteLead = async (req, res) => {
     }
 };
 
+// @GET - get all leads by size - /leads/:size
+const getLeadsBySize = async (req, res) => {
+    try {
+        const leads = await Lead.find({ choices: req.params.size });
+        res.status(200).json(leads);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// @GET - get all leads by date - /leads/:date
+const getLeadsByDate = async (req, res) => {
+    try {
+        const date = new Date(req.params.date);
+
+        const leads = await Lead.find({ date: date });
+        res.status(200).json(leads);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// @GET - get all leads by size and date - /leads/available/:size?date
+const getLeadsBySizeAndDate = async (req, res) => {
+    try {
+        const date = new Date(req.query.date);
+        const leads = await Lead.find({ choices: req.params.size });
+        const filteredLeads = leads.filter((lead) => {
+            const leadDate = new Date(lead.date);
+            return leadDate.getTime() === date.getTime();
+        });
+        res.status(200).json(filteredLeads);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// @GET - check if leads by size and date are available - /leads/available/:size
+const checkLeadsAvailability = async (req, res) => {
+    try {
+        const date = new Date(req.query.date);
+        const leads = await Lead.find({ choices: req.params.size }).select('-_id -name -email -phone');
+        const filteredLeads = leads.filter((lead) => {
+            const leadDate = new Date(lead.date);
+            return leadDate.getTime() === date.getTime();
+        });
+        const exists = filteredLeads.length > 0;
+        res.status(200).json({ exists });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 module.exports = {
     getAllLeads,
     getLeadById,
     createLead,
     updateLead,
-    deleteLead
+    deleteLead,
+    getLeadsBySizeAndDate,
+    getLeadsBySize,
+    getLeadsByDate,
+    getLeadsBySizeAndDate,
+    checkLeadsAvailability
 };
 

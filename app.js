@@ -8,7 +8,7 @@ app.use(cors("*"));
 
 // cors options
 const corsOptions = {
-  origin: "https://www.codingcurricula.com",
+  origin: "*",
   optionsSuccessStatus: 200,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   preflightContinue: false,
@@ -36,21 +36,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // import jwt middleware
 const authMiddleware = require("./middlewares/jwtMiddleware");
 
-// // import path to grab build folder
-// const path = require("path");
-
-// // define react app as static folder
-// const reactBuild = path.join(__dirname, "client", "build");
-// app.use(express.static(reactBuild));
-
-
-// GET / - should serve up the index.html file
-// app.get("/", (req, res) => {
-//     res.sendFile(path.join(reactBuild, "index.html"));
-// });
-
 // import routes
 const router = require("./routes/index");
+
 // use routes
 app.use("/api/v1", router);
 
