@@ -33,22 +33,33 @@ const getLeadById = async (req, res) => {
 const createLead = async (req, res, next) => {
     try {
         if (!req.body.name || !req.body.email || !req.body.phone || !req.body.address || !req.body.zipCode) {
-            res.status(400).json({ error: "Please provide all required fields" });
-        } else {
-            let transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: process.env.EMAIL,
-                    pass: process.env.PASSWORD
-                }
-            });
+            throw new Error("Please provide all required fields");
+        }
 
-            let mailOptions = {
-                from: req.body.email,
-                to: process.env.EMAIL,
-                subject: `New Bounce Lead ${req.body.name.toUpperCase()} for ${formatDate(req.body.date)}`,
-                text:
-                    `
+        // check for lead by size and date
+        const existingLead = await Lead.findOne({
+            date: req.body.date,
+            choices: req.body.choices
+        });
+
+        if (existingLead) {
+            throw new Error("There is already a lead for this date and size");
+        }
+
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD
+            }
+        });
+
+        let mailOptions = {
+            from: req.body.email,
+            to: process.env.EMAIL,
+            subject: `New Bounce Lead ${req.body.name.toUpperCase()} for ${formatDate(req.body.date)}`,
+            text:
+                `
                 Incoming bounce house lead from ${req.body.name.toUpperCase()} for ${formatDate(req.body.date)}.
                 Name: ${req.body.name}
                 Email: ${req.body.email}
@@ -58,25 +69,25 @@ const createLead = async (req, res, next) => {
                 Zip Code: ${req.body.zipCode}
                 Message: ${req.body.message}
                 `
-            };
+        };
 
-            transporter.sendMail(mailOptions, (err, data) => {
-                if (err) {
-                    return res.status(500).json({ error: err.message });
-                }
-            });
+        transporter.sendMail(mailOptions, (err, data) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+        });
 
-            twilioClient.messages
-                .create({
-                    body: `Your ${req.body.choices.toUpperCase()} bounce house reservation for ${formatDate(req.body.date)} has been received. We will contact you shortly. Thank you for choosing SATX Bounce!`,
-                    from: "+18449773588",
-                    to: req.body.phone
-                })
-                .then(message => console.log(message.sid));
+        twilioClient.messages
+            .create({
+                body: `Your ${req.body.choices.toUpperCase()} bounce house reservation for ${formatDate(req.body.date)} has been received. We will contact you shortly. Thank you for choosing SATX Bounce!`,
+                from: "+18449773588",
+                to: req.body.phone
+            })
+            .then(message => console.log(message.sid));
 
-            const lead = await Lead.create(req.body);
-            res.status(201).json(lead);
-        }
+        const lead = await Lead.create(req.body);
+        res.status(201).json(lead);
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

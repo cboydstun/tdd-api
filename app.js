@@ -14,17 +14,13 @@ const cors = require("cors");
 
 // cors options
 const corsOptions = {
-  origin: "https://www.satxbounce.com",
-  optionsSuccessStatus: 200,
-  methods: "GET,POST",
-  preflightContinue: false,
-  credentials: true,
-  allowedHeaders: "Content-Type, Authorization, X-Requested-With",
-  exposedHeaders: "Content-Range, X-Content-Range",
-  
+  origin: "http://satxbounce.com",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
 app.use(cors(corsOptions));
+
+
 
 // import and use helmet to secure headers
 const helmet = require("helmet");
