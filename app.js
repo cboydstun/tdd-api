@@ -2,15 +2,21 @@
 const express = require("express");
 const app = express();
 
+// import and use morgan to log requests
+const morganMiddleware = require("./middlewares/morganMiddleware");
+const logger = require("./utils/logger");
+app.use(morganMiddleware);
+
+
+
 // import and use CORS to allow cross-origin requests
 const cors = require("cors");
-app.use(cors("*"));
 
 // cors options
 const corsOptions = {
-  origin: "*",
+  origin: "https://www.satxbounce.com",
   optionsSuccessStatus: 200,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  methods: "GET,POST",
   preflightContinue: false,
   credentials: true,
   allowedHeaders: "Content-Type, Authorization, X-Requested-With",
@@ -20,17 +26,44 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// import and use morgan to log requests
-const morgan = require("morgan");
-app.use(morgan("dev"));
-
 // import and use helmet to secure headers
 const helmet = require("helmet");
 app.use(helmet());
 
+// too busy
+const tooBusy = require("toobusy-js");
+app.use((req, res, next) => {
+  if (tooBusy()) {
+    res.status(503).send("Server is too busy right now, try again later.");
+  } else {
+    next();
+  }
+});
+
+// express-rate-limit
+const rateLimit = require("express-rate-limit");
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try again after 15 minutes",
+});
+app.use(limiter);
+
+// xss-clean
+const xss = require("xss-clean");
+app.use(xss());
+
+// hsts
+const hsts = require("hsts");
+app.use(hsts({ maxAge: 15552000 }));
+
+// compression
+const compression = require("compression");
+app.use(compression());
+
 // import bodyparser middleware
 const bodyParser = require("body-parser");
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50kb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // import jwt middleware
@@ -44,6 +77,7 @@ app.use("/api/v1", router);
 
 //health check route
 app.get("/api/health", (req, res) => {
+  logger.info("Health check...");
   res.status(200).json({ status: "✅" });
 });
 
