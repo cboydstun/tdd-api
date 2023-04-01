@@ -9,6 +9,8 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioClient = require("twilio")(accountSid, authToken);
 
+const timeZone = 'America/Chicago'; // or whatever time zone is used by the API
+
 // @GET - /leads - Get all leads
 const getAllLeads = async (req, res) => {
     try {
@@ -36,6 +38,8 @@ const createLead = async (req, res, next) => {
             throw new Error("Please provide all required fields");
         }
 
+        console.log(req.body.date);
+
         // check for lead by size and date
         const existingLead = await Lead.findOne({
             date: req.body.date,
@@ -54,13 +58,14 @@ const createLead = async (req, res, next) => {
             }
         });
 
+
         let mailOptions = {
             from: req.body.email,
             to: process.env.EMAIL,
-            subject: `New Bounce Lead ${req.body.name.toUpperCase()} for ${formatDate(req.body.date)}`,
+            subject: `New Bounce Lead ${req.body.name.toUpperCase()} for ${req.body.date}`,
             text:
                 `
-                Incoming bounce house lead from ${req.body.name.toUpperCase()} for ${formatDate(req.body.date)}.
+                Incoming bounce house lead from ${req.body.name.toUpperCase()} for ${req.body.date}.
                 Name: ${req.body.name}
                 Email: ${req.body.email}
                 Phone: ${req.body.phone}
@@ -79,7 +84,7 @@ const createLead = async (req, res, next) => {
 
         twilioClient.messages
             .create({
-                body: `Your ${req.body.choices.toUpperCase()} bounce house reservation for ${formatDate(req.body.date)} has been received. We will contact you shortly. Thank you for choosing SATX Bounce!`,
+                body: `Your ${req.body.choices.toUpperCase()} bounce house reservation for ${req.body.date} has been received. We will contact you shortly. Thank you for choosing SATX Bounce!`,
                 from: "+18449773588",
                 to: req.body.phone
             })

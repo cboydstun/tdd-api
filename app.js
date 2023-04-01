@@ -14,7 +14,7 @@ const cors = require("cors");
 
 // cors options
 const corsOptions = {
-  origin: "http://satxbounce.com",
+  origin: "*",
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
