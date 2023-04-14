@@ -20,8 +20,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
-
 // import and use helmet to secure headers
 const helmet = require("helmet");
 app.use(helmet());
