@@ -7,8 +7,6 @@ const morganMiddleware = require("./middlewares/morganMiddleware");
 const logger = require("./utils/logger");
 app.use(morganMiddleware);
 
-
-
 // import and use CORS to allow cross-origin requests
 const cors = require("cors");
 
