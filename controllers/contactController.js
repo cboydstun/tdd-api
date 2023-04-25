@@ -27,16 +27,17 @@ const getContactById = async (req, res) => {
 // Schema fields:
 // 1. bouncer: Required String, represents the bouncer name
 // 2. email: Required String, represents the email address, validated with a regex pattern
-// 3. phone: Optional String, represents the phone number, validated with a regex pattern
-// 4. tablesChairs: Optional Boolean, indicates if tables and chairs are needed (default: false)
-// 5. generator: Optional Boolean, indicates if a generator is needed (default: false)
-// 6. popcornMachine: Optional Boolean, indicates if a popcorn machine is needed (default: false)
+// 3. partyDate: Required Date, represents the date of the party
+// 4. phone: Optional String, represents the phone number, validated with a regex pattern
+// 5. tablesChairs: Optional Boolean, indicates if tables and chairs are needed (default: false)
+// 6. generator: Optional Boolean, indicates if a generator is needed (default: false)
+// 7. popcornMachine: Optional Boolean, indicates if a popcorn machine is needed (default: false)
 
 // Schema options:
 // 1. timestamps: true, automatically adds createdAt and updatedAt fields to the schema
 const createContact = async (req, res, next) => {
     try {
-        if (!req.body.bouncer || !req.body.email) {
+        if (!req.body.bouncer || !req.body.email || !req.body.partyDate) {
             throw new Error("Please provide all required fields");
         }
 
@@ -57,6 +58,7 @@ const createContact = async (req, res, next) => {
                 Incoming bounce house contact from ${req.body.bouncer.toUpperCase()}.
                 Name: ${req.body.bouncer}
                 Email: ${req.body.email}
+                Party Date: ${req.body.partyDate}
                 Phone: ${req.body.phone}
                 Tables and Chairs: ${req.body.tablesChairs}
                 Generator: ${req.body.generator}

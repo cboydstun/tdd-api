@@ -14,6 +14,10 @@ const contactSchema = new mongoose.Schema({
         match: [emailRegex, 'Please enter a valid email address'],
         index: true
     },
+    partyDate: {
+        type: Date,
+        required: true
+    },
     phone: {
         type: String,
         required: false,
