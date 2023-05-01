@@ -23,6 +23,10 @@ const contactSchema = new mongoose.Schema({
         required: false,
         match: [phoneRegex, 'Please enter a valid phone number']
     },
+    partyZipCode: {
+        type: String,
+        required: true
+    },
     tablesChairs: {
         type: Boolean,
         default: false
@@ -34,6 +38,10 @@ const contactSchema = new mongoose.Schema({
     popcornMachine: {
         type: Boolean,
         default: false
+    },
+    message: {
+        type: String,
+        required: false
     }
 }, {
     timestamps: true

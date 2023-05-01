@@ -23,21 +23,9 @@ const getContactById = async (req, res) => {
 
 // @POST - /contacts - Create a new contact - public
 // Contact Model: Represents a contact entry submitted through the contact form
-
-// Schema fields:
-// 1. bouncer: Required String, represents the bouncer name
-// 2. email: Required String, represents the email address, validated with a regex pattern
-// 3. partyDate: Required Date, represents the date of the party
-// 4. phone: Optional String, represents the phone number, validated with a regex pattern
-// 5. tablesChairs: Optional Boolean, indicates if tables and chairs are needed (default: false)
-// 6. generator: Optional Boolean, indicates if a generator is needed (default: false)
-// 7. popcornMachine: Optional Boolean, indicates if a popcorn machine is needed (default: false)
-
-// Schema options:
-// 1. timestamps: true, automatically adds createdAt and updatedAt fields to the schema
 const createContact = async (req, res, next) => {
     try {
-        if (!req.body.bouncer || !req.body.email || !req.body.partyDate) {
+        if (!req.body.bouncer || !req.body.email || !req.body.partyDate || !req.body.partyZipCode) {
             throw new Error("Please provide all required fields");
         }
 
@@ -59,10 +47,12 @@ const createContact = async (req, res, next) => {
                 Name: ${req.body.bouncer}
                 Email: ${req.body.email}
                 Party Date: ${req.body.partyDate}
+                Party Zip Code: ${req.body.partyZipCode}
                 Phone: ${req.body.phone}
                 Tables and Chairs: ${req.body.tablesChairs}
                 Generator: ${req.body.generator}
                 Popcorn Machine: ${req.body.popcornMachine}
+                Message: ${req.body.message}
                 `
         };
 
