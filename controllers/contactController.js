@@ -52,6 +52,10 @@ const createContact = async (req, res, next) => {
                 Tables and Chairs: ${req.body.tablesChairs}
                 Generator: ${req.body.generator}
                 Popcorn Machine: ${req.body.popcornMachine}
+                Cotton Candy Machine: ${req.body.cottonCandyMachine}
+                Pinata: ${req.body.pinata}
+                Overnight: ${req.body.overnight}
+                Confirmed: NOT YET!
                 Message: ${req.body.message}
                 `
         };
@@ -95,10 +99,27 @@ const deleteContact = async (req, res) => {
     }
 };
 
+// @GET - check if bouncer is available on a given date - public
+const getAvailable = async (req, res) => {
+    try {
+        // if contact is found and confirmed is true, then bouncer is not available
+        const contact = await Contact.findOne({ bouncer: req.params.bouncer, partyDate: req.params.partyDate, confirmed: true });
+        if (contact) {
+            res.status(200).json({ available: false });
+        }
+        else {
+            res.status(200).json({ available: true });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 module.exports = {
     getAllContacts,
     getContactById,
     createContact,
     updateContact,
-    deleteContact
+    deleteContact,
+    getAvailable
 };

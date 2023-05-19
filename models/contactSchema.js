@@ -39,6 +39,22 @@ const contactSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    cottonCandyMachine: {
+        type: Boolean,
+        default: false
+    },
+    overnight: {
+        type: Boolean,
+        default: false
+    },
+    pinata: {
+        type: Boolean,
+        default: false
+    },
+    confirmed: {
+        type: Boolean,
+        default: false
+    },
     message: {
         type: String,
         required: false
