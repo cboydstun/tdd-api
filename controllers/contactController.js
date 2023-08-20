@@ -53,7 +53,10 @@ const createContact = async (req, res, next) => {
                 Generator: ${req.body.generator}
                 Popcorn Machine: ${req.body.popcornMachine}
                 Cotton Candy Machine: ${req.body.cottonCandyMachine}
-                Pinata: ${req.body.pinata}
+                Snow Cone Machine: ${req.body.snowConeMachine}
+                Petting Zoo: ${req.body.pettingZoo}
+                Pony Rides: ${req.body.ponyRides}
+                DJ: ${req.body.dj}
                 Overnight: ${req.body.overnight}
                 Confirmed: NOT YET!
                 Message: ${req.body.message}

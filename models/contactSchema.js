@@ -43,11 +43,23 @@ const contactSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    overnight: {
+    snowConeMachine: {
         type: Boolean,
         default: false
     },
-    pinata: {
+    pettingZoo: {
+        type: Boolean,
+        default: false
+    },
+    ponyRides: {
+        type: Boolean,
+        default: false
+    },
+    dj: {
+        type: Boolean,
+        default: false
+    },
+    overnight: {
         type: Boolean,
         default: false
     },
