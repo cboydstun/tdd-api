@@ -10,9 +10,9 @@ const contactRouter = require('./contactRouter');
 const rsvpRouter = require('./rsvpRouter');
 
 //define routes
+router.use('/users', userRouter);
 router.use('/blogs', blogRouter);
 router.use('/emails', emailRouter);
-router.use('/users', userRouter);
 router.use('/leads', leadRouter);
 router.use('/contacts', contactRouter);
 router.use('/rsvp', rsvpRouter);

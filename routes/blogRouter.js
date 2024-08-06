@@ -7,10 +7,10 @@ const blogController = require('../controllers/blogController');
 
 // define routes
 router.get('/', blogController.getAllBlogs); // PUBLIC
-router.get('/:id', blogController.getBlogById); // PUBLIC
+router.get('/:slug', blogController.getBlogBySlug); // PUBLIC
 router.post('/', authMiddleware, blogController.createBlog);
-router.put('/:id', authMiddleware, blogController.updateBlog);
-router.delete('/:id', authMiddleware, blogController.deleteBlog);
+router.put('/:slug', authMiddleware, blogController.updateBlog);
+router.delete('/:slug', authMiddleware, blogController.deleteBlog);
 
 // export router
 module.exports = router;
