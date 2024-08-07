@@ -11,8 +11,8 @@ const getAllBlogs = async (req, res) => {
             query.status = 'published';
         }
         const blogs = await Blog.find(query)
-            .sort({ createdAt: -1 }) // Sort by creation date instead of publishDate
-            .select('title slug excerpt featuredImage categories tags publishDate readTime status');
+            .sort({ createdAt: -1 }) // Sort by creation date
+            .select('title slug content excerpt featuredImage categories tags publishDate readTime status seo'); // Added 'seo' here
         res.status(200).json(blogs);
     } catch (err) {
         console.error('Error fetching blogs:', err);
@@ -30,10 +30,6 @@ const getBlogBySlug = async (req, res) => {
         if (!blog) {
             return res.status(404).json({ error: 'Blog not found' });
         }
-
-        // Increment view count
-        blog.meta.views += 1;
-        await blog.save();
 
         res.status(200).json(blog);
     } catch (err) {
@@ -64,8 +60,7 @@ const createBlog = async (req, res) => {
             isFeature
         } = req.body;
 
-        // Get author from authenticated user
-        const author = req.user._id;
+        console.log('Received blog data:', req.body); // Log the received data
 
         // Basic validation
         if (!title || !content) {
@@ -100,8 +95,8 @@ const createBlog = async (req, res) => {
         const newBlog = new Blog({
             title: sanitizeHtml(title),
             slug,
-            content: sanitizedContent,
-            author,
+            content: sanitizedContent, // Ensure this line is present
+            author: req.user._id,
             excerpt: truncatedExcerpt,
             featuredImage,
             categories: categories?.map(cat => sanitizeHtml(cat)) || [],
@@ -119,10 +114,12 @@ const createBlog = async (req, res) => {
                 focusKeyword: sanitizeHtml(seo.focusKeyword)
             } : {},
             readTime,
-            isFeature
+            isFeature,
+            publishDate
         });
 
         const savedBlog = await newBlog.save();
+        console.log('Saved blog:', savedBlog); // Log the saved blog
         res.status(201).json(savedBlog);
     } catch (err) {
         console.error('Error creating blog:', err);
@@ -140,9 +137,35 @@ const updateBlog = async (req, res) => {
         }
 
         const updates = req.body;
-        console.log('Received update data:', updates); // Log the received update data
+        console.log('Received update data:', updates);
 
-        // ... rest of your update logic ...
+        // Sanitize and process updates
+        if (updates.title) {
+            updates.title = sanitizeHtml(updates.title);
+            updates.slug = slugify(updates.title, { lower: true, strict: true });
+        }
+        if (updates.content) {
+            updates.content = sanitizeHtml(updates.content, {
+                allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+                allowedAttributes: {
+                    ...sanitizeHtml.defaults.allowedAttributes,
+                    'img': ['src', 'alt']
+                }
+            });
+        }
+        if (updates.categories) {
+            updates.categories = updates.categories.map(cat => sanitizeHtml(cat));
+        }
+        if (updates.tags) {
+            updates.tags = updates.tags.map(tag => sanitizeHtml(tag));
+        }
+        if (updates.seo) {
+            updates.seo = {
+                metaTitle: sanitizeHtml(updates.seo.metaTitle),
+                metaDescription: sanitizeHtml(updates.seo.metaDescription),
+                focusKeyword: sanitizeHtml(updates.seo.focusKeyword)
+            };
+        }
 
         const updatedBlog = await Blog.findOneAndUpdate(
             { slug: req.params.slug },
@@ -154,11 +177,11 @@ const updateBlog = async (req, res) => {
             return res.status(404).json({ error: 'Blog not found after update' });
         }
 
-        console.log('Updated blog:', updatedBlog); // Log the updated blog
+        console.log('Updated blog:', updatedBlog);
         res.status(200).json(updatedBlog);
     } catch (err) {
         console.error('Error updating blog:', err);
-        // ... error handling ...
+        res.status(500).json({ error: 'An error occurred while updating the blog', details: err.message });
     }
 };
 
