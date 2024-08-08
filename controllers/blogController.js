@@ -60,23 +60,25 @@ const createBlog = async (req, res) => {
             isFeature
         } = req.body;
 
-        console.log('Received blog data:', req.body); // Log the received data
+        console.log('Received blog data:', req.body);
 
-        // Basic validation
         if (!title || !content) {
             return res.status(400).json({ error: "Title and content are required" });
         }
 
-        // Sanitize the content
+        // Sanitize the content, allowing for images and videos
         const sanitizedContent = sanitizeHtml(content, {
-            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'video', 'iframe']),
             allowedAttributes: {
                 ...sanitizeHtml.defaults.allowedAttributes,
-                'img': ['src', 'alt']
-            }
+                'img': ['src', 'alt', 'width', 'height'],
+                'video': ['src', 'controls', 'width', 'height'],
+                'iframe': ['src', 'width', 'height', 'frameborder', 'allowfullscreen']
+            },
+            allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com']
         });
 
-        // Generate slug
+        // Generate slug (unchanged)
         let slug = slugify(title, { lower: true, strict: true });
         let slugExists = await Blog.findOne({ slug });
         let counter = 1;
@@ -86,7 +88,7 @@ const createBlog = async (req, res) => {
             counter++;
         }
 
-        // Truncate and sanitize excerpt
+        // Truncate and sanitize excerpt (unchanged)
         const truncatedExcerpt = excerpt
             ? sanitizeHtml(excerpt.substring(0, 197)) + '...'
             : sanitizeHtml(sanitizedContent.substring(0, 197)) + '...';
@@ -95,7 +97,7 @@ const createBlog = async (req, res) => {
         const newBlog = new Blog({
             title: sanitizeHtml(title),
             slug,
-            content: sanitizedContent, // Ensure this line is present
+            content: sanitizedContent,
             author: req.user._id,
             excerpt: truncatedExcerpt,
             featuredImage,
@@ -119,7 +121,7 @@ const createBlog = async (req, res) => {
         });
 
         const savedBlog = await newBlog.save();
-        console.log('Saved blog:', savedBlog); // Log the saved blog
+        console.log('Saved blog:', savedBlog);
         res.status(201).json(savedBlog);
     } catch (err) {
         console.error('Error creating blog:', err);
@@ -145,19 +147,27 @@ const updateBlog = async (req, res) => {
             updates.slug = slugify(updates.title, { lower: true, strict: true });
         }
         if (updates.content) {
+            // First, sanitize the content
             updates.content = sanitizeHtml(updates.content, {
                 allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
                 allowedAttributes: {
                     ...sanitizeHtml.defaults.allowedAttributes,
-                    'img': ['src', 'alt']
+                    img: ['src', 'alt']
                 }
             });
+
+            // Then, process any empty img tags
+            updates.content = updates.content.replace(/<img>/g, '<img src="/api/placeholder/400/300" alt="Placeholder image" />');
         }
         if (updates.categories) {
-            updates.categories = updates.categories.map(cat => sanitizeHtml(cat));
+            updates.categories = Array.isArray(updates.categories)
+                ? updates.categories.map(cat => sanitizeHtml(cat.trim()))
+                : updates.categories.split(',').map(cat => sanitizeHtml(cat.trim()));
         }
         if (updates.tags) {
-            updates.tags = updates.tags.map(tag => sanitizeHtml(tag));
+            updates.tags = Array.isArray(updates.tags)
+                ? updates.tags.map(tag => sanitizeHtml(tag.trim()))
+                : updates.tags.split(',').map(tag => sanitizeHtml(tag.trim()));
         }
         if (updates.seo) {
             updates.seo = {
@@ -166,6 +176,8 @@ const updateBlog = async (req, res) => {
                 focusKeyword: sanitizeHtml(updates.seo.focusKeyword)
             };
         }
+
+        console.log('Sanitized update data:', updates);
 
         const updatedBlog = await Blog.findOneAndUpdate(
             { slug: req.params.slug },

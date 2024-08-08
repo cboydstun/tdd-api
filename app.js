@@ -55,8 +55,9 @@ app.use(compression());
 
 // import bodyparser middleware
 const bodyParser = require("body-parser");
-app.use(bodyParser.json({ limit: "50kb" }));
+app.use(express.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // import jwt middleware
 const authMiddleware = require("./middlewares/jwtMiddleware");
@@ -75,7 +76,7 @@ app.get("/api/health", (req, res) => {
 
 //buggy route to test the 500 route error handler
 app.get("/api/bugsalot", (req, res) => {
-  throw new Error("Buggy route");  
+  throw new Error("Buggy route");
 });
 
 // protected route
@@ -85,7 +86,7 @@ app.get("/api/protected", authMiddleware, (req, res) => {
 
 //handle errors
 app.use((err, req, res, next) => {
-  res.status(500).json({ error: "Something broke!", stack: err.stack});
+  res.status(500).json({ error: "Something broke!", stack: err.stack });
 });
 
 //create 404 route
