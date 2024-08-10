@@ -12,8 +12,6 @@ app.use(morganMiddleware);
 // import and use CORS to allow cross-origin requests
 const cors = require("cors");
 
-console.log("process.env.CLIENT_URL:", process.env.CLIENT_URL);
-
 // CORS configuration
 app.use(cors({
   origin: `${process.env.CLIENT_URL}`,
