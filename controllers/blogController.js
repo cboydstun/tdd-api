@@ -6,13 +6,12 @@ const sanitizeHtml = require('sanitize-html');
 const getAllBlogs = async (req, res) => {
     try {
         let query = {};
-        // If the request is not authenticated, only return published blogs
         if (!req.user) {
             query.status = 'published';
         }
         const blogs = await Blog.find(query)
-            .sort({ createdAt: -1 }) // Sort by creation date
-            .select('title slug content excerpt featuredImage categories tags publishDate readTime status seo'); // Added 'seo' here
+            .sort({ createdAt: -1 })
+            .select('title slug introduction body conclusion excerpt featuredImage categories tags publishDate readTime status seo images');
         res.status(200).json(blogs);
     } catch (err) {
         console.error('Error fetching blogs:', err);
@@ -44,9 +43,16 @@ const getBlogBySlug = async (req, res) => {
 // POST /blogs - should create a new blog
 const createBlog = async (req, res) => {
     try {
+        console.log('Received blog data:', req.body);
+
+        // Parse the JSON string from blogData
+        const blogData = JSON.parse(req.body.blogData);
+
         const {
             title,
-            content,
+            introduction,
+            body,
+            conclusion,
             excerpt,
             featuredImage,
             categories,
@@ -58,16 +64,13 @@ const createBlog = async (req, res) => {
             seo,
             readTime,
             isFeature
-        } = req.body;
+        } = blogData;
 
-        console.log('Received blog data:', req.body);
-
-        if (!title || !content) {
-            return res.status(400).json({ error: "Title and content are required" });
+        if (!title || !introduction || !body || !conclusion) {
+            return res.status(400).json({ error: "Title, introduction, body, and conclusion are required" });
         }
 
-        // Sanitize the content, allowing for images and videos
-        const sanitizedContent = sanitizeHtml(content, {
+        const sanitizeOptions = {
             allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'video', 'iframe']),
             allowedAttributes: {
                 ...sanitizeHtml.defaults.allowedAttributes,
@@ -76,9 +79,12 @@ const createBlog = async (req, res) => {
                 'iframe': ['src', 'width', 'height', 'frameborder', 'allowfullscreen']
             },
             allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com']
-        });
+        };
 
-        // Generate slug (unchanged)
+        const sanitizedIntroduction = sanitizeHtml(introduction, sanitizeOptions);
+        const sanitizedBody = sanitizeHtml(body, sanitizeOptions);
+        const sanitizedConclusion = sanitizeHtml(conclusion, sanitizeOptions);
+
         let slug = slugify(title, { lower: true, strict: true });
         let slugExists = await Blog.findOne({ slug });
         let counter = 1;
@@ -88,16 +94,16 @@ const createBlog = async (req, res) => {
             counter++;
         }
 
-        // Truncate and sanitize excerpt (unchanged)
         const truncatedExcerpt = excerpt
             ? sanitizeHtml(excerpt.substring(0, 197)) + '...'
-            : sanitizeHtml(sanitizedContent.substring(0, 197)) + '...';
+            : sanitizeHtml(sanitizedIntroduction.substring(0, 197)) + '...';
 
-        // Create new blog object
         const newBlog = new Blog({
             title: sanitizeHtml(title),
             slug,
-            content: sanitizedContent,
+            introduction: sanitizedIntroduction,
+            body: sanitizedBody,
+            conclusion: sanitizedConclusion,
             author: req.user._id,
             excerpt: truncatedExcerpt,
             featuredImage,
@@ -117,7 +123,13 @@ const createBlog = async (req, res) => {
             } : {},
             readTime,
             isFeature,
-            publishDate
+            publishDate,
+            images: req.files ? req.files.map(file => ({
+                filename: file.filename,
+                path: file.path,
+                mimetype: file.mimetype,
+                size: file.size
+            })) : []
         });
 
         const savedBlog = await newBlog.save();
@@ -141,23 +153,26 @@ const updateBlog = async (req, res) => {
         const updates = req.body;
         console.log('Received update data:', updates);
 
-        // Sanitize and process updates
+        const sanitizeOptions = {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+            allowedAttributes: {
+                ...sanitizeHtml.defaults.allowedAttributes,
+                img: ['src', 'alt']
+            }
+        };
+
         if (updates.title) {
             updates.title = sanitizeHtml(updates.title);
             updates.slug = slugify(updates.title, { lower: true, strict: true });
         }
-        if (updates.content) {
-            // First, sanitize the content
-            updates.content = sanitizeHtml(updates.content, {
-                allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
-                allowedAttributes: {
-                    ...sanitizeHtml.defaults.allowedAttributes,
-                    img: ['src', 'alt']
-                }
-            });
-
-            // Then, process any empty img tags
-            updates.content = updates.content.replace(/<img>/g, '<img src="/api/placeholder/400/300" alt="Placeholder image" />');
+        if (updates.introduction) {
+            updates.introduction = sanitizeHtml(updates.introduction, sanitizeOptions);
+        }
+        if (updates.body) {
+            updates.body = sanitizeHtml(updates.body, sanitizeOptions);
+        }
+        if (updates.conclusion) {
+            updates.conclusion = sanitizeHtml(updates.conclusion, sanitizeOptions);
         }
         if (updates.categories) {
             updates.categories = Array.isArray(updates.categories)
@@ -175,6 +190,19 @@ const updateBlog = async (req, res) => {
                 metaDescription: sanitizeHtml(updates.seo.metaDescription),
                 focusKeyword: sanitizeHtml(updates.seo.focusKeyword)
             };
+        }
+
+        // Handle image updates
+        if (req.files && req.files.length > 0) {
+            updates.images = [
+                ...(blog.images || []),
+                ...req.files.map(file => ({
+                    filename: file.filename,
+                    path: file.path,
+                    mimetype: file.mimetype,
+                    size: file.size
+                }))
+            ];
         }
 
         console.log('Sanitized update data:', updates);

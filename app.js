@@ -1,6 +1,8 @@
 // import express and initialize app
 const express = require("express");
 const app = express();
+const path = require("path");
+require("dotenv").config();
 
 // import and use morgan to log requests
 const morganMiddleware = require("./middlewares/morganMiddleware");
@@ -10,13 +12,28 @@ app.use(morganMiddleware);
 // import and use CORS to allow cross-origin requests
 const cors = require("cors");
 
-// cors options
-const corsOptions = {
-  origin: "*",
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+console.log("process.env.CLIENT_URL:", process.env.CLIENT_URL);
 
-app.use(cors(corsOptions));
+// CORS configuration
+app.use(cors({
+  origin: `${process.env.CLIENT_URL}`,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
+}));
+
+// Add Cross-Origin-Resource-Policy header to all responses
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+});
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+  setHeaders: (res, path, stat) => {
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+  }
+}));
 
 // import and use helmet to secure headers
 const helmet = require("helmet");
@@ -83,6 +100,9 @@ app.get("/api/bugsalot", (req, res) => {
 app.get("/api/protected", authMiddleware, (req, res) => {
   res.json({ message: "You are authorized" });
 });
+
+// serve static files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //handle errors
 app.use((err, req, res, next) => {

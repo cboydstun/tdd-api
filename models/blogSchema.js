@@ -15,7 +15,15 @@ const blogSchema = new Schema({
     ref: 'user',
     required: true
   },
-  content: { type: String, required: true },
+  introduction: { type: String, required: true },
+  body: { type: String, required: true },
+  conclusion: { type: String, required: true },
+  images: [{
+    filename: { type: String, required: true },
+    path: { type: String, required: true },
+    mimetype: { type: String, required: true },
+    size: { type: Number, required: true }
+  }],
   excerpt: { type: String, maxlength: 200 },
   featuredImage: { type: String },
   categories: [{ type: String, trim: true }],
@@ -28,7 +36,7 @@ const blogSchema = new Schema({
   publishDate: { type: Date },
   lastModified: { type: Date },
   comments: [{
-    user: { type: Schema.Types.ObjectId, ref: 'user' }, // Changed to lowercase 'user'
+    user: { type: Schema.Types.ObjectId, ref: 'user' },
     content: { type: String, required: true },
     date: { type: Date, default: Date.now },
     isApproved: { type: Boolean, default: false }
