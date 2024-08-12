@@ -27,6 +27,7 @@ router.get('/:slug', blogController.getBlogBySlug); // PUBLIC
 router.post('/', authMiddleware, upload.array('images'), blogController.createBlog);
 router.put('/:slug', authMiddleware, upload.array('images'), blogController.updateBlog);
 router.delete('/:slug', authMiddleware, blogController.deleteBlog);
+router.delete('/:slug/images/:imageName', authMiddleware, blogController.removeImage);
 
 // export router
 module.exports = router;

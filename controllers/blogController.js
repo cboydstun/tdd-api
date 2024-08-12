@@ -1,6 +1,9 @@
+// blogController.js
 const Blog = require('../models/blogSchema');
 const slugify = require('slugify');
 const sanitizeHtml = require('sanitize-html');
+const path = require('path');
+const fs = require('fs');
 
 // GET /blogs - should return all blogs
 const getAllBlogs = async (req, res) => {
@@ -245,4 +248,34 @@ const deleteBlog = async (req, res) => {
     }
 };
 
-module.exports = { getAllBlogs, getBlogBySlug, createBlog, updateBlog, deleteBlog };
+// DELETE - /:slug/images/:imageName - should delete a single image from a blog
+const removeImage = async (req, res) => {
+    try {
+        const { slug, imageName } = req.params;
+
+        const blog = await Blog.findOne({ slug });
+        if (!blog) {
+            return res.status(404).json({ error: 'Blog not found' });
+        }
+
+        const imageIndex = blog.images.findIndex(img => img.filename === imageName);
+        if (imageIndex === -1) {
+            return res.status(404).json({ error: 'Image not found' });
+        }
+
+        // Remove image from filesystem
+        const imagePath = path.join(__dirname, '..', 'uploads', imageName);
+        fs.unlinkSync(imagePath);
+
+        // Remove image from blog document
+        blog.images.splice(imageIndex, 1);
+        await blog.save();
+
+        res.status(200).json({ message: 'Image removed successfully' });
+    } catch (err) {
+        console.error('Error removing image:', err);
+        res.status(500).json({ error: 'An error occurred while removing the image' });
+    }
+};
+
+module.exports = { getAllBlogs, getBlogBySlug, createBlog, updateBlog, deleteBlog, removeImage };
