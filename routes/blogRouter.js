@@ -6,8 +6,8 @@ const authMiddleware = require('../middlewares/jwtMiddleware');
 const blogController = require('../controllers/blogController');
 
 // define routes
-router.get('/', blogController.getAllBlogs); // PUBLIC
-router.get('/:slug', blogController.getBlogBySlug); // PUBLIC
+router.get('/', blogController.getAllBlogs);
+router.get('/:slug', blogController.getBlogBySlug);
 router.post('/', authMiddleware, upload.array('images'), blogController.createBlog);
 router.put('/:slug', authMiddleware, upload.array('images'), blogController.updateBlog);
 router.delete('/:slug', authMiddleware, blogController.deleteBlog);

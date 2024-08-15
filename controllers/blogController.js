@@ -153,72 +153,43 @@ const updateBlog = async (req, res) => {
             return res.status(404).json({ error: 'Blog not found' });
         }
 
-        const updates = req.body;
+        let updates = JSON.parse(req.body.blogData);
         console.log('Received update data:', updates);
 
-        const sanitizeOptions = {
-            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
-            allowedAttributes: {
-                ...sanitizeHtml.defaults.allowedAttributes,
-                img: ['src', 'alt']
+        // Handle image deletions
+        const imagesToDelete = JSON.parse(req.body.imagesToDelete || '[]');
+        console.log('Images to delete:', imagesToDelete);
+
+        for (const imageName of imagesToDelete) {
+            const imagePath = path.join(__dirname, '..', 'uploads', imageName);
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+                console.log(`Deleted image file: ${imagePath}`);
             }
-        };
-
-        if (updates.title) {
-            updates.title = sanitizeHtml(updates.title);
-            updates.slug = slugify(updates.title, { lower: true, strict: true });
-        }
-        if (updates.introduction) {
-            updates.introduction = sanitizeHtml(updates.introduction, sanitizeOptions);
-        }
-        if (updates.body) {
-            updates.body = sanitizeHtml(updates.body, sanitizeOptions);
-        }
-        if (updates.conclusion) {
-            updates.conclusion = sanitizeHtml(updates.conclusion, sanitizeOptions);
-        }
-        if (updates.categories) {
-            updates.categories = Array.isArray(updates.categories)
-                ? updates.categories.map(cat => sanitizeHtml(cat.trim()))
-                : updates.categories.split(',').map(cat => sanitizeHtml(cat.trim()));
-        }
-        if (updates.tags) {
-            updates.tags = Array.isArray(updates.tags)
-                ? updates.tags.map(tag => sanitizeHtml(tag.trim()))
-                : updates.tags.split(',').map(tag => sanitizeHtml(tag.trim()));
-        }
-        if (updates.seo) {
-            updates.seo = {
-                metaTitle: sanitizeHtml(updates.seo.metaTitle),
-                metaDescription: sanitizeHtml(updates.seo.metaDescription),
-                focusKeyword: sanitizeHtml(updates.seo.focusKeyword)
-            };
+            blog.images = blog.images.filter(img => img.filename !== imageName);
         }
 
-        // Handle image updates
+        // Handle new image uploads
+        console.log('Files received:', req.files);
         if (req.files && req.files.length > 0) {
-            updates.images = [
-                ...(blog.images || []),
-                ...req.files.map(file => ({
-                    filename: file.filename,
-                    path: file.path,
-                    mimetype: file.mimetype,
-                    size: file.size
-                }))
-            ];
+            const newImages = req.files.map(file => ({
+                filename: file.filename,
+                path: file.path,
+                mimetype: file.mimetype,
+                size: file.size
+            }));
+            console.log('New images to add:', newImages);
+            blog.images = [...blog.images, ...newImages];
         }
 
-        console.log('Sanitized update data:', updates);
+        // Update other fields
+        Object.keys(updates).forEach(key => {
+            if (key !== 'images') {
+                blog[key] = updates[key];
+            }
+        });
 
-        const updatedBlog = await Blog.findOneAndUpdate(
-            { slug: req.params.slug },
-            { $set: updates },
-            { new: true, runValidators: true }
-        );
-
-        if (!updatedBlog) {
-            return res.status(404).json({ error: 'Blog not found after update' });
-        }
+        const updatedBlog = await blog.save();
 
         console.log('Updated blog:', updatedBlog);
         res.status(200).json(updatedBlog);
@@ -253,28 +224,40 @@ const removeImage = async (req, res) => {
     try {
         const { slug, imageName } = req.params;
 
+        console.log(`Attempting to remove image ${imageName} from blog with slug ${slug}`);
+
         const blog = await Blog.findOne({ slug });
         if (!blog) {
+            console.log(`Blog with slug ${slug} not found`);
             return res.status(404).json({ error: 'Blog not found' });
         }
 
         const imageIndex = blog.images.findIndex(img => img.filename === imageName);
         if (imageIndex === -1) {
-            return res.status(404).json({ error: 'Image not found' });
+            console.log(`Image ${imageName} not found in blog`);
+            return res.status(404).json({ error: 'Image not found in blog' });
         }
 
         // Remove image from filesystem
         const imagePath = path.join(__dirname, '..', 'uploads', imageName);
-        fs.unlinkSync(imagePath);
+        console.log(`Attempting to delete file at path: ${imagePath}`);
+
+        if (fs.existsSync(imagePath)) {
+            fs.unlinkSync(imagePath);
+            console.log(`File successfully deleted from filesystem`);
+        } else {
+            console.log(`File not found in filesystem, proceeding with database update`);
+        }
 
         // Remove image from blog document
         blog.images.splice(imageIndex, 1);
         await blog.save();
+        console.log(`Image removed from blog document`);
 
         res.status(200).json({ message: 'Image removed successfully' });
     } catch (err) {
         console.error('Error removing image:', err);
-        res.status(500).json({ error: 'An error occurred while removing the image' });
+        res.status(500).json({ error: 'An error occurred while removing the image', details: err.message });
     }
 };
 
