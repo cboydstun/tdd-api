@@ -1,4 +1,4 @@
-// blogController.js
+// controllers/blogController.js
 const Blog = require('../models/blogSchema');
 const slugify = require('slugify');
 const sanitizeHtml = require('sanitize-html');

@@ -1,3 +1,4 @@
+// models/contactSchema.js
 const mongoose = require('mongoose');
 
 const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
@@ -70,6 +71,10 @@ const contactSchema = new mongoose.Schema({
     message: {
         type: String,
         required: false
+    },
+    sourcePage: {
+        type: String,
+        required: true
     }
 }, {
     timestamps: true

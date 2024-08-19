@@ -1,3 +1,4 @@
+// controllers/contactController.js
 const Contact = require('../models/contactSchema');
 const nodemailer = require('nodemailer');
 
@@ -22,10 +23,9 @@ const getContactById = async (req, res) => {
 };
 
 // @POST - /contacts - Create a new contact - public
-// Contact Model: Represents a contact entry submitted through the contact form
 const createContact = async (req, res, next) => {
     try {
-        if (!req.body.bouncer || !req.body.email || !req.body.partyDate || !req.body.partyZipCode) {
+        if (!req.body.bouncer || !req.body.email || !req.body.partyDate || !req.body.partyZipCode || !req.body.sourcePage) {
             throw new Error("Please provide all required fields");
         }
 
@@ -60,6 +60,7 @@ const createContact = async (req, res, next) => {
                 Overnight: ${req.body.overnight}
                 Confirmed: NOT YET!
                 Message: ${req.body.message}
+                Source Page: ${req.body.sourcePage}
                 `
         };
 
@@ -75,9 +76,7 @@ const createContact = async (req, res, next) => {
 
         res.status(201).json(contact);
     } catch (err) {
-
         res.status(500).json({ error: err.message });
-
     }
 };
 
