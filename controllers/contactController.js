@@ -1,6 +1,9 @@
 // controllers/contactController.js
 const Contact = require('../models/contactSchema');
 const nodemailer = require('nodemailer');
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
 
 // @GET - /contacts - Get all contacts - private
 const getAllContacts = async (req, res) => {
@@ -71,6 +74,23 @@ const createContact = async (req, res, next) => {
                 console.log('Email sent!!!');
             }
         });
+
+        // SMS notification
+        const smsBody = `
+            New Bouncer Job:
+            Bouncer: ${req.body.bouncer}
+            Email: ${req.body.email}
+            Date: ${req.body.partyDate}
+            Phone: ${req.body.phone}
+        `.trim();
+
+        await client.messages.create({
+            body: smsBody,
+            from: process.env.TWILIO_PHONE_NUMBER,
+            to: process.env.USER_PHONE_NUMBER
+        });
+
+        console.log('SMS sent!!!');
 
         const contact = await Contact.create(req.body);
 
