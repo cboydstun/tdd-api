@@ -22,71 +22,43 @@ const speedLimiter = slowDown({
   maxDelayMs: 2000,
 });
 
-const blockedPatterns = [
-  'scanner.ducks.party',
-  'Chrome/74.0.3729.169',
-  'Expanse, a Palo Alto Networks company',
-  'Mozilla/5.0 (ZZ;',
-  'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.13) Gecko/20100916 Iceape/2.0.8',
-  'Chrome/81.0.4044.129',
-  'Apache-HttpClient',
-  'Chrome/107.0.0.0',
-];
+const allowedOrigin = process.env.CLIENT_URL || 'https://www.satxbounce.com';
 
-const suspiciousPaths = [
-  '/.env',
-  '/.idea/workspace.xml',
-  '/login.asp',
-  '/wp-login.php',
-  '/wp-admin',
-  '/admin',
-];
+const strictSecurityCheck = (req, res, next) => {
+    const origin = req.get('Origin');
+    const referer = req.get('Referer');
 
-const blockScanner = (req, res, next) => {
-    const userAgent = req.get('User-Agent') || '';
-    const path = req.path.toLowerCase();
-    const method = req.method;
-
-    // Check user agent against blocked patterns
-    if (blockedPatterns.some(pattern => userAgent.includes(pattern))) {
-        logger.warn(`Blocked request from suspicious user agent: ${req.ip}, ${userAgent}`);
+    // Check if the request is coming from the allowed origin
+    if (origin !== allowedOrigin && (!referer || !referer.startsWith(allowedOrigin))) {
+        logger.warn(`Blocked request from unauthorized origin: ${req.ip}, Origin: ${origin}, Referer: ${referer}`);
         return res.status(403).send('Access Denied');
     }
 
-    // Check for suspicious paths, but exclude legitimate API routes
-    if (!path.startsWith('/api/v1/') && suspiciousPaths.some(p => path.includes(p))) {
-        logger.warn(`Blocked request to suspicious path: ${req.ip}, ${path}`);
-        return res.status(403).send('Access Denied');
+    // Only allow specific HTTP methods
+    const allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
+    if (!allowedMethods.includes(req.method)) {
+        logger.warn(`Blocked request with unauthorized method: ${req.ip}, Method: ${req.method}`);
+        return res.status(405).send('Method Not Allowed');
     }
 
-    // Check for empty or suspicious user agents
-    if (!userAgent || userAgent === 'Unknown') {
-        logger.warn(`Blocked request with suspicious user agent: ${req.ip}, ${userAgent}`);
-        return res.status(403).send('Access Denied');
-    }
-
-    // Block HEAD requests to root path
-    if (method === 'HEAD' && path === '/') {
-        logger.warn(`Blocked suspicious HEAD request to root: ${req.ip}`);
-        return res.status(403).send('Access Denied');
-    }
-
-    // Additional checks for specific malicious behavior
-    if (path === '/' && (method === 'GET' || method === 'POST')) {
-        logger.warn(`Blocked suspicious ${method} request to root: ${req.ip}`);
-        return res.status(403).send('Access Denied');
+    // Only allow requests to your API routes
+    if (!req.path.startsWith('/api/v1/')) {
+        logger.warn(`Blocked request to unauthorized path: ${req.ip}, Path: ${req.path}`);
+        return res.status(404).send('Not Found');
     }
 
     next();
-};  
+};
 
 const blockedIPs = new Map();
 const trackBlockedAttempts = (req, res, next) => {
-  if (res.statusCode === 403) {
+  if (res.statusCode === 403 || res.statusCode === 405 || res.statusCode === 404) {
     const count = (blockedIPs.get(req.ip) || 0) + 1;
     blockedIPs.set(req.ip, count);
     if (count >= 5) {
       logger.error(`Multiple blocked attempts from IP: ${req.ip}, Count: ${count}`);
+      // Implement temporary IP ban here
+      return res.status(403).send('Access Denied');
     }
   }
   next();
@@ -99,6 +71,6 @@ module.exports = {
   xss,
   hsts,
   compression,
-  blockScanner,
+  strictSecurityCheck,
   trackBlockedAttempts
 };
