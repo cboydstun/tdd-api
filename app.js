@@ -88,10 +88,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: "Something went wrong" });
 });
 
-// 404 route for unhandled paths
-app.use((req, res) => {
-  logger.warn(`404 Not Found: ${req.method} ${req.path}`);
-  res.status(404).json({ error: "Not Found" });
-});
-
 module.exports = app;
