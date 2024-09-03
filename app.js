@@ -75,15 +75,24 @@ app.use(express.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// New middleware to block scanner.ducks.party
+// Array of patterns to block
+const blockedPatterns = [
+  'scanner.ducks.party',
+  'Chrome/74.0.3729.169',
+];
+
+// blockScanner middleware
 const blockScanner = (req, res, next) => {
-  const userAgent = req.get('User-Agent');
-  if (userAgent && userAgent.includes('scanner.ducks.party')) {
-    logger.warn(`Blocked request from scanner: ${req.ip}`);
+  const userAgent = req.get('User-Agent') || '';
+  
+  if (blockedPatterns.some(pattern => userAgent.includes(pattern))) {
+    logger.warn(`Blocked request from suspicious user agent: ${req.ip}, ${userAgent}`);
     return res.status(403).send('Access Denied');
   }
   next();
 };
+
+// use blockScanner middleware
 app.use(blockScanner);
 
 // import jwt middleware
