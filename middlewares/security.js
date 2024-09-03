@@ -28,6 +28,11 @@ const strictSecurityCheck = (req, res, next) => {
     const origin = req.get('Origin');
     const referer = req.get('Referer');
 
+    // Allow access to uploads directory
+    if (req.path.startsWith('/uploads/')) {
+        return next();
+    }
+
     // Check if the request is coming from the allowed origin
     if (origin !== allowedOrigin && (!referer || !referer.startsWith(allowedOrigin))) {
         logger.warn(`Blocked request from unauthorized origin: ${req.ip}, Origin: ${origin}, Referer: ${referer}`);
@@ -41,8 +46,8 @@ const strictSecurityCheck = (req, res, next) => {
         return res.status(405).send('Method Not Allowed');
     }
 
-    // Only allow requests to your API routes
-    if (!req.path.startsWith('/api/v1/')) {
+    // Only allow requests to your API routes or uploads
+    if (!req.path.startsWith('/api/v1/') && !req.path.startsWith('/uploads/')) {
         logger.warn(`Blocked request to unauthorized path: ${req.ip}, Path: ${req.path}`);
         return res.status(404).send('Not Found');
     }

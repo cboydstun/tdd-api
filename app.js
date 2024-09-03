@@ -76,7 +76,7 @@ app.set('trust proxy', (ip) => {
 // Apply main router
 app.use("/api/v1", router);
 
-// Health check route (consider removing or securing this)
+// Health check route
 app.get("/api/health", (req, res) => {
   logger.info("Health check...");
   res.status(200).json({ status: "✅" });
