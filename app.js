@@ -75,25 +75,54 @@ app.use(express.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// Array of patterns to block
+// suspicious IP addresses
 const blockedPatterns = [
   'scanner.ducks.party',
   'Chrome/74.0.3729.169',
+  'Expanse, a Palo Alto Networks company',
+  'Mozilla/5.0 (ZZ;',
+  'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.13) Gecko/20100916 Iceape/2.0.8',
+  'Chrome/81.0.4044.129',
+];
+
+// suspicious paths that scanners should not be accessing
+const suspiciousPaths = [
+  '/.env',
+  '/.idea/workspace.xml',
+  '/login.asp',
 ];
 
 // blockScanner middleware
 const blockScanner = (req, res, next) => {
   const userAgent = req.get('User-Agent') || '';
+  const path = req.path;
   
+  // Check user agent against blocked patterns
   if (blockedPatterns.some(pattern => userAgent.includes(pattern))) {
     logger.warn(`Blocked request from suspicious user agent: ${req.ip}, ${userAgent}`);
     return res.status(403).send('Access Denied');
   }
+  
+  // Check for suspicious paths
+  if (suspiciousPaths.includes(path)) {
+    logger.warn(`Blocked request to suspicious path: ${req.ip}, ${path}`);
+    return res.status(403).send('Access Denied');
+  }
+  
+  // Additional checks for specific malicious behavior
+  if (path === '/' && req.method === 'POST') {
+    logger.warn(`Blocked suspicious POST request to root: ${req.ip}`);
+    return res.status(403).send('Access Denied');
+  }
+
   next();
 };
 
-// use blockScanner middleware
+// Use the middleware in your Express app
 app.use(blockScanner);
+
+// trust proxy and get real IP address
+app.set('trust proxy', true);
 
 // import jwt middleware
 const authMiddleware = require("./middlewares/jwtMiddleware");
