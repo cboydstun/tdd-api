@@ -83,6 +83,8 @@ const blockedPatterns = [
   'Mozilla/5.0 (ZZ;',
   'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.13) Gecko/20100916 Iceape/2.0.8',
   'Chrome/81.0.4044.129',
+  'Apache-HttpClient',
+  'Chrome/107.0.0.0',
 ];
 
 // suspicious paths that scanners should not be accessing
@@ -96,6 +98,7 @@ const suspiciousPaths = [
 const blockScanner = (req, res, next) => {
   const userAgent = req.get('User-Agent') || '';
   const path = req.path;
+  const method = req.method;
   
   // Check user agent against blocked patterns
   if (blockedPatterns.some(pattern => userAgent.includes(pattern))) {
@@ -109,9 +112,15 @@ const blockScanner = (req, res, next) => {
     return res.status(403).send('Access Denied');
   }
   
+  // Block HEAD requests to root path
+  if (method === 'HEAD' && path === '/') {
+    logger.warn(`Blocked suspicious HEAD request to root: ${req.ip}`);
+    return res.status(403).send('Access Denied');
+  }
+
   // Additional checks for specific malicious behavior
-  if (path === '/' && req.method === 'POST') {
-    logger.warn(`Blocked suspicious POST request to root: ${req.ip}`);
+  if (path === '/' && (method === 'GET' || method === 'POST')) {
+    logger.warn(`Blocked suspicious ${method} request to root: ${req.ip}`);
     return res.status(403).send('Access Denied');
   }
 
