@@ -70,7 +70,16 @@ app.use(blockScanner);
 app.use(trackBlockedAttempts);
 
 // Trust proxy for accurate client IP detection
-app.set('trust proxy', true);
+app.set('trust proxy', (ip) => {
+  // Trust the first IP in X-Forwarded-For
+  // You should adjust this based on your specific setup
+  if (ip === '127.0.0.1' || ip === '::1') {
+    return true; // trusted local IPs
+  } else {
+    // Add your reverse proxy's IP address here
+    return ip === process.env.REVERSE_PROXY_IP;
+  }
+});
 
 // Apply main router
 app.use("/api/v1", router);
