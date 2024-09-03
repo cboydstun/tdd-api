@@ -17,7 +17,7 @@ router.delete('/:id', authMiddleware, userController.deleteUser);
 // define login route
 router.post('/login', (req, res, next) => {
     logger.info(`Login attempt for user: ${req.body.email}`);
-    userController.login(req, res, next); // PUBLIC
+    userController.loginUser(req, res, next); // PUBLIC
 });
 
 // export router
