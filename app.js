@@ -75,6 +75,17 @@ app.use(express.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+// New middleware to block scanner.ducks.party
+const blockScanner = (req, res, next) => {
+  const userAgent = req.get('User-Agent');
+  if (userAgent && userAgent.includes('scanner.ducks.party')) {
+    logger.warn(`Blocked request from scanner: ${req.ip}`);
+    return res.status(403).send('Access Denied');
+  }
+  next();
+};
+app.use(blockScanner);
+
 // import jwt middleware
 const authMiddleware = require("./middlewares/jwtMiddleware");
 
