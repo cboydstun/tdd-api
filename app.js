@@ -5,6 +5,9 @@ const app = express();
 const path = require("path");
 require("dotenv").config();
 
+// Import logger
+const logger = require('./utils/logger');
+
 // import and use logging middleware
 const enhancedRequestLogging = require('./middlewares/enhancedRequestLogging');
 app.use(enhancedRequestLogging);
