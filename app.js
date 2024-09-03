@@ -26,10 +26,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// import and use csurf
-const csrf = require('csurf');
-app.use(csrf({ cookie: true }));
-
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   setHeaders: (res, path, stat) => {
