@@ -24,50 +24,85 @@ const speedLimiter = slowDown({
 
 const allowedOrigin = process.env.CLIENT_URL || 'https://www.satxbounce.com';
 
+const enhancedLoggingMiddleware = (req, res, next) => {
+  const startTime = process.hrtime();
+
+  res.on('finish', () => {
+    const duration = process.hrtime(startTime);
+    const durationInMs = duration[0] * 1000 + duration[1] / 1e6;
+
+    const logData = {
+      timestamp: new Date().toISOString(),
+      method: req.method,
+      url: req.originalUrl || req.url,
+      status: res.statusCode,
+      duration: `${durationInMs.toFixed(3)}ms`,
+      ip: req.ip,
+      userAgent: req.get('User-Agent') || 'Unknown',
+      referer: req.get('Referer') || 'Unknown',
+      origin: req.get('Origin') || 'Unknown',
+      contentLength: res.get('Content-Length') || 0,
+    };
+
+    const logMessage = `${logData.method} ${logData.url} ${logData.status} ${logData.duration} - ${logData.ip} - ${logData.userAgent}`;
+
+    if (res.statusCode >= 400) {
+      logger.warn(logMessage, logData);
+    } else {
+      logger.info(logMessage, logData);
+    }
+  });
+
+  next();
+};
+
 const strictSecurityCheck = (req, res, next) => {
-    const origin = req.get('Origin');
-    const referer = req.get('Referer');
+  const origin = req.get('Origin');
+  const referer = req.get('Referer');
 
-    // Allow access to uploads directory
-    if (req.path.startsWith('/uploads/')) {
-        return next();
-    }
+  // Allow access to uploads directory and health check
+  if (req.path.startsWith('/uploads/') || req.path === '/api/health') {
+    return next();
+  }
 
-    // Allow access to health check
-    if (req.path === '/api/health') {
-        return next();
-    }
+  // Check if the request is coming from the allowed origin
+  if (origin !== allowedOrigin && (!referer || !referer.startsWith(allowedOrigin))) {
+    logger.warn(`Blocked unauthorized request: ${req.method} ${req.path} from ${req.ip}`, {
+      origin: origin || 'Unknown',
+      referer: referer || 'Unknown',
+      path: req.path,
+    });
+    return res.status(403).send('Access Denied');
+  }
 
-    // Check if the request is coming from the allowed origin
-    if (origin !== allowedOrigin && (!referer || !referer.startsWith(allowedOrigin))) {
-        logger.warn(`Blocked request from unauthorized origin: ${req.ip}, Origin: ${origin}, Referer: ${referer}`);
-        return res.status(403).send('Access Denied');
-    }
+  // Only allow specific HTTP methods
+  const allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
+  if (!allowedMethods.includes(req.method)) {
+    logger.warn(`Blocked unauthorized method: ${req.method} from ${req.ip}`, {
+      method: req.method,
+      path: req.path,
+    });
+    return res.status(405).send('Method Not Allowed');
+  }
 
-    // Only allow specific HTTP methods
-    const allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
-    if (!allowedMethods.includes(req.method)) {
-        logger.warn(`Blocked request with unauthorized method: ${req.ip}, Method: ${req.method}`);
-        return res.status(405).send('Method Not Allowed');
-    }
+  // Only allow requests to your API routes, uploads, or health check
+  if (!req.path.startsWith('/api/v1/') && !req.path.startsWith('/uploads/') && req.path !== '/api/health') {
+    logger.warn(`Blocked unauthorized path: ${req.method} ${req.path} from ${req.ip}`, {
+      path: req.path,
+    });
+    return res.status(404).send('Not Found');
+  }
 
-    // Only allow requests to your API routes, uploads, or health check
-    if (!req.path.startsWith('/api/v1/') && !req.path.startsWith('/uploads/') && req.path !== '/api/health') {
-        logger.warn(`Blocked request to unauthorized path: ${req.ip}, Path: ${req.path}`);
-        return res.status(404).send('Not Found');
-    }
-
-    next();
+  next();
 };
 
 const blockedIPs = new Map();
 const trackBlockedAttempts = (req, res, next) => {
-  if (res.statusCode === 403 || res.statusCode === 405 || res.statusCode === 404) {
+  if ([403, 405, 404].includes(res.statusCode)) {
     const count = (blockedIPs.get(req.ip) || 0) + 1;
     blockedIPs.set(req.ip, count);
     if (count >= 5) {
       logger.error(`Multiple blocked attempts from IP: ${req.ip}, Count: ${count}`);
-      // Implement temporary IP ban here
       return res.status(403).send('Access Denied');
     }
   }
@@ -82,5 +117,6 @@ module.exports = {
   hsts,
   compression,
   strictSecurityCheck,
+  enhancedLoggingMiddleware,
   trackBlockedAttempts
 };

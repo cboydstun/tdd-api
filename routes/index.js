@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const enhancedRequestLogging = require('../middlewares/enhancedRequestLogging');
+const { enhancedLoggingMiddleware } = require('../middlewares/security');
 
 //import routers
 const blogRouter = require('./blogRouter');
@@ -11,7 +11,7 @@ const contactRouter = require('./contactRouter');
 const productRouter = require('./productRouter');
 
 // Use the enhancedRequestLogging middleware for all routes
-router.use(enhancedRequestLogging);
+router.use(enhancedLoggingMiddleware);
 
 //define routes
 router.use('/users', userRouter);

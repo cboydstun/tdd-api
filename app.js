@@ -6,7 +6,6 @@ require("dotenv").config();
 
 // Import custom utilities and middleware
 const logger = require('./utils/logger');
-const enhancedRequestLogging = require('./middlewares/enhancedRequestLogging');
 const tooBusyCheck = require('./utils/tooBusy');
 
 // Import security middleware
@@ -18,7 +17,8 @@ const {
   hsts,
   compression,
   strictSecurityCheck,
-  trackBlockedAttempts
+  trackBlockedAttempts,
+  enhancedLoggingMiddleware,
 } = require('./middlewares/security');
 
 // Import additional middleware
@@ -30,8 +30,7 @@ const router = require("./routes/index");
 // Apply strict security check before any other middleware
 app.use(strictSecurityCheck);
 
-// Apply enhanced request logging
-app.use(enhancedRequestLogging);
+app.use(enhancedLoggingMiddleware);
 
 // Configure and apply CORS
 app.use(cors({
