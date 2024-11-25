@@ -91,7 +91,6 @@ const getProductBySlug = async (req, res) => {
 // POST /products - should create a new product
 const createProduct = async (req, res) => {
     try {
-        console.log('Received product data:', req.body);
         let productData;
 
         try {
@@ -178,8 +177,6 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { slug } = req.params;
-        console.log('Attempting to update product:', slug);
-        console.log('Received update data:', req.body);
 
         let productData;
         try {
@@ -299,12 +296,9 @@ const updateProduct = async (req, res) => {
 // DELETE /products/:slug - should delete a single product
 const deleteProduct = async (req, res) => {
     try {
-        console.log('Attempting to delete product with slug:', req.params.slug);
-
         const product = await Product.findOneAndDelete({ slug: req.params.slug });
 
         if (!product) {
-            console.log('Product not found for deletion');
             return res.status(404).json({ error: 'Product not found' });
         }
 
