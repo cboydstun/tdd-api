@@ -47,9 +47,11 @@ const getBlogBySlug = async (req, res) => {
 const createBlog = async (req, res) => {
     try {
         console.log('Received blog data:', req.body);
+        console.log('User in request:', req.user);
+        console.log('User _id type:', typeof req.user?._id);
+        console.log('User _id:', req.user?._id);
 
-        // Parse the JSON string from blogData
-        const blogData = JSON.parse(req.body.blogData);
+        const blogData = req.body;
 
         const {
             title,
@@ -71,6 +73,10 @@ const createBlog = async (req, res) => {
 
         if (!title || !introduction || !body || !conclusion) {
             return res.status(400).json({ error: "Title, introduction, body, and conclusion are required" });
+        }
+
+        if (!req.user || !req.user._id) {
+            return res.status(401).json({ error: "Authentication required" });
         }
 
         const sanitizeOptions = {
@@ -140,7 +146,10 @@ const createBlog = async (req, res) => {
         res.status(201).json(savedBlog);
     } catch (err) {
         console.error('Error creating blog:', err);
-        res.status(500).json({ error: 'An error occurred while creating the blog', details: err.message });
+        res.status(500).json({
+            error: 'An error occurred while creating the blog',
+            details: err.message
+        });
     }
 };
 
@@ -153,11 +162,11 @@ const updateBlog = async (req, res) => {
             return res.status(404).json({ error: 'Blog not found' });
         }
 
-        let updates = JSON.parse(req.body.blogData);
+        let updates = req.body;
         console.log('Received update data:', updates);
 
         // Handle image deletions
-        const imagesToDelete = JSON.parse(req.body.imagesToDelete || '[]');
+        const imagesToDelete = req.body.imagesToDelete || [];
         console.log('Images to delete:', imagesToDelete);
 
         for (const imageName of imagesToDelete) {
@@ -184,7 +193,7 @@ const updateBlog = async (req, res) => {
 
         // Update other fields
         Object.keys(updates).forEach(key => {
-            if (key !== 'images') {
+            if (key !== 'images' && key !== 'imagesToDelete') {
                 blog[key] = updates[key];
             }
         });
@@ -195,7 +204,10 @@ const updateBlog = async (req, res) => {
         res.status(200).json(updatedBlog);
     } catch (err) {
         console.error('Error updating blog:', err);
-        res.status(500).json({ error: 'An error occurred while updating the blog', details: err.message });
+        res.status(500).json({
+            error: 'An error occurred while updating the blog',
+            details: err.message
+        });
     }
 };
 
@@ -215,7 +227,10 @@ const deleteBlog = async (req, res) => {
         res.status(200).json({ message: 'Blog successfully deleted', deletedBlog: blog });
     } catch (err) {
         console.error('Error in deleteBlog:', err);
-        res.status(500).json({ error: 'An error occurred while deleting the blog', details: err.message });
+        res.status(500).json({
+            error: 'An error occurred while deleting the blog',
+            details: err.message
+        });
     }
 };
 
@@ -257,7 +272,10 @@ const removeImage = async (req, res) => {
         res.status(200).json({ message: 'Image removed successfully' });
     } catch (err) {
         console.error('Error removing image:', err);
-        res.status(500).json({ error: 'An error occurred while removing the image', details: err.message });
+        res.status(500).json({
+            error: 'An error occurred while removing the image',
+            details: err.message
+        });
     }
 };
 
