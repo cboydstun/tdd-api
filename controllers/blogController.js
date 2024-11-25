@@ -46,11 +46,6 @@ const getBlogBySlug = async (req, res) => {
 // POST /blogs - should create a new blog
 const createBlog = async (req, res) => {
     try {
-        console.log('Received blog data:', req.body);
-        console.log('User in request:', req.user);
-        console.log('User _id type:', typeof req.user?._id);
-        console.log('User _id:', req.user?._id);
-
         const blogData = req.body;
 
         const {
@@ -142,7 +137,6 @@ const createBlog = async (req, res) => {
         });
 
         const savedBlog = await newBlog.save();
-        console.log('Saved blog:', savedBlog);
         res.status(201).json(savedBlog);
     } catch (err) {
         console.error('Error creating blog:', err);
@@ -163,23 +157,19 @@ const updateBlog = async (req, res) => {
         }
 
         let updates = req.body;
-        console.log('Received update data:', updates);
 
         // Handle image deletions
         const imagesToDelete = req.body.imagesToDelete || [];
-        console.log('Images to delete:', imagesToDelete);
 
         for (const imageName of imagesToDelete) {
             const imagePath = path.join(__dirname, '..', 'uploads', imageName);
             if (fs.existsSync(imagePath)) {
                 fs.unlinkSync(imagePath);
-                console.log(`Deleted image file: ${imagePath}`);
             }
             blog.images = blog.images.filter(img => img.filename !== imageName);
         }
 
         // Handle new image uploads
-        console.log('Files received:', req.files);
         if (req.files && req.files.length > 0) {
             const newImages = req.files.map(file => ({
                 filename: file.filename,
@@ -187,7 +177,6 @@ const updateBlog = async (req, res) => {
                 mimetype: file.mimetype,
                 size: file.size
             }));
-            console.log('New images to add:', newImages);
             blog.images = [...blog.images, ...newImages];
         }
 
@@ -200,7 +189,6 @@ const updateBlog = async (req, res) => {
 
         const updatedBlog = await blog.save();
 
-        console.log('Updated blog:', updatedBlog);
         res.status(200).json(updatedBlog);
     } catch (err) {
         console.error('Error updating blog:', err);
@@ -214,16 +202,12 @@ const updateBlog = async (req, res) => {
 // DELETE /blogs/:slug - should delete a single blog
 const deleteBlog = async (req, res) => {
     try {
-        console.log('Attempting to delete blog with slug:', req.params.slug);
-
         const blog = await Blog.findOneAndDelete({ slug: req.params.slug });
 
         if (!blog) {
-            console.log('Blog not found for deletion');
             return res.status(404).json({ error: 'Blog not found' });
         }
 
-        console.log('Blog successfully deleted:', blog);
         res.status(200).json({ message: 'Blog successfully deleted', deletedBlog: blog });
     } catch (err) {
         console.error('Error in deleteBlog:', err);
@@ -239,27 +223,22 @@ const removeImage = async (req, res) => {
     try {
         const { slug, imageName } = req.params;
 
-        console.log(`Attempting to remove image ${imageName} from blog with slug ${slug}`);
 
         const blog = await Blog.findOne({ slug });
         if (!blog) {
-            console.log(`Blog with slug ${slug} not found`);
             return res.status(404).json({ error: 'Blog not found' });
         }
 
         const imageIndex = blog.images.findIndex(img => img.filename === imageName);
         if (imageIndex === -1) {
-            console.log(`Image ${imageName} not found in blog`);
             return res.status(404).json({ error: 'Image not found in blog' });
         }
 
         // Remove image from filesystem
         const imagePath = path.join(__dirname, '..', 'uploads', imageName);
-        console.log(`Attempting to delete file at path: ${imagePath}`);
 
         if (fs.existsSync(imagePath)) {
             fs.unlinkSync(imagePath);
-            console.log(`File successfully deleted from filesystem`);
         } else {
             console.log(`File not found in filesystem, proceeding with database update`);
         }
@@ -267,7 +246,6 @@ const removeImage = async (req, res) => {
         // Remove image from blog document
         blog.images.splice(imageIndex, 1);
         await blog.save();
-        console.log(`Image removed from blog document`);
 
         res.status(200).json({ message: 'Image removed successfully' });
     } catch (err) {

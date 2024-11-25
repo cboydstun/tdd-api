@@ -16,18 +16,11 @@ jest.mock('../../middlewares/jwtMiddleware', () => {
     return (req, res, next) => {
         // Get mockUser from app.locals and ensure we use it properly
         if (req.app.locals.mockUser) {
-            console.log('Mock user in middleware:', req.app.locals.mockUser);
-            console.log('Mock user _id in middleware:', req.app.locals.mockUser._id);
-            console.log('Mock user _id type in middleware:', typeof req.app.locals.mockUser._id);
-
             // Create a new object to avoid reference issues
             req.user = {
                 _id: req.app.locals.mockUser._id,
                 email: req.app.locals.mockUser.email
             };
-
-            console.log('Set user in middleware:', req.user);
-            console.log('Set user _id type in middleware:', typeof req.user._id);
         }
         next();
     };

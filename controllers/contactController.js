@@ -93,8 +93,6 @@ const createContact = async (req, res, next) => {
             to: process.env.USER_PHONE_NUMBER
         });
 
-        console.log('SMS sent!!!');
-
         const contact = await Contact.create(req.body);
 
         res.status(201).json(contact);

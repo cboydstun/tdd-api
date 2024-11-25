@@ -73,7 +73,7 @@ app.set('trust proxy', (ip) => {
 });
 
 // Apply main router
-app.use("/api/v1", router);
+app.use("/", router);
 
 // Health check route
 app.get("/api/health", (req, res) => {

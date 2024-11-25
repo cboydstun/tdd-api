@@ -5,6 +5,51 @@ const Product = require('../models/productSchema');
 const slugify = require('slugify');
 const sanitizeHtml = require('sanitize-html');
 
+const VALID_DIMENSION_UNITS = ['feet', 'meters', 'inches'];
+
+// Validation helpers
+const validatePrice = (price) => {
+    if (!price || !price.base || typeof price.base !== 'number') {
+        throw new Error('Price base amount is required and must be a number');
+    }
+    if (price.base <= 0) {
+        throw new Error('Price must be greater than 0');
+    }
+    if (!price.currency || typeof price.currency !== 'string') {
+        throw new Error('Price currency is required and must be a string');
+    }
+};
+
+const validateDimensions = (dimensions) => {
+    if (!dimensions) {
+        throw new Error('Dimensions are required');
+    }
+    if (dimensions.length <= 0 || dimensions.width <= 0 || dimensions.height <= 0) {
+        throw new Error('Dimensions must be greater than 0');
+    }
+    if (!VALID_DIMENSION_UNITS.includes(dimensions.unit)) {
+        throw new Error(`Unit must be one of: ${VALID_DIMENSION_UNITS.join(', ')}`);
+    }
+};
+
+const validateCapacity = (capacity) => {
+    if (typeof capacity !== 'number' || capacity <= 0) {
+        throw new Error('Capacity must be a positive number');
+    }
+};
+
+const validateAgeRange = (ageRange) => {
+    if (!ageRange || typeof ageRange.min !== 'number' || typeof ageRange.max !== 'number') {
+        throw new Error('Age range min and max are required and must be numbers');
+    }
+    if (ageRange.min < 0 || ageRange.max < 0) {
+        throw new Error('Age range values cannot be negative');
+    }
+    if (ageRange.min > ageRange.max) {
+        throw new Error('Minimum age cannot be greater than maximum age');
+    }
+};
+
 // GET /products - should return all products
 const getAllProducts = async (req, res) => {
     try {
@@ -14,7 +59,7 @@ const getAllProducts = async (req, res) => {
         }
         const products = await Product.find(query)
             .sort({ createdAt: -1 })
-            .select('-__v'); // This will select all fields except __v
+            .select('-__v');
 
         res.status(200).json(products);
     } catch (err) {
@@ -47,8 +92,46 @@ const getProductBySlug = async (req, res) => {
 const createProduct = async (req, res) => {
     try {
         console.log('Received product data:', req.body);
+        let productData;
 
-        const productData = JSON.parse(req.body.productData);
+        try {
+            productData = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+            if (req.body.productData) {
+                productData = typeof req.body.productData === 'string' ?
+                    JSON.parse(req.body.productData) : req.body.productData;
+            }
+        } catch (parseErr) {
+            return res.status(400).json({ error: 'Invalid product data format' });
+        }
+
+        // Validate required fields
+        const requiredFields = ['name', 'description', 'category', 'price'];
+        for (const field of requiredFields) {
+            if (!productData[field]) {
+                return res.status(400).json({ error: `${field} is required` });
+            }
+        }
+
+        // Validate complex fields
+        try {
+            validatePrice(productData.price);
+            validateDimensions(productData.dimensions);
+            validateCapacity(productData.capacity);
+            validateAgeRange(productData.ageRange);
+        } catch (validationError) {
+            return res.status(400).json({ error: validationError.message });
+        }
+
+        // Validate enums
+        if (productData.rentalDuration &&
+            !['hourly', 'half-day', 'full-day', 'weekend'].includes(productData.rentalDuration)) {
+            return res.status(400).json({ error: 'Invalid rental duration' });
+        }
+
+        if (productData.availability &&
+            !['available', 'rented', 'maintenance', 'retired'].includes(productData.availability)) {
+            return res.status(400).json({ error: 'Invalid availability status' });
+        }
 
         const sanitizeOptions = {
             allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
@@ -59,57 +142,34 @@ const createProduct = async (req, res) => {
         };
 
         // Generate slug
-        let slug = slugify(productData.name, { lower: true, strict: true });
-        let slugExists = await Product.findOne({ slug });
-        let counter = 1;
-        while (slugExists) {
-            slug = slugify(`${productData.name}-${counter}`, { lower: true, strict: true });
-            slugExists = await Product.findOne({ slug });
-            counter++;
+        const slug = slugify(productData.name, { lower: true, strict: true });
+
+        // Check for existing slug
+        const slugExists = await Product.findOne({ slug });
+        if (slugExists) {
+            return res.status(400).json({ error: 'A product with this name already exists' });
         }
 
         const newProduct = new Product({
+            ...productData,
+            slug,
             name: sanitizeHtml(productData.name),
-            slug, // Include the generated slug
             description: sanitizeHtml(productData.description, sanitizeOptions),
             category: sanitizeHtml(productData.category),
-            price: {
-                base: parseFloat(productData.price.base),
-                currency: productData.price.currency
-            },
-            rentalDuration: productData.rentalDuration,
-            availability: productData.availability,
-            dimensions: {
-                length: parseFloat(productData.dimensions.length),
-                width: parseFloat(productData.dimensions.width),
-                height: parseFloat(productData.dimensions.height),
-                unit: productData.dimensions.unit
-            },
-            capacity: parseInt(productData.capacity),
-            ageRange: {
-                min: parseInt(productData.ageRange.min),
-                max: parseInt(productData.ageRange.max)
-            },
-            setupRequirements: {
-                space: sanitizeHtml(productData.setupRequirements.space),
-                powerSource: productData.setupRequirements.powerSource,
-                surfaceType: productData.setupRequirements.surfaceType.map(type => sanitizeHtml(type))
-            },
-            features: productData.features.map(feature => sanitizeHtml(feature)),
-            safetyGuidelines: sanitizeHtml(productData.safetyGuidelines),
-            weatherRestrictions: productData.weatherRestrictions.map(restriction => sanitizeHtml(restriction)),
             images: req.files ? req.files.map(file => ({
                 url: file.path,
                 alt: sanitizeHtml(file.originalname),
                 isPrimary: false
-            })) : []
+            })) : (productData.images || [])
         });
 
         const savedProduct = await newProduct.save();
-        console.log('Saved product:', savedProduct);
         res.status(201).json(savedProduct);
     } catch (err) {
         console.error('Error creating product:', err);
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ error: 'Validation error', details: err.message });
+        }
         res.status(500).json({ error: 'An error occurred while creating the product', details: err.message });
     }
 };
@@ -121,8 +181,16 @@ const updateProduct = async (req, res) => {
         console.log('Attempting to update product:', slug);
         console.log('Received update data:', req.body);
 
-        const productData = JSON.parse(req.body.productData);
-        console.log('Parsed product data:', productData);
+        let productData;
+        try {
+            productData = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+            if (req.body.productData) {
+                productData = typeof req.body.productData === 'string' ?
+                    JSON.parse(req.body.productData) : req.body.productData;
+            }
+        } catch (parseErr) {
+            return res.status(400).json({ error: 'Invalid product data format' });
+        }
 
         // Find the existing product
         const existingProduct = await Product.findOne({ slug });
@@ -130,57 +198,70 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
+        // Validate updated fields
+        try {
+            if (productData.price) validatePrice(productData.price);
+            if (productData.dimensions) validateDimensions(productData.dimensions);
+            if (productData.capacity !== undefined) validateCapacity(productData.capacity);
+            if (productData.ageRange) validateAgeRange(productData.ageRange);
+        } catch (validationError) {
+            return res.status(400).json({ error: validationError.message });
+        }
+
         // Handle image removal
         if (productData.removedImages && productData.removedImages.length > 0) {
             for (const imageId of productData.removedImages) {
                 const imageToRemove = existingProduct.images.find(img => img._id.toString() === imageId);
                 if (imageToRemove) {
-                    // Remove the file from the file system
-                    const filePath = path.join(__dirname, '..', imageToRemove.url);
                     try {
-                        await fs.unlink(filePath);
+                        await fs.unlink(path.join(__dirname, '..', imageToRemove.url));
                     } catch (err) {
-                        console.error(`Failed to delete file: ${filePath}`, err);
+                        console.error(`Failed to delete file: ${imageToRemove.url}`, err);
                     }
                 }
             }
-            // Update the images array
-            existingProduct.images = existingProduct.images.filter(img => !productData.removedImages.includes(img._id.toString()));
+            existingProduct.images = existingProduct.images.filter(img =>
+                !productData.removedImages.includes(img._id.toString())
+            );
         }
 
         // Generate new slug if name has changed
         let newSlug = slug;
         if (productData.name && productData.name !== existingProduct.name) {
             newSlug = slugify(productData.name, { lower: true, strict: true });
-            let slugExists = await Product.findOne({ slug: newSlug, _id: { $ne: existingProduct._id } });
-            let counter = 1;
-            while (slugExists) {
-                newSlug = slugify(`${productData.name}-${counter}`, { lower: true, strict: true });
-                slugExists = await Product.findOne({ slug: newSlug, _id: { $ne: existingProduct._id } });
-                counter++;
+            const slugExists = await Product.findOne({ slug: newSlug, _id: { $ne: existingProduct._id } });
+            if (slugExists) {
+                return res.status(400).json({ error: 'A product with this name already exists' });
             }
         }
 
+        // Validate enums if provided
+        if (productData.rentalDuration &&
+            !['hourly', 'half-day', 'full-day', 'weekend'].includes(productData.rentalDuration)) {
+            return res.status(400).json({ error: 'Invalid rental duration' });
+        }
+
+        if (productData.availability &&
+            !['available', 'rented', 'maintenance', 'retired'].includes(productData.availability)) {
+            return res.status(400).json({ error: 'Invalid availability status' });
+        }
+
+        const sanitizeOptions = {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+            allowedAttributes: {
+                ...sanitizeHtml.defaults.allowedAttributes,
+                'img': ['src', 'alt', 'width', 'height']
+            }
+        };
+
         // Prepare update data
         const updateData = {
-            name: sanitizeHtml(productData.name),
+            ...productData,
             slug: newSlug,
-            description: sanitizeHtml(productData.description),
-            category: sanitizeHtml(productData.category),
-            price: productData.price,
-            rentalDuration: productData.rentalDuration,
-            availability: productData.availability,
-            dimensions: productData.dimensions,
-            capacity: productData.capacity,
-            ageRange: productData.ageRange,
-            setupRequirements: {
-                space: sanitizeHtml(productData.setupRequirements.space),
-                powerSource: productData.setupRequirements.powerSource,
-                surfaceType: productData.setupRequirements.surfaceType.map(type => sanitizeHtml(type))
-            },
-            features: productData.features.map(feature => sanitizeHtml(feature)),
-            safetyGuidelines: sanitizeHtml(productData.safetyGuidelines),
-            weatherRestrictions: productData.weatherRestrictions.map(restriction => sanitizeHtml(restriction)),
+            name: productData.name ? sanitizeHtml(productData.name) : existingProduct.name,
+            description: productData.description ?
+                sanitizeHtml(productData.description, sanitizeOptions) : existingProduct.description,
+            category: productData.category ? sanitizeHtml(productData.category) : existingProduct.category,
             images: existingProduct.images
         };
 
@@ -194,8 +275,6 @@ const updateProduct = async (req, res) => {
             updateData.images = [...updateData.images, ...newImages];
         }
 
-        console.log('Update data:', updateData);
-
         // Update the product
         const updatedProduct = await Product.findOneAndUpdate(
             { slug },
@@ -207,10 +286,12 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({ error: 'Product not found after update' });
         }
 
-        console.log('Updated product:', updatedProduct);
         res.status(200).json(updatedProduct);
     } catch (err) {
         console.error('Error in updateProduct:', err);
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ error: 'Validation error', details: err.message });
+        }
         res.status(500).json({ error: 'An error occurred while updating the product', details: err.message });
     }
 };
@@ -228,12 +309,16 @@ const deleteProduct = async (req, res) => {
         }
 
         // Remove associated images from filesystem
-        product.images.forEach(image => {
-            const imagePath = path.join(__dirname, '..', image.url);
-            fs.unlinkSync(imagePath);
-        });
+        if (product.images && product.images.length > 0) {
+            for (const image of product.images) {
+                try {
+                    await fs.unlink(path.join(__dirname, '..', image.url));
+                } catch (err) {
+                    console.error(`Failed to delete file: ${image.url}`, err);
+                }
+            }
+        }
 
-        console.log('Product successfully deleted:', product);
         res.status(200).json({ message: 'Product successfully deleted', deletedProduct: product });
     } catch (err) {
         console.error('Error in deleteProduct:', err);
@@ -257,8 +342,11 @@ const removeImage = async (req, res) => {
         }
 
         // Remove image from filesystem
-        const imagePath = path.join(__dirname, '..', product.images[imageIndex].url);
-        fs.unlinkSync(imagePath);
+        try {
+            await fs.unlink(path.join(__dirname, '..', product.images[imageIndex].url));
+        } catch (err) {
+            console.error(`Failed to delete file: ${product.images[imageIndex].url}`, err);
+        }
 
         // Remove image from product document
         product.images.splice(imageIndex, 1);

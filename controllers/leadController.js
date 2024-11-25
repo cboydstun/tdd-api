@@ -38,8 +38,6 @@ const createLead = async (req, res, next) => {
             throw new Error("Please provide all required fields");
         }
 
-        console.log(req.body.date);
-
         // check for lead by size and date
         const existingLead = await Lead.findOne({
             date: req.body.date,
