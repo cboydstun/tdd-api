@@ -330,6 +330,7 @@ const removeImage = async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
+        // Find the image by filename
         const imageIndex = product.images.findIndex(img => path.basename(img.url) === imageName);
         if (imageIndex === -1) {
             return res.status(404).json({ error: 'Image not found' });
