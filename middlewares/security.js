@@ -22,7 +22,11 @@ const speedLimiter = slowDown({
   maxDelayMs: 2000,
 });
 
-const allowedOrigin = process.env.CLIENT_URL || 'https://www.satxbounce.com';
+const allowedOrigins = [
+  process.env.CLIENT_URL || 'https://www.satxbounce.com',
+  'http://localhost:5173', // Vite development server
+  'http://127.0.0.1:5173'
+];
 
 const enhancedLoggingMiddleware = (req, res, next) => {
   const startTime = process.hrtime();
@@ -65,14 +69,16 @@ const strictSecurityCheck = (req, res, next) => {
     return next();
   }
 
-  // Check if the request is coming from the allowed origin
-  if (origin !== allowedOrigin && (!referer || !referer.startsWith(allowedOrigin))) {
-    logger.warn(`Blocked unauthorized request: ${req.method} ${req.path} from ${req.ip}`, {
-      origin: origin || 'Unknown',
-      referer: referer || 'Unknown',
-      path: req.path,
-    });
-    return res.status(403).send('Access Denied');
+  // Check if the request is coming from an allowed origin
+  if (origin && !allowedOrigins.includes(origin)) {
+    if (!referer || !allowedOrigins.some(allowed => referer.startsWith(allowed))) {
+      logger.warn(`Blocked unauthorized request: ${req.method} ${req.path} from ${req.ip}`, {
+        origin: origin || 'Unknown',
+        referer: referer || 'Unknown',
+        path: req.path,
+      });
+      return res.status(403).send('Access Denied');
+    }
   }
 
   // Only allow specific HTTP methods

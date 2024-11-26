@@ -8,10 +8,9 @@ const fs = require('fs');
 // GET /blogs - should return all blogs
 const getAllBlogs = async (req, res) => {
     try {
-        let query = {};
-        if (!req.user) {
-            query.status = 'published';
-        }
+        // Only show published blogs for public access
+        const query = { status: 'published' };
+
         const blogs = await Blog.find(query)
             .sort({ createdAt: -1 })
             .select('title slug introduction body conclusion excerpt featuredImage categories tags publishDate readTime status seo images');
@@ -25,7 +24,12 @@ const getAllBlogs = async (req, res) => {
 // GET /blogs/:slug - should return a single blog
 const getBlogBySlug = async (req, res) => {
     try {
-        const blog = await Blog.findOne({ slug: req.params.slug })
+        const query = { slug: req.params.slug };
+        if (!req.user) {
+            query.status = 'published';
+        }
+
+        const blog = await Blog.findOne(query)
             .populate('author', 'email')
             .populate('relatedPosts', 'title slug');
 
@@ -222,7 +226,6 @@ const deleteBlog = async (req, res) => {
 const removeImage = async (req, res) => {
     try {
         const { slug, imageName } = req.params;
-
 
         const blog = await Blog.findOne({ slug });
         if (!blog) {
