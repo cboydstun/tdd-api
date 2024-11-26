@@ -1,8 +1,15 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import axios from "axios";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -11,16 +18,45 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const login = async (username: string, password: string) => {
-    // TODO: Implement actual authentication logic
-    if (username === "admin" && password === "admin") {
+  useEffect(() => {
+    // Check if we have a token in localStorage
+    const token = localStorage.getItem("token");
+    if (token) {
       setIsAuthenticated(true);
-      return true;
+      // Set axios default header for all future requests
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
-    return false;
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await axios.post("/api/v1/users/login", {
+        email,
+        password,
+      });
+
+      if (response.data.token) {
+        // Store the token
+        localStorage.setItem("token", response.data.token);
+        // Set axios default header for all future requests
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data.token}`;
+        setIsAuthenticated(true);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      }
+      throw new Error("An error occurred during login");
+    }
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
+    delete axios.defaults.headers.common["Authorization"];
     setIsAuthenticated(false);
   };
 
