@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Product, ProductFormData } from '../types/product';
+import { Product } from '../types/product';
 
 export const useProductManagement = () => {
     const [products, setProducts] = useState<Product[]>([]);

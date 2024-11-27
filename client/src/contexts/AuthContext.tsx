@@ -47,10 +47,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       return false;
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.data?.error) {
-        throw new Error(error.response.data.error);
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data?.error) {
+          throw new Error(error.response.data.error);
+        }
+        // For network errors or any other axios errors without a response
+        throw new Error("An error occurred during login");
       }
-      throw new Error("An error occurred during login");
+      throw error;
     }
   };
 
