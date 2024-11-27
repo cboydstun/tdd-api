@@ -1,9 +1,12 @@
 {
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
+    "composite": true,
     "moduleResolution": "node",
+    "module": "commonjs",
     "types": ["jest", "@testing-library/jest-dom", "node"],
-    "module": "commonjs"
+    "allowJs": true,
+    "esModuleInterop": true
   },
   "include": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/setupTests.ts"]
 }

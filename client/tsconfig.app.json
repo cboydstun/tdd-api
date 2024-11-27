@@ -10,7 +10,7 @@
     "allowSyntheticDefaultImports": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
@@ -25,7 +25,7 @@
     "noUncheckedSideEffectImports": true,
 
     /* Import.meta support */
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
 
     /* Module Resolution */
     "baseUrl": ".",
@@ -33,5 +33,11 @@
       "*": ["src/*"]
     }
   },
-  "include": ["src", "src/types", "src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"]
+  "include": [
+    "src",
+    "src/types",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.d.ts"
+  ]
 }

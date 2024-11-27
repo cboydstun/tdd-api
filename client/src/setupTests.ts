@@ -1,13 +1,27 @@
 import '@testing-library/jest-dom';
+import * as util from 'util';
 
-// Add TextEncoder polyfill
-const { TextEncoder, TextDecoder } = require('util');
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
+declare global {
+    interface Window {
+        matchMedia: (query: string) => MediaQueryList;
+    }
+    namespace NodeJS {
+        interface ProcessEnv {
+            VITE_API_URL: string;
+        }
+    }
+}
+
+// Set up TextEncoder/TextDecoder
+if (typeof globalThis.TextEncoder === 'undefined') {
+    (globalThis as any).TextEncoder = util.TextEncoder;
+    (globalThis as any).TextDecoder = util.TextDecoder;
+}
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
     writable: true,
+    configurable: true,
     value: jest.fn().mockImplementation((query: string) => ({
         matches: false,
         media: query,
@@ -21,7 +35,7 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Mock environment variables
-global.process.env.VITE_API_URL = 'http://localhost:8080';
+process.env.VITE_API_URL = 'http://localhost:8080';
 
 // Mock modules that might cause issues
 jest.mock('lucide-react', () => ({

@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import ProtectedRoute from "../ProtectedRoute";
 import { useAuth } from "../../contexts/AuthContext";
+import { Navigate } from "react-router-dom";
 import "@testing-library/jest-dom";
 
 // Mock the useAuth hook
@@ -25,7 +26,6 @@ describe("ProtectedRoute", () => {
 
   it("redirects to login when user is not authenticated", () => {
     mockUseAuth(false);
-    const { Navigate } = require("react-router-dom");
 
     render(
       <ProtectedRoute>
