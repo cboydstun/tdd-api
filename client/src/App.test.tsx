@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import App from "./App";
-import * as AuthContext from "./contexts/AuthContext";
+// import * as AuthContext from "./contexts/AuthContext";
 
 // Mock all component imports
 jest.mock("./components/Layout", () => {
@@ -37,20 +37,6 @@ jest.mock("./components/Login", () => {
 jest.mock("./components/AdminPanel", () => {
   return function MockAdminPanel() {
     return <div data-testid="mock-adminpanel">AdminPanel</div>;
-  };
-});
-
-jest.mock("./components/ProtectedRoute", () => {
-  return function MockProtectedRoute({
-    children,
-  }: {
-    children: React.ReactNode;
-  }) {
-    const { isAuthenticated } = AuthContext.useAuth();
-    if (!isAuthenticated) {
-      return <div data-testid="mock-login">Login</div>;
-    }
-    return <>{children}</>;
   };
 });
 

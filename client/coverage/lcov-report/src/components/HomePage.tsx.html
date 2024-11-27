@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -294,13 +294,13 @@
 <a name='L229'></a><a href='#L229'>229</a>
 <a name='L230'></a><a href='#L230'>230</a>
 <a name='L231'></a><a href='#L231'>231</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -469,7 +469,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">76x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -495,7 +495,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">76x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -522,15 +522,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
-<span class="cstat-no" title="statement not covered" >import { Link } from "react-router-dom";</span>
-<span class="cstat-no" title="statement not covered" >import { ArrowRight } from "lucide-react";</span>
-<span class="cstat-no" title="statement not covered" >import CustomerReviews from "./CustomerReviews";</span>
-<span class="cstat-no" title="statement not covered" >import { Feature, features } from "../data/features";</span>
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import CustomerReviews from "./CustomerReviews";
+import { Feature, features } from "../data/features";
 &nbsp;
-const HomePage: React.FC = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return (</span>
+const HomePage: React.FC = () =&gt; {
+  return (
     &lt;&gt;
       {/* Hero Section */}
       &lt;div className="py-20 text-center"&gt;
@@ -698,8 +698,8 @@ const HomePage: React.FC = <span class="cstat-no" title="statement not covered" 
           Your One-Stop Party Solution
         &lt;/h2&gt;
         &lt;div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"&gt;
-          {features.map(<span class="fstat-no" title="function not covered" >(f</span>eature: Feature, index: number) =&gt; (
-<span class="cstat-no" title="statement not covered" >            &lt;div</span>
+          {features.map((feature: Feature, index: number) =&gt; (
+            &lt;div
               key={index}
               className="p-6 border rounded-lg hover:border-secondary-indigo transition duration-300"
             &gt;
@@ -724,8 +724,8 @@ const HomePage: React.FC = <span class="cstat-no" title="statement not covered" 
             "School Events",
             "Church Functions",
             "Community Gatherings",
-          ].map(<span class="fstat-no" title="function not covered" >(e</span>vent: string, index: number) =&gt; (
-<span class="cstat-no" title="statement not covered" >            &lt;div</span>
+          ].map((event: string, index: number) =&gt; (
+            &lt;div
               key={index}
               className="p-6 bg-secondary-blue/10 rounded-lg text-center hover:bg-secondary-purple/10 transition duration-300"
             &gt;
@@ -752,7 +752,7 @@ const HomePage: React.FC = <span class="cstat-no" title="statement not covered" 
   );
 };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default HomePage;</span>
+export default HomePage;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -760,7 +760,7 @@ const HomePage: React.FC = <span class="cstat-no" title="statement not covered" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-27T03:23:39.715Z
+                at 2024-11-27T18:26:15.080Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

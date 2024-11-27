@@ -23,11 +23,18 @@ app.use(morgan('dev'));
 app.use(tooBusy);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/dist')));
+// app.use(express.static(path.join(__dirname, 'client/dist')));
+
+// path to uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/', routes);
+
+// Check Health route
+app.get('/api/health', (req, res) => {
+  res.json({ status: '✅' });
+});
 
 // Catch-all handler for client-side routing
 app.get('*', (req, res) => {
