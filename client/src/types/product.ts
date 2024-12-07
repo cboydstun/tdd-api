@@ -14,8 +14,6 @@ export interface ProductImage {
     url: string;
     alt?: string;
     isPrimary: boolean;
-    public_id?: string;
-    filename?: string;
 }
 
 export interface ProductAgeRange {
@@ -25,15 +23,30 @@ export interface ProductAgeRange {
 
 export interface SetupRequirements {
     space: string;
-    powerSource?: boolean;
-    surfaceType?: string[];
+    powerSource: boolean;
+    surfaceType: string[];
+}
+
+export interface Specification {
+    name: string;
+    value: string;
+}
+
+export interface AdditionalService {
+    name: string;
+    price: number;
+}
+
+export interface MaintenanceSchedule {
+    lastMaintenance: string;
+    nextMaintenance: string;
 }
 
 export type RentalDuration = 'hourly' | 'half-day' | 'full-day' | 'weekend';
 export type Availability = 'available' | 'rented' | 'maintenance' | 'retired';
 
 export interface Product {
-    _id: string;
+    _id?: string;
     slug: string;
     name: string;
     description: string;
@@ -43,39 +56,36 @@ export interface Product {
     capacity: number;
     ageRange: ProductAgeRange;
     setupRequirements: SetupRequirements;
+    features: string[];
     safetyGuidelines: string;
+    maintenanceSchedule: MaintenanceSchedule;
+    weatherRestrictions: string[];
+    additionalServices: AdditionalService[];
+    specifications: Specification[];
     images: ProductImage[];
     rentalDuration: RentalDuration;
     availability: Availability;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
-export interface ProductFormData {
+// Form data includes all fields except system-generated ones
+export interface ProductFormData extends Omit<Product, '_id' | 'createdAt' | 'updatedAt'> {
+    // All fields from Product except _id, createdAt, and updatedAt
     name: string;
     description: string;
     category: string;
-    price: {
-        base: number;
-        currency: string;
-    };
-    dimensions: {
-        length: number;
-        width: number;
-        height: number;
-        unit: 'feet' | 'meters' | 'inches';
-    };
+    price: ProductPrice;
+    dimensions: ProductDimensions;
     capacity: number;
-    ageRange: {
-        min: number;
-        max: number;
-    };
-    setupRequirements: {
-        space: string;
-        powerSource?: boolean;
-        surfaceType?: string[];
-    };
+    ageRange: ProductAgeRange;
+    setupRequirements: SetupRequirements;
+    features: string[];
     safetyGuidelines: string;
+    maintenanceSchedule: MaintenanceSchedule;
+    weatherRestrictions: string[];
+    additionalServices: AdditionalService[];
+    specifications: Specification[];
     rentalDuration: RentalDuration;
     availability: Availability;
 }

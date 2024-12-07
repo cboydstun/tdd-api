@@ -6,6 +6,8 @@ import {
   ProductFormData,
   RentalDuration,
   Availability,
+  Specification,
+  AdditionalService,
 } from "../../types/product";
 import { modules, formats } from "../blog/QuillConfig";
 
@@ -20,115 +22,220 @@ interface ImagePreview {
   file?: File;
   public_id?: string;
   filename?: string;
+  alt?: string;
+  isPrimary?: boolean;
 }
+
+const generateSlug = (name: string): string => {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+};
 
 export default function ProductForm({
   onSubmit,
   onCancel,
   initialData,
 }: ProductFormProps) {
-  const [formData, setFormData] = useState<ProductFormData>({
-    name: "",
-    description: "",
-    category: "",
-    price: {
-      base: 0,
-      currency: "USD",
-    },
-    dimensions: {
-      length: 0,
-      width: 0,
-      height: 0,
-      unit: "feet",
-    },
-    capacity: 0,
-    ageRange: {
-      min: 0,
-      max: 0,
-    },
-    setupRequirements: {
-      space: "",
-      powerSource: false,
-      surfaceType: [],
-    },
-    safetyGuidelines: "",
-    rentalDuration: "full-day",
-    availability: "available",
+  console.log('ProductForm rendered with initialData:', initialData);
+
+  const [formData, setFormData] = useState<ProductFormData>(() => {
+    console.log('Initializing formData state with initialData:', initialData);
+    
+    // Initialize with initialData if available, otherwise use defaults
+    if (initialData) {
+      return {
+        name: initialData.name || "",
+        slug: initialData.slug || "",
+        description: initialData.description || "",
+        category: initialData.category || "",
+        price: {
+          base: initialData.price?.base || 0,
+          currency: initialData.price?.currency || "USD",
+        },
+        dimensions: {
+          length: initialData.dimensions?.length || 0,
+          width: initialData.dimensions?.width || 0,
+          height: initialData.dimensions?.height || 0,
+          unit: initialData.dimensions?.unit || "feet",
+        },
+        capacity: initialData.capacity || 0,
+        ageRange: {
+          min: initialData.ageRange?.min || 0,
+          max: initialData.ageRange?.max || 0,
+        },
+        setupRequirements: {
+          space: initialData.setupRequirements?.space || "",
+          powerSource: initialData.setupRequirements?.powerSource || false,
+          surfaceType: initialData.setupRequirements?.surfaceType || [],
+        },
+        features: initialData.features || [],
+        safetyGuidelines: initialData.safetyGuidelines || "",
+        maintenanceSchedule: {
+          lastMaintenance: initialData.maintenanceSchedule?.lastMaintenance || new Date().toISOString(),
+          nextMaintenance: initialData.maintenanceSchedule?.nextMaintenance || new Date().toISOString(),
+        },
+        weatherRestrictions: initialData.weatherRestrictions || [],
+        additionalServices: initialData.additionalServices || [],
+        specifications: initialData.specifications || [],
+        images: initialData.images || [],
+        rentalDuration: (initialData.rentalDuration as RentalDuration) || "full-day",
+        availability: (initialData.availability as Availability) || "available",
+      };
+    }
+
+    // Default values if no initialData
+    return {
+      name: "",
+      slug: "",
+      description: "",
+      category: "",
+      price: {
+        base: 0,
+        currency: "USD",
+      },
+      dimensions: {
+        length: 0,
+        width: 0,
+        height: 0,
+        unit: "feet",
+      },
+      capacity: 0,
+      ageRange: {
+        min: 0,
+        max: 0,
+      },
+      setupRequirements: {
+        space: "",
+        powerSource: false,
+        surfaceType: [],
+      },
+      features: [],
+      safetyGuidelines: "",
+      maintenanceSchedule: {
+        lastMaintenance: new Date().toISOString(),
+        nextMaintenance: new Date().toISOString(),
+      },
+      weatherRestrictions: [],
+      additionalServices: [],
+      specifications: [],
+      images: [],
+      rentalDuration: "full-day" as RentalDuration,
+      availability: "available" as Availability,
+    };
   });
 
   const [imagePreviews, setImagePreviews] = useState<ImagePreview[]>([]);
   const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Handle image previews initialization
   useEffect(() => {
+    console.log('useEffect triggered with initialData:', initialData);
+    
     if (initialData) {
-      setFormData({
-        name: initialData.name,
-        description: initialData.description,
-        category: initialData.category,
+      console.log('Processing initialData fields:');
+      console.log('- name:', initialData.name);
+      console.log('- category:', initialData.category);
+      console.log('- price:', initialData.price);
+      console.log('- dimensions:', initialData.dimensions);
+      console.log('- specifications:', initialData.specifications);
+      console.log('- features:', initialData.features);
+      console.log('- setupRequirements:', initialData.setupRequirements);
+
+      // Create a deep copy of initialData to avoid reference issues
+      const formattedData = {
+        name: initialData.name || "",
+        slug: initialData.slug || "",
+        description: initialData.description || "",
+        category: initialData.category || "",
         price: {
-          base: initialData.price.base,
-          currency: initialData.price.currency,
+          base: initialData.price?.base || 0,
+          currency: initialData.price?.currency || "USD",
         },
         dimensions: {
-          length: initialData.dimensions.length,
-          width: initialData.dimensions.width,
-          height: initialData.dimensions.height,
-          unit: initialData.dimensions.unit,
+          length: initialData.dimensions?.length || 0,
+          width: initialData.dimensions?.width || 0,
+          height: initialData.dimensions?.height || 0,
+          unit: initialData.dimensions?.unit || "feet",
         },
-        capacity: initialData.capacity,
+        capacity: initialData.capacity || 0,
         ageRange: {
-          min: initialData.ageRange.min,
-          max: initialData.ageRange.max,
+          min: initialData.ageRange?.min || 0,
+          max: initialData.ageRange?.max || 0,
         },
         setupRequirements: {
-          space: initialData.setupRequirements.space,
-          powerSource: initialData.setupRequirements.powerSource,
-          surfaceType: initialData.setupRequirements.surfaceType,
+          space: initialData.setupRequirements?.space || "",
+          powerSource: initialData.setupRequirements?.powerSource || false,
+          surfaceType: initialData.setupRequirements?.surfaceType || [],
         },
-        safetyGuidelines: initialData.safetyGuidelines,
-        rentalDuration: initialData.rentalDuration,
-        availability: initialData.availability,
-      });
+        features: initialData.features || [],
+        safetyGuidelines: initialData.safetyGuidelines || "",
+        maintenanceSchedule: {
+          lastMaintenance: initialData.maintenanceSchedule?.lastMaintenance || new Date().toISOString(),
+          nextMaintenance: initialData.maintenanceSchedule?.nextMaintenance || new Date().toISOString(),
+        },
+        weatherRestrictions: initialData.weatherRestrictions || [],
+        additionalServices: initialData.additionalServices || [],
+        specifications: initialData.specifications || [],
+        images: initialData.images || [],
+        rentalDuration: (initialData.rentalDuration as RentalDuration) || "full-day",
+        availability: (initialData.availability as Availability) || "available",
+      };
 
-      // Set existing images with proper mapping of all fields
-      const existingImages = initialData.images.map((img) => ({
-        url: img.url,
-        public_id: img.url.split("/products/")[1]?.split(".")[0], // Extract public_id from URL
-        filename: img.alt,
-      }));
-      setImagePreviews(existingImages);
+      console.log('Setting formData with formatted data:', formattedData);
+      setFormData(formattedData);
+
+      if (initialData.images?.length > 0) {
+        console.log('Processing images:', initialData.images);
+        const existingImages = initialData.images.map((img) => ({
+          url: img.url,
+          alt: img.alt || "",
+          isPrimary: img.isPrimary || false,
+          public_id: img.url.split("/").pop()?.split(".")[0] || "",
+        }));
+        setImagePreviews(existingImages);
+      }
     }
   }, [initialData]);
+
+  // Log whenever formData changes
+  useEffect(() => {
+    console.log('formData updated:', formData);
+  }, [formData]);
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.value;
+    const slug = generateSlug(name);
+    console.log('Name changed:', name, 'Generated slug:', slug);
+    setFormData({ ...formData, name, slug });
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
+      console.log('New images selected:', files.length);
       const newPreviews = Array.from(files).map((file) => ({
         url: URL.createObjectURL(file),
         file,
       }));
       setImagePreviews((prev) => [...prev, ...newPreviews]);
     }
-    // Reset the input value to allow selecting the same file again
     e.target.value = "";
   };
 
   const removeImage = (index: number) => {
+    console.log('Removing image at index:', index);
     const imageToRemove = imagePreviews[index];
 
     if (!imageToRemove.file) {
-      // Only handle deletion for existing images
       const identifier = imageToRemove.public_id;
       if (identifier) {
-        setImagesToDelete((prev) => {
-          const newImagesToDelete = [...prev, identifier];
-          return newImagesToDelete;
-        });
+        setImagesToDelete((prev) => [...prev, identifier]);
       }
     }
 
-    // If it's a new image that hasn't been uploaded yet, revoke the object URL
     if (imageToRemove.url.startsWith("blob:")) {
       URL.revokeObjectURL(imageToRemove.url);
     }
@@ -138,6 +245,8 @@ export default function ProductForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submitted with data:', formData);
+    
     const submitFormData = new FormData();
 
     // Add product data
@@ -152,11 +261,12 @@ export default function ProductForm({
 
     // Add existing images info
     const existingImages = imagePreviews
-      .filter((preview) => !preview.file) // Only include non-new images
+      .filter((preview) => !preview.file)
       .map((preview) => ({
         url: preview.url,
         public_id: preview.public_id,
-        filename: preview.filename,
+        alt: preview.alt,
+        isPrimary: preview.isPrimary,
       }));
     submitFormData.append("existingImages", JSON.stringify(existingImages));
 
@@ -165,39 +275,51 @@ export default function ProductForm({
       submitFormData.append("imagesToDelete", JSON.stringify(imagesToDelete));
     }
 
-    // Debug log the form data
-    for (const [key, value] of submitFormData.entries()) {
-      console.log(key, ":", typeof value === "string" ? value : "File or Blob");
-    }
-
     await onSubmit(submitFormData);
   };
 
+  // Rest of the component remains exactly the same...
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Rest of the form JSX remains unchanged */}
       <div>
         <label className="block text-sm font-medium text-gray-700">Name</label>
         <input
           type="text"
           value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          onChange={handleNameChange}
           required
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple sm:text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Description
-        </label>
+        <label className="block text-sm font-medium text-gray-700">Slug</label>
+        <input
+          type="text"
+          value={formData.slug}
+          readOnly
+          className="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm focus:border-primary-purple focus:ring-primary-purple sm:text-sm"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Category</label>
+        <input
+          type="text"
+          value={formData.category}
+          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+          required
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple sm:text-sm"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Description</label>
         <div className="prose max-w-full">
           <ReactQuill
             theme="snow"
             value={formData.description}
-            onChange={(content) =>
-              setFormData({ ...formData, description: content })
-            }
+            onChange={(content) => setFormData({ ...formData, description: content })}
             modules={modules}
             formats={formats}
             className="bg-white"
@@ -205,22 +327,8 @@ export default function ProductForm({
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Category
-        </label>
-        <input
-          type="text"
-          value={formData.category}
-          onChange={(e) =>
-            setFormData({ ...formData, category: e.target.value })
-          }
-          required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple sm:text-sm"
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
+     {/* Price */}
+     <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Price
@@ -260,6 +368,7 @@ export default function ProductForm({
         </div>
       </div>
 
+      {/* Dimensions */}
       <div className="bg-gray-50 p-4 rounded-lg">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Dimensions</h3>
         <div className="grid grid-cols-4 gap-4">
@@ -351,6 +460,7 @@ export default function ProductForm({
         </div>
       </div>
 
+      {/* Capacity */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
@@ -371,6 +481,7 @@ export default function ProductForm({
         </div>
       </div>
 
+      {/* Age Range */}
       <div className="bg-gray-50 p-4 rounded-lg">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Age Range</h3>
         <div className="grid grid-cols-2 gap-4">
@@ -417,6 +528,7 @@ export default function ProductForm({
         </div>
       </div>
 
+      {/* Setup Requirements */}
       <div className="bg-gray-50 p-4 rounded-lg">
         <h3 className="text-lg font-medium text-gray-900 mb-4">
           Setup Requirements
@@ -462,9 +574,49 @@ export default function ProductForm({
               Requires Power Source
             </label>
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Surface Types
+            </label>
+            <input
+              type="text"
+              value={formData.setupRequirements.surfaceType?.join(", ") || ""}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  setupRequirements: {
+                    ...formData.setupRequirements,
+                    surfaceType: e.target.value.split(",").map((s) => s.trim()),
+                  },
+                })
+              }
+              placeholder="e.g., Grass, Concrete, Asphalt"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple sm:text-sm"
+            />
+          </div>
         </div>
       </div>
 
+      {/* Features */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Features
+        </label>
+        <input
+          type="text"
+          value={formData.features.join(", ")}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              features: e.target.value.split(",").map((s) => s.trim()),
+            })
+          }
+          placeholder="e.g., Basketball Hoop, Climbing Wall, Safety Netting"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple sm:text-sm"
+        />
+      </div>
+
+      {/* Safety Guidelines */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Safety Guidelines
@@ -483,6 +635,140 @@ export default function ProductForm({
         </div>
       </div>
 
+      {/* Weather Restrictions */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Weather Restrictions
+        </label>
+        <input
+          type="text"
+          value={formData.weatherRestrictions.join(", ")}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              weatherRestrictions: e.target.value.split(",").map((s) => s.trim()),
+            })
+          }
+          placeholder="e.g., No use in rain, Wind under 15mph"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple sm:text-sm"
+        />
+      </div>
+
+      {/* Specifications */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Specifications
+        </label>
+        <div className="space-y-2">
+          {formData.specifications.map((spec: Specification, index: number) => (
+            <div key={index} className="flex gap-2">
+              <input
+                type="text"
+                value={spec.name}
+                onChange={(e) => {
+                  const newSpecs = [...formData.specifications];
+                  newSpecs[index] = { ...spec, name: e.target.value };
+                  setFormData({ ...formData, specifications: newSpecs });
+                }}
+                placeholder="Name"
+                className="mt-1 block w-1/3 rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple sm:text-sm"
+              />
+              <input
+                type="text"
+                value={spec.value}
+                onChange={(e) => {
+                  const newSpecs = [...formData.specifications];
+                  newSpecs[index] = { ...spec, value: e.target.value };
+                  setFormData({ ...formData, specifications: newSpecs });
+                }}
+                placeholder="Value"
+                className="mt-1 block w-1/3 rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple sm:text-sm"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const newSpecs = formData.specifications.filter((_: Specification, i: number) => i !== index);
+                  setFormData({ ...formData, specifications: newSpecs });
+                }}
+                className="mt-1 px-2 py-1 bg-red-500 text-white rounded"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => {
+              setFormData({
+                ...formData,
+                specifications: [...formData.specifications, { name: "", value: "" }],
+              });
+            }}
+            className="mt-2 px-4 py-2 bg-primary-purple text-white rounded"
+          >
+            Add Specification
+          </button>
+        </div>
+      </div>
+
+      {/* Additional Services */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Additional Services
+        </label>
+        <div className="space-y-2">
+          {formData.additionalServices.map((service: AdditionalService, index: number) => (
+            <div key={index} className="flex gap-2">
+              <input
+                type="text"
+                value={service.name}
+                onChange={(e) => {
+                  const newServices = [...formData.additionalServices];
+                  newServices[index] = { ...service, name: e.target.value };
+                  setFormData({ ...formData, additionalServices: newServices });
+                }}
+                placeholder="Service Name"
+                className="mt-1 block w-1/3 rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple sm:text-sm"
+              />
+              <input
+                type="number"
+                value={service.price}
+                onChange={(e) => {
+                  const newServices = [...formData.additionalServices];
+                  newServices[index] = { ...service, price: parseFloat(e.target.value) };
+                  setFormData({ ...formData, additionalServices: newServices });
+                }}
+                placeholder="Price"
+                className="mt-1 block w-1/3 rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple sm:text-sm"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const newServices = formData.additionalServices.filter((_: AdditionalService, i: number) => i !== index);
+                  setFormData({ ...formData, additionalServices: newServices });
+                }}
+                className="mt-1 px-2 py-1 bg-red-500 text-white rounded"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => {
+              setFormData({
+                ...formData,
+                additionalServices: [...formData.additionalServices, { name: "", price: 0 }],
+              });
+            }}
+            className="mt-2 px-4 py-2 bg-primary-purple text-white rounded"
+          >
+            Add Service
+          </button>
+        </div>
+      </div>
+
+      {/* Rental Duration */}
       <div>
         <label className="block text-sm font-medium text-gray-700">
           Rental Duration
@@ -504,6 +790,7 @@ export default function ProductForm({
         </select>
       </div>
 
+      {/* Availability */}
       <div>
         <label className="block text-sm font-medium text-gray-700">
           Availability
@@ -525,6 +812,7 @@ export default function ProductForm({
         </select>
       </div>
 
+      {/* Images */}
       <div>
         <label className="block text-sm font-medium text-gray-700">
           Images
@@ -544,7 +832,6 @@ export default function ProductForm({
         />
       </div>
 
-      {/* Display image previews */}
       {imagePreviews.length > 0 && (
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -571,6 +858,7 @@ export default function ProductForm({
         </div>
       )}
 
+      {/* Form Actions */}
       <div className="flex justify-end space-x-3">
         <button
           type="button"

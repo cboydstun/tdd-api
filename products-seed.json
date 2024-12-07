@@ -1,0 +1,150 @@
+{
+  "products": [
+    {
+      "name": "Deluxe Bounce House Castle",
+      "slug": "deluxe-bounce-house-castle",
+      "description": "A majestic castle-themed bounce house perfect for princess parties and royal celebrations. Features tall spires, a spacious jumping area, and medieval-themed artwork.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 175.00,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733546738/blogs/mcagp7usi38iehxb8ohi.jpg",
+          "alt": "Castle Bounce House Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Material",
+          "value": "Commercial Grade PVC"
+        },
+        {
+          "name": "Weight Limit",
+          "value": "800 lbs"
+        }
+      ],
+      "dimensions": {
+        "length": 15,
+        "width": 15,
+        "height": 12,
+        "unit": "feet"
+      },
+      "capacity": 6,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "20x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": [
+        "Basketball Hoop",
+        "Climbing Wall",
+        "Safety Netting",
+        "Entry Ramp"
+      ],
+      "safetyGuidelines": "Adult supervision required at all times. No shoes, sharp objects, or food inside. Maximum of 6 children at once.",
+      "maintenanceSchedule": {
+        "lastMaintenance": "2024-03-01T00:00:00.000Z",
+        "nextMaintenance": "2024-04-01T00:00:00.000Z"
+      },
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds must be under 15mph",
+        "No use in temperatures above 95°F"
+      ],
+      "additionalServices": [
+        {
+          "name": "Setup and Takedown",
+          "price": 50.00
+        },
+        {
+          "name": "Generator Rental",
+          "price": 75.00
+        }
+      ]
+    },
+    {
+      "name": "Water Slide Combo",
+      "slug": "water-slide-combo",
+      "description": "Massive water slide combo unit featuring a climbing wall, sliding area, and splash pool. Perfect for hot summer days and pool parties.",
+      "category": "Water Slides",
+      "price": {
+        "base": 225.00,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733546738/blogs/uhfjoildlimlalhu88e7.jpg",
+          "alt": "Water Slide Combo Full View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Water Usage",
+          "value": "Standard Garden Hose Connection"
+        },
+        {
+          "name": "Weight Limit",
+          "value": "1000 lbs"
+        }
+      ],
+      "dimensions": {
+        "length": 25,
+        "width": 15,
+        "height": 18,
+        "unit": "feet"
+      },
+      "capacity": 8,
+      "ageRange": {
+        "min": 5,
+        "max": 14
+      },
+      "setupRequirements": {
+        "space": "30x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Dirt"]
+      },
+      "features": [
+        "Dual Slides",
+        "Splash Pool",
+        "Climbing Wall",
+        "Water Sprayers"
+      ],
+      "safetyGuidelines": "Adult supervision required. No running on wet surfaces. One person per slide at a time. No diving or flips.",
+      "maintenanceSchedule": {
+        "lastMaintenance": "2024-03-10T00:00:00.000Z",
+        "nextMaintenance": "2024-04-10T00:00:00.000Z"
+      },
+      "weatherRestrictions": [
+        "No use in thunderstorms",
+        "Wind speeds must be under 10mph",
+        "Temperature must be above 75°F"
+      ],
+      "additionalServices": [
+        {
+          "name": "Setup and Takedown",
+          "price": 75.00
+        },
+        {
+          "name": "Generator Rental",
+          "price": 75.00
+        },
+        {
+          "name": "Water Supply Service",
+          "price": 50.00
+        }
+      ]
+    }
+  ]
+}
