@@ -19,16 +19,22 @@ const Navigation: React.FC = () => {
               Home
             </Link>
             <Link
-              to="/blogs"
+              to="/products"
               className="text-gray-600 hover:text-primary-blue transition"
             >
-              Blog
+              Products
             </Link>
             <Link
               to="/about"
               className="text-gray-600 hover:text-primary-blue transition"
             >
               About
+            </Link>
+            <Link
+              to="/blogs"
+              className="text-gray-600 hover:text-primary-blue transition"
+            >
+              Blog
             </Link>
             <Link
               to="/contact"

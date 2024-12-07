@@ -15,11 +15,8 @@ export default function BlogForm({
   onCancel,
   initialData,
 }: BlogFormProps) {
-  console.log('BlogForm rendered with initialData:', initialData);
 
-  const [formData, setFormData] = useState<BlogFormData>(() => {
-    console.log('Initializing formData state with initialData:', initialData);
-    
+  const [formData, setFormData] = useState<BlogFormData>(() => {    
     if (initialData) {
       return {
         title: initialData.title || "",
@@ -55,25 +52,17 @@ export default function BlogForm({
 
   // Handle image initialization
   useEffect(() => {
-    console.log('Processing images from initialData:', initialData?.images);
     if (initialData?.images) {
       const images = initialData.images.map((img) => ({
         url: img.url,
         filename: img.filename,
       }));
-      console.log('Setting existing images:', images);
       setExistingImages(images);
     }
   }, [initialData]);
 
-  // Log whenever formData changes
-  useEffect(() => {
-    console.log('formData updated:', formData);
-  }, [formData]);
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    console.log('New images selected:', files.length);
     setSelectedImages((prev) => [...prev, ...files]);
 
     // Create preview URLs
@@ -82,7 +71,6 @@ export default function BlogForm({
   };
 
   const removeSelectedImage = (index: number) => {
-    console.log('Removing selected image at index:', index);
     setSelectedImages((prev) => prev.filter((_, i) => i !== index));
 
     // Revoke the object URL to avoid memory leaks
@@ -91,7 +79,6 @@ export default function BlogForm({
   };
 
   const removeExistingImage = (index: number) => {
-    console.log('Removing existing image at index:', index);
     const imageToDelete = existingImages[index];
     setImagesToDelete((prev) => [...prev, imageToDelete.filename]);
     setExistingImages((prev) => prev.filter((_, i) => i !== index));
@@ -99,7 +86,6 @@ export default function BlogForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted with data:', formData);
     
     const formDataToSend = new FormData();
 

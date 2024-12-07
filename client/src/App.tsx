@@ -9,6 +9,9 @@ import Login from "./components/Login";
 import AdminPanel from "./components/AdminPanel";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ContactPage from "./components/ContactPage";
+import ProductList from "./components/product/ProductList";
+import ProductDetail from "./components/product/ProductDetail";
+import AboutPage from "./components/AboutPage";
 
 const App: React.FC = () => {
   return (
@@ -18,7 +21,10 @@ const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/blogs" element={<BlogList />} />
           <Route path="/blogs/:slug" element={<BlogPost />} />
+          <Route path="/products" element={<ProductList />} />
+          <Route path="/products/:slug" element={<ProductDetail />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/admin"

@@ -38,10 +38,8 @@ export default function ProductForm({
   onCancel,
   initialData,
 }: ProductFormProps) {
-  console.log('ProductForm rendered with initialData:', initialData);
 
   const [formData, setFormData] = useState<ProductFormData>(() => {
-    console.log('Initializing formData state with initialData:', initialData);
     
     // Initialize with initialData if available, otherwise use defaults
     if (initialData) {
@@ -132,18 +130,8 @@ export default function ProductForm({
 
   // Handle image previews initialization
   useEffect(() => {
-    console.log('useEffect triggered with initialData:', initialData);
     
     if (initialData) {
-      console.log('Processing initialData fields:');
-      console.log('- name:', initialData.name);
-      console.log('- category:', initialData.category);
-      console.log('- price:', initialData.price);
-      console.log('- dimensions:', initialData.dimensions);
-      console.log('- specifications:', initialData.specifications);
-      console.log('- features:', initialData.features);
-      console.log('- setupRequirements:', initialData.setupRequirements);
-
       // Create a deep copy of initialData to avoid reference issues
       const formattedData = {
         name: initialData.name || "",
@@ -184,11 +172,9 @@ export default function ProductForm({
         availability: (initialData.availability as Availability) || "available",
       };
 
-      console.log('Setting formData with formatted data:', formattedData);
       setFormData(formattedData);
 
       if (initialData.images?.length > 0) {
-        console.log('Processing images:', initialData.images);
         const existingImages = initialData.images.map((img) => ({
           url: img.url,
           alt: img.alt || "",
@@ -200,22 +186,15 @@ export default function ProductForm({
     }
   }, [initialData]);
 
-  // Log whenever formData changes
-  useEffect(() => {
-    console.log('formData updated:', formData);
-  }, [formData]);
-
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
     const slug = generateSlug(name);
-    console.log('Name changed:', name, 'Generated slug:', slug);
     setFormData({ ...formData, name, slug });
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      console.log('New images selected:', files.length);
       const newPreviews = Array.from(files).map((file) => ({
         url: URL.createObjectURL(file),
         file,
@@ -226,7 +205,6 @@ export default function ProductForm({
   };
 
   const removeImage = (index: number) => {
-    console.log('Removing image at index:', index);
     const imageToRemove = imagePreviews[index];
 
     if (!imageToRemove.file) {
@@ -245,7 +223,6 @@ export default function ProductForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted with data:', formData);
     
     const submitFormData = new FormData();
 
