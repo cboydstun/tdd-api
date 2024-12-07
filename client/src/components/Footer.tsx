@@ -126,13 +126,13 @@ const Footer: React.FC = () => {
             <p>© {new Date().getFullYear()} SATX Bounce. All rights reserved.</p>
             <div className="flex gap-6">
               <Link 
-                to="/privacy" 
+                to="/privacy-policy" 
                 className="hover:text-primary-blue transition-colors duration-300"
               >
                 Privacy Policy
               </Link>
               <Link 
-                to="/terms" 
+                to="/tos" 
                 className="hover:text-primary-blue transition-colors duration-300"
               >
                 Terms of Service

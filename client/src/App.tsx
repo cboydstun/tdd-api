@@ -12,6 +12,9 @@ import ContactPage from "./components/ContactPage";
 import ProductList from "./components/product/ProductList";
 import ProductDetail from "./components/product/ProductDetail";
 import AboutPage from "./components/AboutPage";
+import TermsPage from "./components/TermsPage";
+import PrivacyPage from "./components/PrivacyPage";
+import FaqPage from "./components/FaqPage";
 
 const App: React.FC = () => {
   return (
@@ -26,6 +29,9 @@ const App: React.FC = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/tos" element={<TermsPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPage />} />
+          <Route path="/faq" element={<FaqPage />} />
           <Route
             path="/admin"
             element={
