@@ -203,44 +203,32 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { slug } = req.params;
-        console.log('Update request received for slug:', slug);
-        console.log('Request body:', req.body);
 
         // Find the existing product first
         const existingProduct = await Product.findOne({ slug });
         if (!existingProduct) {
-            console.log('Product not found for slug:', slug);
             return res.status(404).json({ error: 'Product not found' });
         }
-        console.log('Found existing product:', existingProduct.name);
 
         // Handle image deletions first, before parsing product data
         let imagesToDelete = [];
         try {
             if (req.body.imagesToDelete) {
-                console.log('Raw imagesToDelete from request:', req.body.imagesToDelete);
                 imagesToDelete = JSON.parse(req.body.imagesToDelete);
-                console.log('Parsed imagesToDelete:', imagesToDelete);
             }
         } catch (parseErr) {
             console.error('Error parsing imagesToDelete:', parseErr);
             return res.status(400).json({ error: 'Invalid imagesToDelete format' });
         }
 
-        console.log('Current images:', existingProduct.images);
-
         // Process image deletions
         let updatedImages = [...existingProduct.images];
         for (const identifier of imagesToDelete) {
-            console.log('Processing image deletion for identifier:', identifier);
-
             // Find the image by matching either the URL-extracted ID or the alt text
             const imageToDelete = existingProduct.images.find(img => {
                 const urlId = img.url.split('/').pop()?.split('.')[0];
                 return urlId === identifier || img.alt === identifier;
             });
-
-            console.log('Found image to delete:', imageToDelete);
 
             if (imageToDelete) {
                 // Extract public_id from the URL
@@ -248,9 +236,7 @@ const updateProduct = async (req, res) => {
                 const publicId = `products/${urlParts[urlParts.length - 1].split('.')[0]}`;
 
                 try {
-                    console.log('Attempting to delete from Cloudinary:', publicId);
                     await cloudinary.uploader.destroy(publicId);
-                    console.log('Successfully deleted from Cloudinary');
                 } catch (err) {
                     console.error(`Failed to delete image from Cloudinary: ${publicId}`, err);
                 }
@@ -260,15 +246,11 @@ const updateProduct = async (req, res) => {
             }
         }
 
-        console.log('Images after deletion:', updatedImages);
-
         // Now parse the product data
         let productData;
         try {
-            console.log('Raw productData from request:', req.body.productData);
             productData = typeof req.body.productData === 'string' ?
                 JSON.parse(req.body.productData) : req.body.productData;
-            console.log('Parsed productData:', productData);
         } catch (parseErr) {
             console.error('Error parsing productData:', parseErr);
             return res.status(400).json({ error: 'Invalid product data format' });
@@ -277,9 +259,7 @@ const updateProduct = async (req, res) => {
         // Upload new images to Cloudinary
         let newImages = [];
         if (req.files && req.files.length > 0) {
-            console.log('Processing new images:', req.files.length);
             newImages = await Promise.all(req.files.map(file => uploadToCloudinary(file)));
-            console.log('Uploaded new images:', newImages);
         }
 
         // Prepare update data
@@ -293,8 +273,6 @@ const updateProduct = async (req, res) => {
             images: [...updatedImages, ...newImages]
         };
 
-        console.log('Final update data:', updateData);
-
         // Update the product
         const updatedProduct = await Product.findOneAndUpdate(
             { slug },
@@ -303,11 +281,9 @@ const updateProduct = async (req, res) => {
         );
 
         if (!updatedProduct) {
-            console.log('Product not found after update attempt');
             return res.status(404).json({ error: 'Product not found after update' });
         }
 
-        console.log('Successfully updated product:', updatedProduct.name);
         res.status(200).json(updatedProduct);
     } catch (err) {
         console.error('Error in updateProduct:', err);

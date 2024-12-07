@@ -57,12 +57,6 @@ const ImageWithFallback = ({
   const [imageError, setImageError] = useState(false);
 
   const imageProps = getCloudinaryImageProps(src);
-  console.log("Image props:", imageProps);
-  console.log("Rendering ImageWithFallback:", {
-    cloudinaryProps: imageProps,
-    originalSrc: src,
-    alt,
-  });
 
   return (
     <div
@@ -77,7 +71,6 @@ const ImageWithFallback = ({
           imageLoaded ? "opacity-100" : "opacity-0"
         } ${className}`}
         onLoad={() => {
-          console.log("Image loaded:", imageProps.src);
           setImageLoaded(true);
         }}
         onError={(e) => {
@@ -107,7 +100,6 @@ const BlogPost = () => {
     const fetchBlog = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/v1/blogs/${slug}`);
-        console.log("Blog data:", response.data);
         setBlog(response.data);
         setLoading(false);
       } catch (err) {
@@ -144,8 +136,6 @@ const BlogPost = () => {
       </div>
     );
   }
-
-  console.log("Blog images:", blog.images);
 
   return (
     <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -205,7 +195,6 @@ const BlogPost = () => {
               <h3 className="text-2xl font-semibold mb-4">Gallery</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {blog.images.map((image, index) => {
-                  console.log("Rendering image:", image);
                   return (
                     <div key={index} className="rounded-lg overflow-hidden">
                       <ImageWithFallback

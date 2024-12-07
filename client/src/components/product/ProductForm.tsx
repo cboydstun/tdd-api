@@ -92,13 +92,11 @@ export default function ProductForm({
       });
 
       // Set existing images with proper mapping of all fields
-      console.log("Initial images data:", initialData.images);
       const existingImages = initialData.images.map((img) => ({
         url: img.url,
         public_id: img.url.split("/products/")[1]?.split(".")[0], // Extract public_id from URL
         filename: img.alt,
       }));
-      console.log("Mapped existing images:", existingImages);
       setImagePreviews(existingImages);
     }
   }, [initialData]);
@@ -118,7 +116,6 @@ export default function ProductForm({
 
   const removeImage = (index: number) => {
     const imageToRemove = imagePreviews[index];
-    console.log("Removing image:", imageToRemove);
 
     if (!imageToRemove.file) {
       // Only handle deletion for existing images
@@ -126,7 +123,6 @@ export default function ProductForm({
       if (identifier) {
         setImagesToDelete((prev) => {
           const newImagesToDelete = [...prev, identifier];
-          console.log("Updated imagesToDelete:", newImagesToDelete);
           return newImagesToDelete;
         });
       }
@@ -166,12 +162,10 @@ export default function ProductForm({
 
     // Add images to delete
     if (imagesToDelete.length > 0) {
-      console.log("Submitting imagesToDelete:", imagesToDelete);
       submitFormData.append("imagesToDelete", JSON.stringify(imagesToDelete));
     }
 
     // Debug log the form data
-    console.log("Form Data being sent:");
     for (const [key, value] of submitFormData.entries()) {
       console.log(key, ":", typeof value === "string" ? value : "File or Blob");
     }

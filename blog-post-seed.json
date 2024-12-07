@@ -1,0 +1,80 @@
+{
+  "blogPosts": [
+    {
+      "title": "Getting Started with Test-Driven Development",
+      "slug": "getting-started-with-tdd",
+      "author": "507f1f77bcf86cd799439011",
+      "introduction": "Test-Driven Development (TDD) is a software development approach that emphasizes writing tests before writing the actual code.",
+      "body": "Test-Driven Development follows a simple yet powerful cycle: Red-Green-Refactor. First, you write a failing test (Red). Then, you write just enough code to make the test pass (Green). Finally, you improve the code while keeping the tests passing (Refactor). This approach leads to better code design and more maintainable applications.",
+      "conclusion": "By following TDD principles, developers can create more reliable and maintainable software while building confidence in their codebase.",
+      "images": [
+        {
+          "filename": "cld-sample-3.jpg",
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733541950/cld-sample-3.jpg",
+          "public_id": "cld-sample-3",
+          "mimetype": "image/jpeg",
+          "size": 245000,
+          "asset_id": "a1b2c3d4e5f6",
+          "version": 1
+        }
+      ],
+      "excerpt": "Learn the fundamentals of Test-Driven Development and how it can improve your software development process.",
+      "featuredImage": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733541950/samples/woman-on-a-football-field.jpg",
+      "categories": ["Programming", "Best Practices"],
+      "tags": ["TDD", "Testing", "Software Development"],
+      "status": "published",
+      "publishDate": "2024-03-15T00:00:00.000Z",
+      "lastModified": "2024-03-15T00:00:00.000Z",
+      "meta": {
+        "views": 150,
+        "likes": 45,
+        "shares": 23
+      },
+      "seo": {
+        "metaTitle": "Getting Started with Test-Driven Development (TDD)",
+        "metaDescription": "Learn how to implement Test-Driven Development in your software projects and improve code quality.",
+        "focusKeyword": "Test-Driven Development"
+      },
+      "readTime": 8,
+      "isFeature": true
+    },
+    {
+      "title": "Best Practices for API Design",
+      "slug": "best-practices-for-api-design",
+      "author": "507f1f77bcf86cd799439012",
+      "introduction": "Designing APIs that are both powerful and easy to use requires careful consideration of several key principles.",
+      "body": "A well-designed API should be intuitive, consistent, and secure. Start by using clear naming conventions and following REST principles. Implement proper versioning from the start and ensure comprehensive documentation. Use status codes correctly and handle errors gracefully.",
+      "conclusion": "Following these API design best practices will help you create APIs that developers love to use and are easy to maintain.",
+      "images": [
+        {
+          "filename": "cld-sample",
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733541950/cld-sample.jpg",
+          "public_id": "cld-sample",
+          "mimetype": "image/jpeg",
+          "size": 188000,
+          "asset_id": "f6e5d4c3b2a1",
+          "version": 1
+        }
+      ],
+      "excerpt": "Discover essential best practices for designing robust and developer-friendly APIs.",
+      "featuredImage": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733541946/samples/two-ladies.jpg",
+      "categories": ["API", "Backend Development"],
+      "tags": ["API Design", "REST", "Backend"],
+      "status": "published",
+      "publishDate": "2024-03-14T00:00:00.000Z",
+      "lastModified": "2024-03-14T00:00:00.000Z",
+      "meta": {
+        "views": 120,
+        "likes": 38,
+        "shares": 15
+      },
+      "seo": {
+        "metaTitle": "Best Practices for Modern API Design",
+        "metaDescription": "Learn the essential principles and best practices for designing modern, developer-friendly APIs.",
+        "focusKeyword": "API Design Best Practices"
+      },
+      "readTime": 10,
+      "isFeature": false
+    }
+  ]
+}
