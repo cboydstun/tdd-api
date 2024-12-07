@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ContactForm from '../ContactForm';
 
 interface Product {
   _id: string;
@@ -60,78 +61,105 @@ export default function ProductDetail() {
   }, [slug]);
 
   if (loading) {
-    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <p className="text-primary-blue font-semibold text-lg">Loading product details...</p>
+      </div>
+    );
   }
 
   if (error || !product) {
-    return <div className="text-red-500 text-center min-h-screen">{error || 'Product not found'}</div>;
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <p className="text-red-500 font-semibold text-lg">{error || 'Product not found'}</p>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <div className="mb-4">
-            <img
-              src={selectedImage || product.images[0]?.url}
-              alt={product.name}
-              className="w-full h-96 object-cover rounded-lg"
-            />
-          </div>
-          {product.images.length > 1 && (
-            <div className="grid grid-cols-4 gap-2">
-              {product.images.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(image.url)}
-                  className={`border rounded-lg overflow-hidden ${
-                    selectedImage === image.url ? 'ring-2 ring-blue-500' : ''
-                  }`}
-                >
-                  <img
-                    src={image.url}
-                    alt={`${product.name} view ${index + 1}`}
-                    className="w-full h-20 object-cover"
-                  />
-                </button>
-              ))}
+    <div className="w-full bg-secondary-blue/5 py-12">
+      <div className="container mx-auto px-4">
+        {/* Product Details Section */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* Image Gallery */}
+            <div className="space-y-6">
+              <div className="rounded-xl overflow-hidden shadow-lg">
+                <img
+                  src={selectedImage || product.images[0]?.url}
+                  alt={product.name}
+                  className="w-full h-[400px] object-cover transition-transform duration-300 hover:scale-105"
+                />
+              </div>
+              {product.images.length > 1 && (
+                <div className="grid grid-cols-4 gap-4">
+                  {product.images.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImage(image.url)}
+                      className={`rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 ${
+                        selectedImage === image.url 
+                          ? 'ring-2 ring-primary-blue' 
+                          : 'ring-2 ring-transparent'
+                      }`}
+                    >
+                      <img
+                        src={image.url}
+                        alt={`${product.name} view ${index + 1}`}
+                        className="w-full h-24 object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
+            
+            {/* Product Details */}
+            <div className="space-y-8">
+              <div>
+                <h1 className="text-4xl font-bold text-primary-purple mb-4">{product.name}</h1>
+                <p className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text mb-6">
+                  {product.price.currency} {product.price.base.toFixed(2)}
+                </p>
+                <div className="prose max-w-none text-gray-600 text-lg">
+                  <p>{product.description}</p>
+                </div>
+              </div>
+              
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold text-primary-blue">Specifications</h2>
+                <dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-secondary-blue/5 p-4 rounded-lg">
+                    <dt className="font-semibold text-primary-blue mb-1">Dimensions</dt>
+                    <dd className="text-gray-600">
+                      {product.dimensions.length} x {product.dimensions.width} x {product.dimensions.height} {product.dimensions.unit}
+                    </dd>
+                  </div>
+                  <div className="bg-secondary-blue/5 p-4 rounded-lg">
+                    <dt className="font-semibold text-primary-blue mb-1">Capacity</dt>
+                    <dd className="text-gray-600">{product.capacity} people</dd>
+                  </div>
+                  <div className="bg-secondary-blue/5 p-4 rounded-lg">
+                    <dt className="font-semibold text-primary-blue mb-1">Age Range</dt>
+                    <dd className="text-gray-600">{product.ageRange.min} - {product.ageRange.max} years</dd>
+                  </div>
+                  <div className="bg-secondary-blue/5 p-4 rounded-lg">
+                    <dt className="font-semibold text-primary-blue mb-1">Availability</dt>
+                    <dd className="text-gray-600 capitalize">{product.availability}</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <div>
-          <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-          <p className="text-2xl font-bold text-blue-600 mb-4">
-            {product.price.currency} {product.price.base.toFixed(2)}
-          </p>
-          <div className="prose max-w-none mb-6">
-            <p>{product.description}</p>
-          </div>
-          
-          <div className="space-y-4">
-            <div className="border-t pt-4">
-              <h2 className="text-xl font-semibold mb-2">Specifications</h2>
-              <dl className="grid grid-cols-2 gap-4">
-                <div>
-                  <dt className="font-medium text-gray-600">Dimensions</dt>
-                  <dd>
-                    {product.dimensions.length} x {product.dimensions.width} x {product.dimensions.height} {product.dimensions.unit}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="font-medium text-gray-600">Capacity</dt>
-                  <dd>{product.capacity} people</dd>
-                </div>
-                <div>
-                  <dt className="font-medium text-gray-600">Age Range</dt>
-                  <dd>{product.ageRange.min} - {product.ageRange.max} years</dd>
-                </div>
-                <div>
-                  <dt className="font-medium text-gray-600">Availability</dt>
-                  <dd className="capitalize">{product.availability}</dd>
-                </div>
-              </dl>
-            </div>
+
+        {/* Contact Form Section */}
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <h2 className="text-3xl font-bold text-center text-primary-purple mb-8">
+              Book {product.name}
+            </h2>
+            <ContactForm initialBouncerId={product._id} />
           </div>
         </div>
       </div>

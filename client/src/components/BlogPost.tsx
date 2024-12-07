@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getCloudinaryImageProps } from "../utils/cloudinary";
+import { ArrowLeft } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -60,14 +61,14 @@ const ImageWithFallback = ({
 
   return (
     <div
-      className={`relative bg-gray-100 ${
+      className={`relative bg-secondary-blue/5 rounded-lg overflow-hidden ${
         !imageLoaded && !imageError ? "animate-pulse" : ""
       }`}
     >
       <img
         {...imageProps}
         alt={alt}
-        className={`w-full h-full object-cover transition-opacity duration-300 ${
+        className={`w-full h-full object-cover transition-all duration-300 ${
           imageLoaded ? "opacity-100" : "opacity-0"
         } ${className}`}
         onLoad={() => {
@@ -81,8 +82,8 @@ const ImageWithFallback = ({
         aria-hidden={imageError}
       />
       {imageError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-          <p className="text-gray-500">Image failed to load</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-secondary-blue/5">
+          <p className="text-gray-500 font-medium">Image failed to load</p>
         </div>
       )}
     </div>
@@ -114,7 +115,7 @@ const BlogPost = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[400px]">
+      <div className="min-h-[400px] flex justify-center items-center">
         <div
           data-testid="loading-spinner"
           className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-blue"
@@ -125,12 +126,13 @@ const BlogPost = () => {
 
   if (error || !blog) {
     return (
-      <div className="text-center py-12">
-        <p className="text-red-500">{error || "Blog post not found"}</p>
+      <div className="min-h-[400px] flex flex-col justify-center items-center">
+        <p className="text-red-500 font-semibold text-lg mb-4">{error || "Blog post not found"}</p>
         <button
           onClick={() => navigate("/blogs")}
-          className="mt-4 text-primary-blue hover:underline"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-400 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-500 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-[1.02]"
         >
+          <ArrowLeft className="w-5 h-5" />
           Back to Blogs
         </button>
       </div>
@@ -138,97 +140,117 @@ const BlogPost = () => {
   }
 
   return (
-    <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <button
-        onClick={() => navigate("/blogs")}
-        className="text-primary-blue hover:underline mb-8 inline-flex items-center"
-      >
-        ← Back to Blogs
-      </button>
+    <div className="w-full bg-secondary-blue/5 py-12">
+      <div className="container mx-auto px-4">
+        <article className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+          <button
+            onClick={() => navigate("/blogs")}
+            className="inline-flex items-center gap-2 px-4 py-2 text-primary-blue hover:bg-secondary-blue/10 rounded-lg transition-colors duration-300 mb-8 font-medium"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Back to Blogs
+          </button>
 
-      {blog.featuredImage && (
-        <div className="aspect-video mb-8 rounded-lg overflow-hidden">
-          <ImageWithFallback
-            src={blog.featuredImage}
-            alt={`Featured image for ${blog.title}`}
-          />
-        </div>
-      )}
+          {blog.featuredImage && (
+            <div className="mb-8 rounded-xl overflow-hidden shadow-lg">
+              <ImageWithFallback
+                src={blog.featuredImage}
+                alt={`Featured image for ${blog.title}`}
+                className="aspect-video"
+              />
+            </div>
+          )}
 
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">{blog.title}</h1>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text mb-6">
+            {blog.title}
+          </h1>
 
-      <div className="flex items-center text-sm text-gray-500 mb-8">
-        {blog.author && <span>By {blog.author.email}</span>}
-        <span className="mx-2">•</span>
-        <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
-        <span className="mx-2">•</span>
-        <div className="flex items-center gap-4">
-          <span>{blog.meta.views} views</span>
-          <span>{blog.meta.likes} likes</span>
-          <span>{blog.meta.shares} shares</span>
-        </div>
-      </div>
-
-      {blog.categories.length > 0 && (
-        <div className="flex gap-2 mb-8">
-          {blog.categories.map((category, index) => (
-            <span
-              key={index}
-              className="bg-secondary-blue/10 text-primary-blue px-3 py-1 rounded-full text-sm"
-            >
-              {category}
+          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-8 pb-8 border-b border-gray-100">
+            {blog.author && (
+              <span className="font-medium text-primary-blue">
+                By {blog.author.email}
+              </span>
+            )}
+            <span className="font-medium">
+              {new Date(blog.createdAt).toLocaleDateString()}
             </span>
-          ))}
-        </div>
-      )}
+            <div className="flex items-center gap-4">
+              <span className="bg-secondary-blue/10 text-primary-blue px-3 py-1 rounded-full">
+                {blog.meta.views} views
+              </span>
+              <span className="bg-secondary-blue/10 text-primary-blue px-3 py-1 rounded-full">
+                {blog.meta.likes} likes
+              </span>
+              <span className="bg-secondary-blue/10 text-primary-blue px-3 py-1 rounded-full">
+                {blog.meta.shares} shares
+              </span>
+            </div>
+          </div>
 
-      <div className="prose prose-lg max-w-none">
-        <div
-          dangerouslySetInnerHTML={{ __html: blog.introduction }}
-          className="mb-8"
-        />
-        <div dangerouslySetInnerHTML={{ __html: blog.body }} className="mb-8" />
+          {blog.categories.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-8">
+              {blog.categories.map((category, index) => (
+                <span
+                  key={index}
+                  className="bg-gradient-to-r from-blue-400 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-medium"
+                >
+                  {category}
+                </span>
+              ))}
+            </div>
+          )}
 
-        {blog.images && blog.images.length > 0 && (
-          <>
-            <div className="my-8">
-              <h3 className="text-2xl font-semibold mb-4">Gallery</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {blog.images.map((image, index) => {
-                  return (
-                    <div key={index} className="rounded-lg overflow-hidden">
+          <div className="prose prose-lg max-w-none">
+            <div
+              dangerouslySetInnerHTML={{ __html: blog.introduction }}
+              className="mb-8 text-gray-600"
+            />
+            <div
+              dangerouslySetInnerHTML={{ __html: blog.body }}
+              className="mb-8 text-gray-600"
+            />
+
+            {blog.images && blog.images.length > 0 && (
+              <div className="my-12">
+                <h3 className="text-2xl font-bold text-primary-purple mb-6">Gallery</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {blog.images.map((image, index) => (
+                    <div key={index} className="rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
                       <ImageWithFallback
                         src={image.filename}
                         alt={`Image ${index + 1} for ${blog.title}`}
                         className="aspect-video"
                       />
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div
+              dangerouslySetInnerHTML={{ __html: blog.conclusion }}
+              className="text-gray-600"
+            />
+          </div>
+
+          {blog.tags.length > 0 && (
+            <div className="mt-12 pt-8 border-t border-gray-100">
+              <h2 className="text-xl font-bold text-primary-purple mb-4">Tags</h2>
+              <div className="flex flex-wrap gap-2">
+                {blog.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="bg-secondary-blue/10 text-primary-blue px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary-blue/20 transition-colors duration-300"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
-          </>
-        )}
-
-        <div dangerouslySetInnerHTML={{ __html: blog.conclusion }} />
+          )}
+        </article>
       </div>
-
-      {blog.tags.length > 0 && (
-        <div className="mt-8 pt-8 border-t">
-          <h2 className="text-lg font-semibold mb-4">Tags</h2>
-          <div className="flex flex-wrap gap-2">
-            {blog.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-    </article>
+    </div>
   );
 };
 

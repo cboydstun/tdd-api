@@ -75,7 +75,6 @@ export default function ProductList() {
 
   const filteredAndSortedProducts = [...products]
     .filter(product => {
-      // Type filter
       if (selectedType !== 'ALL') {
         const typeSpec = product.specifications?.find(spec => spec.name === 'Type');
         if (!typeSpec) return false;
@@ -87,13 +86,9 @@ export default function ProductList() {
         } else if (typeValue !== selectedType) return false;
       }
 
-      // Category filter
       if (selectedCategory !== 'ALL' && product.category !== selectedCategory) return false;
-
-      // Price range filter
       if (product.price.base < priceRange.min || product.price.base > priceRange.max) return false;
 
-      // Size filter (based on floor area)
       const floorArea = product.dimensions.length * product.dimensions.width;
       if (floorArea < minSize) return false;
 
@@ -108,141 +103,151 @@ export default function ProductList() {
   const toggleFilters = () => setShowFilters(!showFilters);
 
   if (loading) {
-    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <p className="text-primary-blue font-semibold text-lg">Loading products...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-red-500 text-center min-h-screen">{error}</div>;
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <p className="text-red-500 font-semibold text-lg">{error}</p>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Header Section */}
-      <div className="flex flex-col gap-4 mb-8">
-        <div className="flex flex-wrap justify-between items-center gap-4">
-          <h1 className="text-2xl md:text-3xl font-bold">Our Products</h1>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={toggleFilters}
-              className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm md:text-base"
-            >
-              {showFilters ? <X size={18} /> : <Filter size={18} />}
-              Filters
-            </button>
-            <button
-              onClick={toggleSort}
-              className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm md:text-base"
-            >
-              <ArrowUpDown size={18} />
-              <span className="hidden md:inline">Price:</span> {sortAscending ? '↑' : '↓'}
-            </button>
-          </div>
-        </div>
-        
-        {/* Filters Panel */}
-        {showFilters && (
-          <div className="bg-gray-50 p-4 rounded-lg space-y-4">
-            {/* Type Filter */}
-            <div className="flex flex-col md:flex-row gap-2 md:items-center">
-              <span className="font-semibold md:min-w-24">Type:</span>
-              <div className="flex flex-wrap gap-2">
-                {(['ALL', 'DRY', 'WET'] as FilterType[]).map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => setSelectedType(type)}
-                    className={`px-3 py-1.5 rounded-lg transition-colors ${
-                      selectedType === type
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                    }`}
-                  >
-                    {type}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Category Filter */}
-            <div className="flex flex-col md:flex-row gap-2 md:items-center">
-              <span className="font-semibold md:min-w-24">Category:</span>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-1.5 rounded-lg border bg-white"
+    <div className="w-full bg-secondary-blue/5 py-12">
+      <div className="container mx-auto px-4">
+        {/* Header Section */}
+        <div className="flex flex-col gap-6 mb-12">
+          <div className="flex flex-wrap justify-between items-center gap-4">
+            <h1 className="text-3xl font-bold text-primary-purple">Our Products</h1>
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={toggleFilters}
+                className="flex items-center gap-2 px-4 py-2.5 bg-white text-primary-blue rounded-xl border-2 border-primary-blue/20 hover:border-primary-blue/40 transition-all duration-300 font-semibold shadow-md hover:shadow-lg"
               >
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
+                {showFilters ? <X size={20} /> : <Filter size={20} />}
+                Filters
+              </button>
+              <button
+                onClick={toggleSort}
+                className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-400 to-purple-600 text-white rounded-xl hover:from-blue-500 hover:to-purple-700 transition-all duration-300 font-semibold shadow-md hover:shadow-lg"
+              >
+                <ArrowUpDown size={20} />
+                <span className="hidden md:inline">Price:</span> {sortAscending ? '↑' : '↓'}
+              </button>
             </div>
+          </div>
+          
+          {/* Filters Panel */}
+          {showFilters && (
+            <div className="bg-white p-6 rounded-xl shadow-lg space-y-6 border-2 border-secondary-blue/20">
+              {/* Type Filter */}
+              <div className="flex flex-col md:flex-row gap-3 md:items-center">
+                <span className="font-semibold text-primary-blue md:min-w-24">Type:</span>
+                <div className="flex flex-wrap gap-2">
+                  {(['ALL', 'DRY', 'WET'] as FilterType[]).map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setSelectedType(type)}
+                      className={`px-4 py-2 rounded-lg transition-all duration-300 font-semibold ${
+                        selectedType === type
+                          ? 'bg-gradient-to-r from-blue-400 to-purple-600 text-white shadow-md'
+                          : 'bg-secondary-blue/10 hover:bg-secondary-blue/20 text-primary-blue'
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-            {/* Price Range Filter */}
-            <div className="flex flex-col md:flex-row gap-2 md:items-center">
-              <span className="font-semibold md:min-w-24">Price:</span>
-              <div className="flex items-center gap-2">
+              {/* Category Filter */}
+              <div className="flex flex-col md:flex-row gap-3 md:items-center">
+                <span className="font-semibold text-primary-blue md:min-w-24">Category:</span>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="px-4 py-2 rounded-lg border-2 border-secondary-blue/20 bg-white text-primary-blue font-medium focus:border-primary-blue focus:outline-none transition-colors duration-300"
+                >
+                  {categories.map(category => (
+                    <option key={category} value={category}>{category}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Price Range Filter */}
+              <div className="flex flex-col md:flex-row gap-3 md:items-center">
+                <span className="font-semibold text-primary-blue md:min-w-24">Price:</span>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="number"
+                    value={priceRange.min}
+                    onChange={(e) => setPriceRange(prev => ({ ...prev, min: Number(e.target.value) }))}
+                    className="px-4 py-2 rounded-lg border-2 border-secondary-blue/20 w-28 text-primary-blue font-medium focus:border-primary-blue focus:outline-none transition-colors duration-300"
+                    placeholder="Min"
+                  />
+                  <span className="text-primary-blue font-medium">to</span>
+                  <input
+                    type="number"
+                    value={priceRange.max}
+                    onChange={(e) => setPriceRange(prev => ({ ...prev, max: Number(e.target.value) }))}
+                    className="px-4 py-2 rounded-lg border-2 border-secondary-blue/20 w-28 text-primary-blue font-medium focus:border-primary-blue focus:outline-none transition-colors duration-300"
+                    placeholder="Max"
+                  />
+                </div>
+              </div>
+
+              {/* Minimum Size Filter */}
+              <div className="flex flex-col md:flex-row gap-3 md:items-center">
+                <span className="font-semibold text-primary-blue md:min-w-24">Min Size (sq ft):</span>
                 <input
                   type="number"
-                  value={priceRange.min}
-                  onChange={(e) => setPriceRange(prev => ({ ...prev, min: Number(e.target.value) }))}
-                  className="px-3 py-1.5 rounded-lg border w-24"
-                  placeholder="Min"
-                />
-                <span>to</span>
-                <input
-                  type="number"
-                  value={priceRange.max}
-                  onChange={(e) => setPriceRange(prev => ({ ...prev, max: Number(e.target.value) }))}
-                  className="px-3 py-1.5 rounded-lg border w-24"
-                  placeholder="Max"
+                  value={minSize}
+                  onChange={(e) => setMinSize(Number(e.target.value))}
+                  className="px-4 py-2 rounded-lg border-2 border-secondary-blue/20 w-28 text-primary-blue font-medium focus:border-primary-blue focus:outline-none transition-colors duration-300"
+                  placeholder="0"
                 />
               </div>
             </div>
+          )}
+        </div>
 
-            {/* Minimum Size Filter */}
-            <div className="flex flex-col md:flex-row gap-2 md:items-center">
-              <span className="font-semibold md:min-w-24">Min Size (sq ft):</span>
-              <input
-                type="number"
-                value={minSize}
-                onChange={(e) => setMinSize(Number(e.target.value))}
-                className="px-3 py-1.5 rounded-lg border w-24"
-                placeholder="0"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        {filteredAndSortedProducts.map((product) => (
-          <Link 
-            key={product._id} 
-            to={`/products/${product.slug}`}
-            className="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-          >
-            <div className="aspect-w-16 aspect-h-9">
-              {product.images && product.images.length > 0 ? (
-                <img
-                  src={product.images[0].url}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                  No Image
-                </div>
-              )}
-            </div>
-            <div className="p-4">
-              <h2 className="text-lg md:text-xl font-semibold mb-2">{product.name}</h2>
-              <p className="text-gray-600 mb-2 line-clamp-2 text-sm md:text-base">{product.description}</p>
-              <p className="text-base md:text-lg font-bold text-blue-600">
-                {getCurrencySymbol(product.price.currency)}{product.price.base.toFixed(2)}
-              </p>
-            </div>
-          </Link>
-        ))}
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredAndSortedProducts.map((product) => (
+            <Link 
+              key={product._id} 
+              to={`/products/${product.slug}`}
+              className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] border-2 border-transparent hover:border-secondary-blue/20"
+            >
+              <div className="aspect-w-16 aspect-h-9 relative overflow-hidden">
+                {product.images && product.images.length > 0 ? (
+                  <img
+                    src={product.images[0].url}
+                    alt={product.name}
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-secondary-blue/10 flex items-center justify-center text-primary-blue font-medium">
+                    No Image
+                  </div>
+                )}
+              </div>
+              <div className="p-6">
+                <h2 className="text-xl font-bold text-primary-blue mb-2">{product.name}</h2>
+                <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
+                <p className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">
+                  {getCurrencySymbol(product.price.currency)}{product.price.base.toFixed(2)}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -40,9 +40,13 @@ interface FormErrors {
   phone?: string;
 }
 
-const ContactForm = () => {
+interface ContactFormProps {
+  initialBouncerId?: string;
+}
+
+const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
   const [formData, setFormData] = useState<FormData>({
-    bouncer: "",
+    bouncer: initialBouncerId || "",
     email: "",
     partyDate: "",
     partyZipCode: "",
@@ -85,6 +89,14 @@ const ContactForm = () => {
         });
         
         setBouncers(filteredBouncers);
+
+        // Set selected bouncer image if initialBouncerId is provided
+        if (initialBouncerId) {
+          const selectedBouncer = filteredBouncers.find((b: Bouncer) => b._id === initialBouncerId);
+          if (selectedBouncer?.images[0]?.url) {
+            setSelectedBouncerImage(selectedBouncer.images[0].url);
+          }
+        }
       } catch (error) {
         console.error("Error fetching bouncers:", error);
         setLoadError("Failed to load bouncers. Please try again later.");
@@ -94,7 +106,7 @@ const ContactForm = () => {
     };
 
     fetchBouncers();
-  }, [API_URL]);
+  }, [API_URL, initialBouncerId]);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -167,7 +179,7 @@ const ContactForm = () => {
     }));
 
     if (name === "bouncer") {
-      const selectedBouncer = bouncers.find(b => b._id === value);
+      const selectedBouncer = bouncers.find((b: Bouncer) => b._id === value);
       setSelectedBouncerImage(selectedBouncer?.images[0]?.url || "");
     }
   };
@@ -175,12 +187,8 @@ const ContactForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-lg mx-auto p-6 space-y-4 bg-white rounded-lg shadow-lg"
+      className="max-w-lg mx-auto space-y-4"
     >
-      <h2 className="text-2xl font-bold text-center text-primary-purple mb-6">
-        🎉 Let's Plan Your Perfect Party! 🎈
-      </h2>
-
       {submitStatus === "success" && (
         <div className="bg-green-100 text-green-700 p-3 rounded text-center">
           🎊 Woohoo! Your message is on its way! We'll be in touch super soon!
@@ -211,7 +219,7 @@ const ContactForm = () => {
             name="bouncer"
             value={formData.bouncer}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple"
+            className="mt-1 block w-full rounded-lg border-2 border-secondary-blue/20 shadow-sm focus:border-primary-purple focus:ring-primary-purple p-2.5"
           >
             <option value="">Choose a bouncer...</option>
             {bouncers.map((bouncer) => {
@@ -234,7 +242,7 @@ const ContactForm = () => {
           <img
             src={selectedBouncerImage}
             alt="Selected bouncer"
-            className="w-full h-full object-cover rounded-lg"
+            className="w-full h-full object-cover rounded-lg shadow-md"
           />
         </div>
       )}
@@ -252,7 +260,7 @@ const ContactForm = () => {
           name="email"
           value={formData.email}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple"
+          className="mt-1 block w-full rounded-lg border-2 border-secondary-blue/20 shadow-sm focus:border-primary-purple focus:ring-primary-purple p-2.5"
           placeholder="Where should we send the party details?"
         />
         {errors.email && (
@@ -273,7 +281,7 @@ const ContactForm = () => {
           name="partyDate"
           value={formData.partyDate}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple"
+          className="mt-1 block w-full rounded-lg border-2 border-secondary-blue/20 shadow-sm focus:border-primary-purple focus:ring-primary-purple p-2.5"
         />
         {errors.partyDate && (
           <p className="text-red-500 text-sm mt-1">{errors.partyDate}</p>
@@ -293,7 +301,7 @@ const ContactForm = () => {
           name="partyZipCode"
           value={formData.partyZipCode}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple"
+          className="mt-1 block w-full rounded-lg border-2 border-secondary-blue/20 shadow-sm focus:border-primary-purple focus:ring-primary-purple p-2.5"
           placeholder="Where's the party at?"
         />
         {errors.partyZipCode && (
@@ -314,7 +322,7 @@ const ContactForm = () => {
           name="phone"
           value={formData.phone}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple"
+          className="mt-1 block w-full rounded-lg border-2 border-secondary-blue/20 shadow-sm focus:border-primary-purple focus:ring-primary-purple p-2.5"
           placeholder="Best number to reach you"
         />
         {errors.phone && (
@@ -328,56 +336,56 @@ const ContactForm = () => {
         </h3>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
+          <div className="flex items-center space-x-2 bg-secondary-blue/5 p-3 rounded-lg hover:bg-secondary-blue/10 transition-colors">
             <input
               type="checkbox"
               id="tablesChairs"
               name="tablesChairs"
               checked={formData.tablesChairs}
               onChange={handleChange}
-              className="rounded border-gray-300 text-primary-purple focus:ring-primary-purple"
+              className="rounded border-2 border-secondary-blue/20 text-primary-purple focus:ring-primary-purple"
             />
             <label htmlFor="tablesChairs" className="text-sm text-gray-700">
               🪑 Tables & Chairs
             </label>
           </div>
 
-          <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
+          <div className="flex items-center space-x-2 bg-secondary-blue/5 p-3 rounded-lg hover:bg-secondary-blue/10 transition-colors">
             <input
               type="checkbox"
               id="generator"
               name="generator"
               checked={formData.generator}
               onChange={handleChange}
-              className="rounded border-gray-300 text-primary-purple focus:ring-primary-purple"
+              className="rounded border-2 border-secondary-blue/20 text-primary-purple focus:ring-primary-purple"
             />
             <label htmlFor="generator" className="text-sm text-gray-700">
               ⚡ Generator
             </label>
           </div>
 
-          <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
+          <div className="flex items-center space-x-2 bg-secondary-blue/5 p-3 rounded-lg hover:bg-secondary-blue/10 transition-colors">
             <input
               type="checkbox"
               id="popcornMachine"
               name="popcornMachine"
               checked={formData.popcornMachine}
               onChange={handleChange}
-              className="rounded border-gray-300 text-primary-purple focus:ring-primary-purple"
+              className="rounded border-2 border-secondary-blue/20 text-primary-purple focus:ring-primary-purple"
             />
             <label htmlFor="popcornMachine" className="text-sm text-gray-700">
               🍿 Popcorn Machine
             </label>
           </div>
 
-          <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
+          <div className="flex items-center space-x-2 bg-secondary-blue/5 p-3 rounded-lg hover:bg-secondary-blue/10 transition-colors">
             <input
               type="checkbox"
               id="cottonCandyMachine"
               name="cottonCandyMachine"
               checked={formData.cottonCandyMachine}
               onChange={handleChange}
-              className="rounded border-gray-300 text-primary-purple focus:ring-primary-purple"
+              className="rounded border-2 border-secondary-blue/20 text-primary-purple focus:ring-primary-purple"
             />
             <label
               htmlFor="cottonCandyMachine"
@@ -387,28 +395,28 @@ const ContactForm = () => {
             </label>
           </div>
 
-          <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
+          <div className="flex items-center space-x-2 bg-secondary-blue/5 p-3 rounded-lg hover:bg-secondary-blue/10 transition-colors">
             <input
               type="checkbox"
               id="snowConeMachine"
               name="snowConeMachine"
               checked={formData.snowConeMachine}
               onChange={handleChange}
-              className="rounded border-gray-300 text-primary-purple focus:ring-primary-purple"
+              className="rounded border-2 border-secondary-blue/20 text-primary-purple focus:ring-primary-purple"
             />
             <label htmlFor="snowConeMachine" className="text-sm text-gray-700">
               🧊 Snow Cones
             </label>
           </div>
 
-          <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
+          <div className="flex items-center space-x-2 bg-secondary-blue/5 p-3 rounded-lg hover:bg-secondary-blue/10 transition-colors">
             <input
               type="checkbox"
               id="overnight"
               name="overnight"
               checked={formData.overnight}
               onChange={handleChange}
-              className="rounded border-gray-300 text-primary-purple focus:ring-primary-purple"
+              className="rounded border-2 border-secondary-blue/20 text-primary-purple focus:ring-primary-purple"
             />
             <label htmlFor="overnight" className="text-sm text-gray-700">
               🌙 Overnight Rental
@@ -430,19 +438,19 @@ const ContactForm = () => {
           value={formData.message}
           onChange={handleChange}
           rows={4}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple"
+          className="mt-1 block w-full rounded-lg border-2 border-secondary-blue/20 shadow-sm focus:border-primary-purple focus:ring-primary-purple p-2.5"
           placeholder="Share your party vision with us..."
         />
       </div>
 
-      <div className="flex items-center space-x-2 bg-gray-50 p-4 rounded-lg">
+      <div className="flex items-center space-x-2 bg-secondary-blue/5 p-4 rounded-lg">
         <input
           type="checkbox"
           id="consentToContact"
           name="consentToContact"
           checked={formData.consentToContact}
           onChange={handleChange}
-          className="rounded border-gray-300 text-primary-purple focus:ring-primary-purple"
+          className="rounded border-2 border-secondary-blue/20 text-primary-purple focus:ring-primary-purple"
         />
         <label htmlFor="consentToContact" className="text-sm text-gray-700">
           I agree to calls, texts, and emails about my party rental inquiry 📱
@@ -452,13 +460,13 @@ const ContactForm = () => {
       <button
         type="submit"
         disabled={!formData.consentToContact}
-        className={`w-full py-3 px-4 rounded-md font-semibold text-lg transition-all transform hover:scale-105 ${
+        className={`w-full py-3 px-4 rounded-xl font-semibold text-lg transition-all transform hover:scale-105 ${
           formData.consentToContact
-            ? "bg-primary-purple text-white hover:bg-primary-blue"
+            ? "bg-gradient-to-r from-blue-400 to-purple-600 text-white hover:from-blue-500 hover:to-purple-700 shadow-md hover:shadow-lg"
             : "bg-gray-300 text-gray-500 cursor-not-allowed"
         }`}
       >
-        Submit
+        Book Now
       </button>
     </form>
   );

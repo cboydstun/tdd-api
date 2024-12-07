@@ -106,84 +106,91 @@ const ProductCarousel = () => {
   };
 
   if (loading) {
-    return <div className="text-center">Loading products...</div>;
+    return <div className="text-center text-primary-blue font-semibold">Loading products...</div>;
   }
 
   if (error) {
-    return <div className="text-red-500 text-center">Failed to load products</div>;
+    return <div className="text-red-500 text-center font-semibold">Failed to load products</div>;
   }
 
   if (!products.length) {
-    return <div className="text-center">No products available</div>;
+    return <div className="text-center text-primary-blue font-semibold">No products available</div>;
   }
 
   return (
-    <div className="w-full overflow-hidden bg-white py-8">
-      <div className="relative">
-        <div
-          ref={carouselRef}
-          className="flex gap-4 overflow-x-auto whitespace-nowrap scroll-smooth cursor-grab touch-pan-x"
-          onMouseDown={handleDragStart}
-          onMouseMove={handleDragMove}
-          onMouseUp={handleDragEnd}
-          onMouseLeave={handleDragEnd}
-          onTouchStart={handleDragStart}
-          onTouchMove={handleDragMove}
-          onTouchEnd={handleDragEnd}
-          style={{
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-            WebkitOverflowScrolling: 'touch'
-          }}
-        >
-          {/* Hide scrollbar */}
-          <style>
-            {`
-              .overflow-x-auto::-webkit-scrollbar {
-                display: none;
-              }
-            `}
-          </style>
-          {/* Double the products array to create seamless loop */}
-          {[...products, ...products].map((product, index) => (
-            <div
-              key={`${product._id}-${index}`}
-              className="inline-block w-64 flex-shrink-0"
-            >
-              <div className="rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-                <img
-                  src={product.images[0]?.url}
-                  alt={product.images[0]?.alt || product.name}
-                  className="w-full h-48 object-cover"
-                  draggable="false"
-                />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-primary-blue truncate">
-                    {product.name}
-                  </h3>
-                  <p className="text-gray-600 text-sm mt-1">
-                    ${product.price.base}/{product.rentalDuration}
-                  </p>
-                  <div className="mt-4 flex gap-2">
-                    <Link
-                      to={`/products/${product.slug}`}
-                      className="flex-1 bg-primary-blue text-white text-center py-2 px-4 rounded-md hover:bg-blue-600 transition-colors duration-200"
-                      onClick={(e) => e.stopPropagation()} // Prevent drag when clicking
-                    >
-                      More Info
-                    </Link>
-                    <Link
-                      to="/contact"
-                      className="flex-1 bg-green-500 text-white text-center py-2 px-4 rounded-md hover:bg-green-600 transition-colors duration-200"
-                      onClick={(e) => e.stopPropagation()} // Prevent drag when clicking
-                    >
-                      Contact Now
-                    </Link>
+    <div className="w-full overflow-hidden bg-secondary-blue/5 py-12 rounded-xl">
+      <div className="container mx-auto px-4">
+        <h2 className="text-3xl font-bold text-center mb-8 text-primary-purple">
+          Featured Products
+        </h2>
+        <div className="relative">
+          <div
+            ref={carouselRef}
+            className="flex gap-6 overflow-x-auto whitespace-nowrap scroll-smooth cursor-grab touch-pan-x"
+            onMouseDown={handleDragStart}
+            onMouseMove={handleDragMove}
+            onMouseUp={handleDragEnd}
+            onMouseLeave={handleDragEnd}
+            onTouchStart={handleDragStart}
+            onTouchMove={handleDragMove}
+            onTouchEnd={handleDragEnd}
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch'
+            }}
+          >
+            {/* Hide scrollbar */}
+            <style>
+              {`
+                .overflow-x-auto::-webkit-scrollbar {
+                  display: none;
+                }
+              `}
+            </style>
+            {/* Double the products array to create seamless loop */}
+            {[...products, ...products].map((product, index) => (
+              <div
+                key={`${product._id}-${index}`}
+                className="inline-block w-72 flex-shrink-0"
+              >
+                <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={product.images[0]?.url}
+                      alt={product.images[0]?.alt || product.name}
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                      draggable="false"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-primary-blue truncate mb-2">
+                      {product.name}
+                    </h3>
+                    <p className="text-gray-600 text-lg mb-4">
+                      ${product.price.base}/{product.rentalDuration}
+                    </p>
+                    <div className="flex gap-3">
+                      <Link
+                        to={`/products/${product.slug}`}
+                        className="flex-1 bg-primary-blue text-white text-center py-3 px-4 rounded-lg font-semibold hover:bg-blue-600 transition-colors duration-300 shadow-md hover:shadow-lg"
+                        onClick={(e) => e.stopPropagation()} // Prevent drag when clicking
+                      >
+                        More Info
+                      </Link>
+                      <Link
+                        to="/contact"
+                        className="flex-1 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center py-3 px-4 rounded-lg font-semibold hover:from-blue-500 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg"
+                        onClick={(e) => e.stopPropagation()} // Prevent drag when clicking
+                      >
+                        Contact Now
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

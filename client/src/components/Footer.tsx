@@ -7,102 +7,138 @@ import {
   Facebook,
   Instagram,
   Twitter,
+  ArrowRight,
 } from "lucide-react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-50 border-t">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold text-primary-blue">SATX Bounce</h3>
-            <p className="text-gray-600">
+    <footer className="bg-white border-t border-gray-100">
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          {/* Brand Section */}
+          <div className="space-y-6">
+            <Link 
+              to="/"
+              className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text hover:scale-105 transition-transform duration-300 inline-block"
+            >
+              SATX Bounce
+            </Link>
+            <p className="text-gray-600 text-lg">
               Making your events memorable with safe and clean bounce house
               rentals in San Antonio.
             </p>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 text-primary-blue hover:text-primary-purple transition-colors duration-300 font-semibold group"
+            >
+              Book Now
+              <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" />
+            </Link>
           </div>
-          <div className="space-y-4">
-            <h4 className="font-semibold text-gray-900">Quick Links</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to="/"
-                  className="text-gray-600 hover:text-primary-blue transition"
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/blogs"
-                  className="text-gray-600 hover:text-primary-blue transition"
-                >
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products"
-                  className="text-gray-600 hover:text-primary-blue transition"
-                >
-                  Products
-                </Link>
-              </li>
-              <li>
-              <Link
-                  to="/about"
-                  className="text-gray-600 hover:text-primary-blue transition"
-                >
-                  About
-                </Link>
-              </li>
+
+          {/* Quick Links */}
+          <div className="space-y-6">
+            <h4 className="text-xl font-bold text-primary-purple">Quick Links</h4>
+            <ul className="space-y-4">
+              {[
+                { to: "/", label: "Home" },
+                { to: "/blogs", label: "Blog" },
+                { to: "/products", label: "Products" },
+                { to: "/about", label: "About" },
+              ].map((link) => (
+                <li key={link.to}>
+                  <Link
+                    to={link.to}
+                    className="text-gray-600 hover:text-primary-blue transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="space-y-4">
-            <h4 className="font-semibold text-gray-900">Contact</h4>
-            <ul className="space-y-2">
-              <li className="flex items-center gap-2 text-gray-600">
-                <Phone className="w-4 h-4" />
-                (210) 555-0123
+
+          {/* Contact Info */}
+          <div className="space-y-6">
+            <h4 className="text-xl font-bold text-primary-purple">Contact</h4>
+            <ul className="space-y-4">
+              <li>
+                <a 
+                  href="tel:(210) 555-0123" 
+                  className="flex items-center gap-3 text-gray-600 hover:text-primary-blue transition-colors duration-300 group"
+                >
+                  <div className="p-2 bg-secondary-blue/5 rounded-lg group-hover:bg-secondary-blue/10 transition-colors duration-300">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  (210) 555-0123
+                </a>
               </li>
-              <li className="flex items-center gap-2 text-gray-600">
-                <Mail className="w-4 h-4" />
-                info@satxbounce.com
+              <li>
+                <a 
+                  href="mailto:info@satxbounce.com"
+                  className="flex items-center gap-3 text-gray-600 hover:text-primary-blue transition-colors duration-300 group"
+                >
+                  <div className="p-2 bg-secondary-blue/5 rounded-lg group-hover:bg-secondary-blue/10 transition-colors duration-300">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  info@satxbounce.com
+                </a>
               </li>
-              <li className="flex items-center gap-2 text-gray-600">
-                <MapPin className="w-4 h-4" />
+              <li className="flex items-center gap-3 text-gray-600">
+                <div className="p-2 bg-secondary-blue/5 rounded-lg">
+                  <MapPin className="w-5 h-5" />
+                </div>
                 San Antonio, TX
               </li>
             </ul>
           </div>
-          <div className="space-y-4">
-            <h4 className="font-semibold text-gray-900">Follow Us</h4>
-            <div className="flex space-x-4">
-              <a
-                href="#"
-                className="text-gray-600 hover:text-primary-blue transition"
-              >
-                <Facebook className="w-6 h-6" />
-              </a>
-              <a
-                href="#"
-                className="text-gray-600 hover:text-primary-blue transition"
-              >
-                <Instagram className="w-6 h-6" />
-              </a>
-              <a
-                href="#"
-                className="text-gray-600 hover:text-primary-blue transition"
-              >
-                <Twitter className="w-6 h-6" />
-              </a>
+
+          {/* Social Links */}
+          <div className="space-y-6">
+            <h4 className="text-xl font-bold text-primary-purple">Follow Us</h4>
+            <div className="flex gap-4">
+              {[
+                { icon: Facebook, href: "#", label: "Facebook" },
+                { icon: Instagram, href: "#", label: "Instagram" },
+                { icon: Twitter, href: "#", label: "Twitter" },
+              ].map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                  className="p-3 bg-secondary-blue/5 rounded-lg hover:bg-secondary-blue/10 text-primary-blue transition-all duration-300 hover:scale-110"
+                >
+                  <social.icon className="w-6 h-6" />
+                </a>
+              ))}
+            </div>
+            <div className="bg-gradient-to-r from-blue-400 to-purple-600 text-white p-4 rounded-xl">
+              <p className="font-semibold">Free Delivery</p>
+              <p className="text-sm">Within Loop 1604!</p>
             </div>
           </div>
         </div>
-        <div className="mt-8 pt-8 border-t border-gray-200">
-          <p className="text-center text-gray-600">
-            © {new Date().getFullYear()} SATX Bounce. All rights reserved.
-          </p>
+
+        {/* Copyright */}
+        <div className="mt-16 pt-8 border-t border-gray-100">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-gray-600">
+            <p>© {new Date().getFullYear()} SATX Bounce. All rights reserved.</p>
+            <div className="flex gap-6">
+              <Link 
+                to="/privacy" 
+                className="hover:text-primary-blue transition-colors duration-300"
+              >
+                Privacy Policy
+              </Link>
+              <Link 
+                to="/terms" 
+                className="hover:text-primary-blue transition-colors duration-300"
+              >
+                Terms of Service
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

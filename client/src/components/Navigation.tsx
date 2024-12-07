@@ -1,54 +1,102 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
 const Navigation: React.FC = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const isActiveLink = (path: string) => {
+    return location.pathname === path;
+  };
+
+  const navLinks = [
+    { path: "/", label: "Home" },
+    { path: "/products", label: "Products" },
+    { path: "/about", label: "About" },
+    { path: "/blogs", label: "Blog" },
+  ];
+
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <nav className="bg-white shadow-lg sticky top-0 z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo */}
           <div className="flex-shrink-0">
-            <Link to="/" className="text-2xl font-bold text-primary-blue">
+            <Link 
+              to="/" 
+              className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text hover:scale-105 transition-transform duration-300 inline-block"
+            >
               SATX Bounce
             </Link>
           </div>
-          <div className="hidden md:flex space-x-8">
-            <Link
-              to="/"
-              className="text-gray-600 hover:text-primary-blue transition"
-            >
-              Home
-            </Link>
-            <Link
-              to="/products"
-              className="text-gray-600 hover:text-primary-blue transition"
-            >
-              Products
-            </Link>
-            <Link
-              to="/about"
-              className="text-gray-600 hover:text-primary-blue transition"
-            >
-              About
-            </Link>
-            <Link
-              to="/blogs"
-              className="text-gray-600 hover:text-primary-blue transition"
-            >
-              Blog
-            </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                  isActiveLink(link.path)
+                    ? "bg-secondary-blue/10 text-primary-blue"
+                    : "text-gray-600 hover:bg-secondary-blue/5 hover:text-primary-blue"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
             <Link
               to="/contact"
-              className="text-gray-600 hover:text-primary-blue transition"
+              className="ml-4 px-6 py-2.5 bg-gradient-to-r from-blue-400 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-500 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-[1.02]"
             >
-              Contact
+              Contact Now
             </Link>
           </div>
-          <div>
-            <button className="bg-primary-blue text-white px-4 py-2 rounded-lg font-semibold hover:bg-secondary-indigo transition">
-              <a href="/contact">Contact Now</a>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-lg text-gray-600 hover:bg-secondary-blue/5 hover:text-primary-blue transition-colors duration-300"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden py-4 border-t border-gray-100">
+            <div className="flex flex-col space-y-2">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                    isActiveLink(link.path)
+                      ? "bg-secondary-blue/10 text-primary-blue"
+                      : "text-gray-600 hover:bg-secondary-blue/5 hover:text-primary-blue"
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Link
+                to="/contact"
+                className="px-4 py-2 bg-gradient-to-r from-blue-400 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-500 hover:to-purple-700 transition-all duration-300 text-center shadow-md hover:shadow-lg"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Contact Now
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );

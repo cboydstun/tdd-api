@@ -10,36 +10,58 @@ const HomePage: React.FC = () => {
   return (
     <>
       {/* Hero Section */}
-      <div className="py-20 text-center">
-        <h1 className="text-5xl font-bold mb-6 text-primary-blue">
-          San Antonio's Premier Bounce House Rentals
-        </h1>
-        <p className="text-xl text-gray-600 mb-8">
-          Professional and timely bounce house rentals with free delivery and no
-          deposit required
-        </p>
-        <div className="flex justify-center gap-4">
-
-          <button className="bg-primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:bg-secondary-indigo transition">
-            <a href="#contact-form" >Contact Now</a>
-          </button>
-          <Link
-            to="/products"
-            className="border border-primary-blue text-primary-blue px-8 py-3 rounded-lg font-semibold hover:bg-secondary-blue/10 transition"
-          >
-            View Products
-          </Link>
-        </div>
-
-        {/* Customer Logos */}
-        <div className="mt-16">
-          <div className="flex justify-center items-center gap-8 mb-8">
-            <CustomerReviews />
-          </div>
-          <ProductCarousel />
-
-        </div>
+      <div 
+        className="relative min-h-[80vh] flex items-center justify-center bg-cover bg-center overflow-hidden" 
+        style={{ 
+          backgroundImage: 'url("https://media3.giphy.com/media/wZQ8RoZAfj82CQFQyW/giphy.gif?cid=6c09b9529ffd590a91ec0c1478287543484f520c19b1d63c&rid=giphy.gif&ct=g")',
+        }}
+      >
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/20 to-black/20"></div>
         
+        {/* Content Container */}
+        <div className="relative z-10 container mx-auto px-4 py-20 text-center">
+          <h1 className="text-6xl md:text-7xl font-extrabold mb-6 text-white animate-fade-in-down drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+            San Antonio's Premier
+            <span className="block mt-2 bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">
+              Bounce House Rentals
+            </span>
+          </h1>
+          
+          <p className="text-2xl text-white mb-12 max-w-3xl mx-auto leading-relaxed drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] animate-fade-in-up">
+            Professional and timely bounce house rentals with 
+            <span className="font-bold text-blue-300"> free delivery </span> 
+            and 
+            <span className="font-bold text-purple-300"> no deposit required</span>
+          </p>
+          
+          <div className="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up">
+            <a 
+              href="#contact-form"
+              className="group relative px-8 py-4 bg-blue-600 text-white text-lg font-bold rounded-xl overflow-hidden transition-all duration-300 hover:bg-blue-700 hover:scale-105 hover:shadow-xl"
+            >
+              <span className="relative z-10">Contact Now</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </a>
+            
+            <Link
+              to="/products"
+              className="group px-8 py-4 bg-white/10 backdrop-blur-sm text-white text-lg font-bold rounded-xl border-2 border-white/30 transition-all duration-300 hover:bg-white/20 hover:scale-105 hover:shadow-xl hover:border-white/50"
+            >
+              View Products
+              <ArrowRight className="inline-block ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </div>
+      </div>
+        <div className="container mx-auto">
+                {/* Customer REviews */}
+                <div className="animate-fade-in-up">
+            <div className="flex justify-center items-center gap-8 mb-8">
+              <CustomerReviews />
+            </div>
+            <ProductCarousel />
+          </div>
       </div>
 
       {/* Problem Section */}

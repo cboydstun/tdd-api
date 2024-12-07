@@ -81,7 +81,7 @@ const CustomerReviews = () => {
       stars.push(
         <Star
           key={`star-${i}`}
-          className="w-5 h-5 text-secondary-purple fill-secondary-purple"
+          className="w-5 h-5 text-primary-blue fill-primary-blue"
         />
       );
     }
@@ -90,7 +90,7 @@ const CustomerReviews = () => {
       stars.push(
         <StarHalf
           key="half-star"
-          className="w-5 h-5 text-secondary-purple fill-secondary-purple"
+          className="w-5 h-5 text-primary-blue fill-primary-blue"
         />
       );
     }
@@ -99,61 +99,69 @@ const CustomerReviews = () => {
   };
 
   return (
-    <div className="mt-16">
-      {/* Reviews Summary */}
-      <div className="flex justify-center items-center gap-8 mb-12">
-        <div className="flex items-center gap-2">{renderStars(5)}</div>
-        <div className="flex flex-col items-start">
-          <p className="text-2xl font-semibold text-primary-purple">
-            5.0 Rating on Google
-          </p>
-          <p className="text-gray-600">Based on {reviews.length} reviews</p>
-        </div>
-      </div>
+    <div className="w-full bg-secondary-blue/5 py-12 rounded-xl">
+      <div className="container mx-auto px-4">
+        <h2 className="text-3xl font-bold text-center mb-8 text-primary-purple">
+          Customer Reviews
+        </h2>
 
-      {/* Reviews Grid */}
-      <div className="grid md:grid-cols-3 gap-6 px-4">
-        {loading ? (
-          <div className="col-span-3 text-center py-8">Loading reviews...</div>
-        ) : (
-          reviews.map((review) => (
-            <div
-              key={review.id}
-              className="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:border-secondary-purple transition duration-300"
-            >
-              <Quote className="w-8 h-8 text-secondary-purple mb-4" />
-              <div className="flex items-center gap-2 mb-3">
-                {renderStars(review.rating)}
-              </div>
-              <p className="text-gray-700 mb-4 line-clamp-4">
-                {review.comment}
-              </p>
-              <div className="flex items-center gap-3">
-                {review.photoUrl ? (
-                  <img
-                    src={review.photoUrl}
-                    alt={review.author}
-                    className="w-10 h-10 rounded-full"
-                  />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-primary-purple/10 flex items-center justify-center">
-                    <span className="text-primary-purple font-semibold">
+        {/* Reviews Summary */}
+        <div className="flex justify-center items-center gap-8 mb-12 bg-white p-6 rounded-xl shadow-lg max-w-2xl mx-auto transform hover:scale-[1.02] transition-all duration-300">
+          <div className="flex items-center gap-2">{renderStars(5)}</div>
+          <div className="flex flex-col items-start">
+            <p className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">
+              5.0 Rating on Google
+            </p>
+            <p className="text-gray-600 font-medium">
+              Based on {reviews.length} reviews
+            </p>
+          </div>
+        </div>
+
+        {/* Reviews Grid */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {loading ? (
+            <div className="col-span-3 text-center py-8 text-primary-blue font-semibold">
+              Loading reviews...
+            </div>
+          ) : (
+            reviews.map((review) => (
+              <div
+                key={review.id}
+                className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl border-2 border-transparent hover:border-secondary-blue/20 transition-all duration-300 transform hover:scale-[1.02]"
+              >
+                <Quote className="w-8 h-8 text-primary-blue mb-4" />
+                <div className="flex items-center gap-2 mb-4">
+                  {renderStars(review.rating)}
+                </div>
+                <p className="text-gray-600 mb-6 line-clamp-4 text-lg">
+                  {review.comment}
+                </p>
+                <div className="flex items-center gap-4">
+                  {review.photoUrl ? (
+                    <img
+                      src={review.photoUrl}
+                      alt={review.author}
+                      className="w-12 h-12 rounded-full ring-2 ring-primary-blue/20"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
                       {review.author[0]}
-                    </span>
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-bold text-primary-purple text-lg">
+                      {review.author}
+                    </p>
+                    <p className="text-gray-500 font-medium">
+                      {new Date(review.date).toLocaleDateString()}
+                    </p>
                   </div>
-                )}
-                <div>
-                  <p className="font-semibold text-primary-purple">
-                    {review.author}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {new Date(review.date).toLocaleDateString()}
-                  </p>
                 </div>
               </div>
-            </div>
-          ))
-        )}
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
