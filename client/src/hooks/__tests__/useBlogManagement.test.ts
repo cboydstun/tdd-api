@@ -7,6 +7,21 @@ import { BlogFormData } from '../../types/blog';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
+// Helper function to convert BlogFormData to FormData
+const createFormData = (blogData: BlogFormData): FormData => {
+    const formData = new FormData();
+    Object.entries(blogData).forEach(([key, value]) => {
+        if (key === 'categories' || key === 'tags') {
+            // Convert comma-separated strings to arrays
+            const arrayValue = value ? value.split(',').map((item: string) => item.trim()) : [];
+            formData.append(key, JSON.stringify(arrayValue));
+        } else {
+            formData.append(key, value?.toString() || '');
+        }
+    });
+    return formData;
+};
+
 describe('useBlogManagement', () => {
     beforeEach(() => {
         jest.clearAllMocks();
@@ -84,20 +99,21 @@ describe('useBlogManagement', () => {
                 tags: 'tag1, tag2'
             };
 
+            const formData = createFormData(mockBlogData);
             mockedAxios.post.mockResolvedValueOnce({});
             mockedAxios.get.mockResolvedValueOnce({ data: [] }); // For the subsequent fetchBlogs call
 
             const { result } = renderHook(() => useBlogManagement());
 
             const success = await act(async () => {
-                return await result.current.createBlog(mockBlogData);
+                return await result.current.createBlog(formData);
             });
 
             expect(success).toBe(true);
-            expect(mockedAxios.post).toHaveBeenCalledWith('/api/v1/blogs', {
-                ...mockBlogData,
-                categories: ['cat1', 'cat2'],
-                tags: ['tag1', 'tag2']
+            expect(mockedAxios.post).toHaveBeenCalledWith('/api/v1/blogs', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
             });
             expect(mockedAxios.get).toHaveBeenCalledWith('/api/v1/blogs');
         });
@@ -111,12 +127,13 @@ describe('useBlogManagement', () => {
                 status: 'draft'
             };
 
+            const formData = createFormData(mockBlogData);
             mockedAxios.post.mockRejectedValueOnce(new Error('Failed to create'));
 
             const { result } = renderHook(() => useBlogManagement());
 
             const success = await act(async () => {
-                return await result.current.createBlog(mockBlogData);
+                return await result.current.createBlog(formData);
             });
 
             expect(success).toBe(false);
@@ -136,20 +153,21 @@ describe('useBlogManagement', () => {
                 tags: 'tag1, tag2'
             };
 
+            const formData = createFormData(mockBlogData);
             mockedAxios.put.mockResolvedValueOnce({});
             mockedAxios.get.mockResolvedValueOnce({ data: [] }); // For the subsequent fetchBlogs call
 
             const { result } = renderHook(() => useBlogManagement());
 
             const success = await act(async () => {
-                return await result.current.updateBlog('test-slug', mockBlogData);
+                return await result.current.updateBlog('test-slug', formData);
             });
 
             expect(success).toBe(true);
-            expect(mockedAxios.put).toHaveBeenCalledWith('/api/v1/blogs/test-slug', {
-                ...mockBlogData,
-                categories: ['cat1', 'cat2'],
-                tags: ['tag1', 'tag2']
+            expect(mockedAxios.put).toHaveBeenCalledWith('/api/v1/blogs/test-slug', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
             });
             expect(mockedAxios.get).toHaveBeenCalledWith('/api/v1/blogs');
         });
@@ -163,12 +181,13 @@ describe('useBlogManagement', () => {
                 status: 'draft'
             };
 
+            const formData = createFormData(mockBlogData);
             mockedAxios.put.mockRejectedValueOnce(new Error('Failed to update'));
 
             const { result } = renderHook(() => useBlogManagement());
 
             const success = await act(async () => {
-                return await result.current.updateBlog('test-slug', mockBlogData);
+                return await result.current.updateBlog('test-slug', formData);
             });
 
             expect(success).toBe(false);

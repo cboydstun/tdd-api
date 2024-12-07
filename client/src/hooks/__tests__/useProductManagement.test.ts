@@ -41,8 +41,20 @@ describe('useProductManagement', () => {
                     dimensions: { length: 10, width: 10, height: 10, unit: 'feet' },
                     capacity: 5,
                     ageRange: { min: 3, max: 12 },
-                    setupRequirements: { space: 'Large area' },
+                    setupRequirements: {
+                        space: 'Large area',
+                        powerSource: true,
+                        surfaceType: ['Grass', 'Concrete']
+                    },
+                    features: [],
                     safetyGuidelines: 'Test safety guidelines',
+                    maintenanceSchedule: {
+                        lastMaintenance: new Date().toISOString(),
+                        nextMaintenance: new Date().toISOString()
+                    },
+                    weatherRestrictions: [],
+                    additionalServices: [],
+                    specifications: [],
                     images: [],
                     rentalDuration: 'full-day',
                     availability: 'available',
@@ -59,8 +71,20 @@ describe('useProductManagement', () => {
                     dimensions: { length: 12, width: 12, height: 12, unit: 'feet' },
                     capacity: 8,
                     ageRange: { min: 4, max: 15 },
-                    setupRequirements: { space: 'Medium area' },
+                    setupRequirements: {
+                        space: 'Medium area',
+                        powerSource: true,
+                        surfaceType: ['Grass']
+                    },
+                    features: [],
                     safetyGuidelines: 'Test safety guidelines',
+                    maintenanceSchedule: {
+                        lastMaintenance: new Date().toISOString(),
+                        nextMaintenance: new Date().toISOString()
+                    },
+                    weatherRestrictions: [],
+                    additionalServices: [],
+                    specifications: [],
                     images: [],
                     rentalDuration: 'full-day',
                     availability: 'available',

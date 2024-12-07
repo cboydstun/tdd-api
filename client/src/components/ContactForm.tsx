@@ -1,6 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { getApiUrl } from "../utils/env";
+
+interface Specification {
+  name: string;
+  value: string;
+  _id: string;
+}
+
+interface Bouncer {
+  _id: string;
+  name: string;
+  images: Array<{ url: string; alt: string }>;
+  specifications: Specification[];
+}
 
 interface FormData {
   bouncer: string;
@@ -15,10 +28,8 @@ interface FormData {
   popcornMachine: boolean;
   cottonCandyMachine: boolean;
   snowConeMachine: boolean;
-  pettingZoo: boolean;
-  ponyRides: boolean;
-  dj: boolean;
   overnight: boolean;
+  consentToContact: boolean;
 }
 
 interface FormErrors {
@@ -43,11 +54,14 @@ const ContactForm = () => {
     popcornMachine: false,
     cottonCandyMachine: false,
     snowConeMachine: false,
-    pettingZoo: false,
-    ponyRides: false,
-    dj: false,
     overnight: false,
+    consentToContact: false,
   });
+
+  const [bouncers, setBouncers] = useState<Bouncer[]>([]);
+  const [selectedBouncerImage, setSelectedBouncerImage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const API_URL = getApiUrl();
 
@@ -56,12 +70,38 @@ const ContactForm = () => {
     "idle" | "success" | "error"
   >("idle");
 
+  useEffect(() => {
+    const fetchBouncers = async () => {
+      setIsLoading(true);
+      setLoadError(null);
+      try {
+        const response = await axios.get(`${API_URL}/api/v1/products`);
+        
+        const filteredBouncers = response.data.filter((product: Bouncer) => {
+          const typeSpec = product.specifications?.find(spec => 
+            spec.name === "Type" && (spec.value === "WET" || spec.value === "DRY")
+          );
+          return typeSpec !== undefined;
+        });
+        
+        setBouncers(filteredBouncers);
+      } catch (error) {
+        console.error("Error fetching bouncers:", error);
+        setLoadError("Failed to load bouncers. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBouncers();
+  }, [API_URL]);
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
     const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
     const phoneRegex = /^(\+?[\d\s\-()]{7,16})?$/;
 
-    if (!formData.bouncer) newErrors.bouncer = "Name is required";
+    if (!formData.bouncer) newErrors.bouncer = "Please select a bouncer";
 
     if (!formData.email) {
       newErrors.email = "Email is required";
@@ -88,7 +128,7 @@ const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) return;
+    if (!validateForm() || !formData.consentToContact) return;
 
     try {
       await axios.post(`${API_URL}/api/v1/contacts`, formData);
@@ -106,18 +146,17 @@ const ContactForm = () => {
         popcornMachine: false,
         cottonCandyMachine: false,
         snowConeMachine: false,
-        pettingZoo: false,
-        ponyRides: false,
-        dj: false,
         overnight: false,
+        consentToContact: false,
       });
+      setSelectedBouncerImage("");
     } catch (error) {
       setSubmitStatus("error");
     }
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
@@ -126,6 +165,11 @@ const ContactForm = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    if (name === "bouncer") {
+      const selectedBouncer = bouncers.find(b => b._id === value);
+      setSelectedBouncerImage(selectedBouncer?.images[0]?.url || "");
+    }
   };
 
   return (
@@ -155,21 +199,45 @@ const ContactForm = () => {
           htmlFor="bouncer"
           className="block text-sm font-medium text-gray-700"
         >
-          👤 Your Name
+          🎪 Select a Bouncer
         </label>
-        <input
-          type="text"
-          id="bouncer"
-          name="bouncer"
-          value={formData.bouncer}
-          onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple"
-          placeholder="What should we call you?"
-        />
+        {isLoading ? (
+          <div className="mt-1 text-gray-500">Loading bouncers...</div>
+        ) : loadError ? (
+          <div className="mt-1 text-red-500">{loadError}</div>
+        ) : (
+          <select
+            id="bouncer"
+            name="bouncer"
+            value={formData.bouncer}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-purple focus:ring-primary-purple"
+          >
+            <option value="">Choose a bouncer...</option>
+            {bouncers.map((bouncer) => {
+              const type = bouncer.specifications.find(spec => spec.name === "Type")?.value;
+              return (
+                <option key={bouncer._id} value={bouncer._id}>
+                  {bouncer.name} ({type})
+                </option>
+              );
+            })}
+          </select>
+        )}
         {errors.bouncer && (
           <p className="text-red-500 text-sm mt-1">{errors.bouncer}</p>
         )}
       </div>
+
+      {selectedBouncerImage && (
+        <div className="mt-4">
+          <img
+            src={selectedBouncerImage}
+            alt="Selected bouncer"
+            className="w-full h-full object-cover rounded-lg"
+          />
+        </div>
+      )}
 
       <div>
         <label
@@ -256,7 +324,7 @@ const ContactForm = () => {
 
       <div className="space-y-4">
         <h3 className="text-xl font-semibold text-center text-primary-purple">
-          ✨ Make Your Party Extra Special! ✨
+          Make Your Party Extra Special!
         </h3>
 
         <div className="grid grid-cols-2 gap-4">
@@ -333,48 +401,6 @@ const ContactForm = () => {
             </label>
           </div>
 
-          {/* <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
-            <input
-              type="checkbox"
-              id="pettingZoo"
-              name="pettingZoo"
-              checked={formData.pettingZoo}
-              onChange={handleChange}
-              className="rounded border-gray-300 text-primary-purple focus:ring-primary-purple"
-            />
-            <label htmlFor="pettingZoo" className="text-sm text-gray-700">
-              🦒 Petting Zoo
-            </label>
-          </div>
-
-          <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
-            <input
-              type="checkbox"
-              id="ponyRides"
-              name="ponyRides"
-              checked={formData.ponyRides}
-              onChange={handleChange}
-              className="rounded border-gray-300 text-primary-purple focus:ring-primary-purple"
-            />
-            <label htmlFor="ponyRides" className="text-sm text-gray-700">
-              🐎 Pony Rides
-            </label>
-          </div>
-
-          <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
-            <input
-              type="checkbox"
-              id="dj"
-              name="dj"
-              checked={formData.dj}
-              onChange={handleChange}
-              className="rounded border-gray-300 text-primary-purple focus:ring-primary-purple"
-            />
-            <label htmlFor="dj" className="text-sm text-gray-700">
-              🎵 DJ Services
-            </label>
-          </div> */}
-
           <div className="flex items-center space-x-2 bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
             <input
               type="checkbox"
@@ -409,11 +435,30 @@ const ContactForm = () => {
         />
       </div>
 
+      <div className="flex items-center space-x-2 bg-gray-50 p-4 rounded-lg">
+        <input
+          type="checkbox"
+          id="consentToContact"
+          name="consentToContact"
+          checked={formData.consentToContact}
+          onChange={handleChange}
+          className="rounded border-gray-300 text-primary-purple focus:ring-primary-purple"
+        />
+        <label htmlFor="consentToContact" className="text-sm text-gray-700">
+          I agree to calls, texts, and emails about my party rental inquiry 📱
+        </label>
+      </div>
+
       <button
         type="submit"
-        className="w-full bg-primary-purple text-white py-3 px-4 rounded-md hover:bg-primary-blue transition-all transform hover:scale-105 font-semibold text-lg"
+        disabled={!formData.consentToContact}
+        className={`w-full py-3 px-4 rounded-md font-semibold text-lg transition-all transform hover:scale-105 ${
+          formData.consentToContact
+            ? "bg-primary-purple text-white hover:bg-primary-blue"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        }`}
       >
-        🎪 Let's Make Magic Happen! 🎪
+        Submit
       </button>
     </form>
   );

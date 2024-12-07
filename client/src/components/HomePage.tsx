@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import CustomerReviews from "./CustomerReviews";
 import { Feature, features } from "../data/features";
 import ContactForm from "./ContactForm";
+import ProductCarousel from "./ProductCarousel";
 
 const HomePage: React.FC = () => {
   return (
@@ -35,7 +36,10 @@ const HomePage: React.FC = () => {
           <div className="flex justify-center items-center gap-8 mb-8">
             <CustomerReviews />
           </div>
+          <ProductCarousel />
+
         </div>
+        
       </div>
 
       {/* Problem Section */}

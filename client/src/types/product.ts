@@ -29,7 +29,7 @@ export interface SetupRequirements {
 
 export interface Specification {
     name: string;
-    value: string;
+    value: string | string[];
 }
 
 export interface AdditionalService {
