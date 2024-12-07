@@ -6,7 +6,9 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "seed:blogs": "node ./blogSeed.js",
+    "seed:products": "node ./productSeed.js"
   },
   "repository": {
     "type": "git",
