@@ -3,8 +3,8 @@
   "compilerOptions": {
     "composite": true,
     "moduleResolution": "node",
-    "module": "commonjs",
-    "types": ["jest", "@testing-library/jest-dom", "node"],
+    "module": "ES2020",
+    "types": ["jest", "@testing-library/jest-dom", "node", "vite/client"],
     "allowJs": true,
     "esModuleInterop": true
   },

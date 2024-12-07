@@ -25,35 +25,17 @@ const Navigation: React.FC = () => {
               Blog
             </Link>
             <Link
-              to="/inventory"
-              className="text-gray-600 hover:text-primary-blue transition"
-            >
-              Inventory
-            </Link>
-            <Link
-              to="/products"
-              className="text-gray-600 hover:text-primary-blue transition"
-            >
-              Products
-            </Link>
-            <a
-              href="#"
-              className="text-gray-600 hover:text-primary-blue transition"
-            >
-              Pricing
-            </a>
-            <a
-              href="#"
+              to="/about"
               className="text-gray-600 hover:text-primary-blue transition"
             >
               About
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/contact"
               className="text-gray-600 hover:text-primary-blue transition"
             >
               Contact
-            </a>
+            </Link>
           </div>
           <div>
             <button className="bg-primary-blue text-white px-4 py-2 rounded-lg font-semibold hover:bg-secondary-indigo transition">

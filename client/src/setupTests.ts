@@ -37,6 +37,15 @@ Object.defineProperty(window, 'matchMedia', {
 // Mock environment variables
 process.env.VITE_API_URL = 'http://localhost:8080';
 
+// Mock Vite's import.meta.env
+(global as any).import = {
+    meta: {
+        env: {
+            VITE_API_URL: 'http://localhost:8080'
+        }
+    }
+};
+
 // Mock modules that might cause issues
 jest.mock('lucide-react', () => ({
     ArrowRight: () => null,

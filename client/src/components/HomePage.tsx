@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import CustomerReviews from "./CustomerReviews";
 import { Feature, features } from "../data/features";
+import ContactForm from "./ContactForm";
 
 const HomePage: React.FC = () => {
   return (
@@ -210,6 +211,16 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
+      {/* Contact Form Section */}
+      <div className="container mx-auto px-4 py-16">
+        <h2 className="text-3xl font-bold text-center mb-12 text-primary-purple">
+          Get in Touch
+        </h2>
+        <div className="max-w-2xl mx-auto">
+          <ContactForm />
+        </div>
+      </div>
+
       {/* CTA Section */}
       <div className="py-16 bg-primary-blue rounded-xl px-8 my-16 text-center">
         <h2 className="text-3xl font-bold mb-6 text-white">
@@ -218,10 +229,13 @@ const HomePage: React.FC = () => {
         <p className="text-xl mb-8 text-secondary-blue">
           Book now and get free delivery within Loop 1604!
         </p>
-        <button className="bg-white text-primary-blue px-8 py-3 rounded-lg font-semibold hover:bg-secondary-blue transition inline-flex items-center gap-2">
+        <Link
+          to="/contact"
+          className="bg-white text-primary-blue px-8 py-3 rounded-lg font-semibold hover:bg-secondary-blue transition inline-flex items-center gap-2"
+        >
           Contact Now
           <ArrowRight className="w-5 h-5" />
-        </button>
+        </Link>
       </div>
     </>
   );
