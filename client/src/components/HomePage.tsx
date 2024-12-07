@@ -18,14 +18,15 @@ const HomePage: React.FC = () => {
           deposit required
         </p>
         <div className="flex justify-center gap-4">
+
           <button className="bg-primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:bg-secondary-indigo transition">
-            Book Now
+            <a href="#contact-form" >Contact Now</a>
           </button>
           <Link
-            to="/inventory"
+            to="/products"
             className="border border-primary-blue text-primary-blue px-8 py-3 rounded-lg font-semibold hover:bg-secondary-blue/10 transition"
           >
-            View Inventory
+            View Products
           </Link>
         </div>
 
@@ -212,7 +213,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Contact Form Section */}
-      <div className="container mx-auto px-4 py-16">
+      <div id="contact-form" className="container mx-auto px-4 py-16">
         <h2 className="text-3xl font-bold text-center mb-12 text-primary-purple">
           Get in Touch
         </h2>

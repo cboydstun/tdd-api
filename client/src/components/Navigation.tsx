@@ -45,7 +45,7 @@ const Navigation: React.FC = () => {
           </div>
           <div>
             <button className="bg-primary-blue text-white px-4 py-2 rounded-lg font-semibold hover:bg-secondary-indigo transition">
-              Book Now
+              <a href="/contact">Contact Now</a>
             </button>
           </div>
         </div>

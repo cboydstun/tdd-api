@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import axios from 'axios';
-import { Blog, BlogFormData } from '../types/blog';
+import { Blog } from '../types/blog';
 
 export const useBlogManagement = () => {
     const [blogs, setBlogs] = useState<Blog[]>([]);
