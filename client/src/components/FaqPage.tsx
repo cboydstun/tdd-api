@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Plus, Minus } from "lucide-react";
 import { useState } from "react";
-
+import { Helmet } from "react-helmet";
 
 const FaqPage: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -110,70 +110,103 @@ const FaqPage: React.FC = () => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  // Create FAQ structured data for SEO
+  const faqStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
   return (
-    <div className="w-full bg-secondary-blue/5 py-12">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-primary-blue hover:text-primary-purple transition-colors duration-300 mb-8 group"
-            >
-              <ArrowLeft className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform duration-300" />
-              Back to Home
-            </Link>
+    <>
+      <Helmet>
+        <title>Frequently Asked Questions | SATX Bounce House Rentals</title>
+        <meta name="description" content="Find answers to common questions about bounce house rentals in San Antonio, TX. Learn about delivery times, safety measures, pricing, and more." />
+        <meta name="keywords" content="bounce house rentals FAQ, San Antonio bounce house questions, party rental FAQ, waterslide rental questions, bounce house safety, rental pricing, delivery information" />
+        
+        {/* Open Graph tags */}
+        <meta property="og:title" content="Frequently Asked Questions | SATX Bounce House Rentals" />
+        <meta property="og:description" content="Find answers to common questions about bounce house rentals in San Antonio, TX. Learn about delivery times, safety measures, pricing, and more." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={window.location.href} />
+        
+        {/* Structured Data for FAQ Page */}
+        <script type="application/ld+json">
+          {JSON.stringify(faqStructuredData)}
+        </script>
+      </Helmet>
 
-            <h1 className="text-4xl font-bold mb-8">
-              <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">
-                Frequently Asked Questions
-              </span>
-            </h1>
+      <div className="w-full bg-secondary-blue/5 py-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <Link
+                to="/"
+                className="inline-flex items-center gap-2 text-primary-blue hover:text-primary-purple transition-colors duration-300 mb-8 group"
+              >
+                <ArrowLeft className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform duration-300" />
+                Back to Home
+              </Link>
 
-            <div className="space-y-4 text-gray-600">
-              {faqs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="border border-gray-200 rounded-lg overflow-hidden"
-                >
-                  <button
-                    className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors duration-300"
-                    onClick={() => toggleFaq(index)}
+              <h1 className="text-4xl font-bold mb-8">
+                <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">
+                  Frequently Asked Questions
+                </span>
+              </h1>
+
+              <div className="space-y-4 text-gray-600">
+                {faqs.map((faq, index) => (
+                  <div
+                    key={index}
+                    className="border border-gray-200 rounded-lg overflow-hidden"
                   >
-                    <span className="font-medium text-primary-purple">{faq.question}</span>
-                    {openIndex === index ? (
-                      <Minus className="w-5 h-5 text-primary-blue flex-shrink-0" />
-                    ) : (
-                      <Plus className="w-5 h-5 text-primary-blue flex-shrink-0" />
+                    <button
+                      className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors duration-300"
+                      onClick={() => toggleFaq(index)}
+                    >
+                      <span className="font-medium text-primary-purple">{faq.question}</span>
+                      {openIndex === index ? (
+                        <Minus className="w-5 h-5 text-primary-blue flex-shrink-0" />
+                      ) : (
+                        <Plus className="w-5 h-5 text-primary-blue flex-shrink-0" />
+                      )}
+                    </button>
+                    {openIndex === index && (
+                      <div className="p-4 bg-gray-50 border-t border-gray-200">
+                        <p>{faq.answer}</p>
+                      </div>
                     )}
-                  </button>
-                  {openIndex === index && (
-                    <div className="p-4 bg-gray-50 border-t border-gray-200">
-                      <p>{faq.answer}</p>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+                  </div>
+                ))}
+              </div>
 
-            <div className="bg-secondary-blue/5 p-6 rounded-lg mt-12">
-              <p className="text-sm">
-                Last updated: {new Date().toLocaleDateString()}
-              </p>
-              <p className="text-sm mt-2">
-                Have more questions? Please{" "}
-                <Link
-                  to="/contact"
-                  className="text-primary-blue hover:text-primary-purple transition-colors duration-300"
-                >
-                  contact us
-                </Link>
-                .
-              </p>
+              <div className="bg-secondary-blue/5 p-6 rounded-lg mt-12">
+                <p className="text-sm">
+                  Last updated: {new Date().toLocaleDateString()}
+                </p>
+                <p className="text-sm mt-2">
+                  Have more questions? Please{" "}
+                  <Link
+                    to="/contact"
+                    className="text-primary-blue hover:text-primary-purple transition-colors duration-300"
+                  >
+                    contact us
+                  </Link>
+                  .
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

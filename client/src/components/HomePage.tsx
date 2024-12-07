@@ -1,16 +1,97 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { Helmet } from "react-helmet";
 import CustomerReviews from "./CustomerReviews";
 import { Feature, features } from "../data/features";
 import ContactForm from "./ContactForm";
 import ProductCarousel from "./ProductCarousel";
 
 const HomePage: React.FC = () => {
+  // Local business structured data
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "SATX Bounce House Rentals",
+    "image": "https://media3.giphy.com/media/wZQ8RoZAfj82CQFQyW/giphy.gif",
+    "description": "San Antonio's premier bounce house and party rental service offering inflatable bounce houses, water slides, and party equipment with free delivery.",
+    "@id": "https://satxbounce.com",
+    "url": "https://satxbounce.com",
+    "telephone": "(512) 210-0194",
+    "priceRange": "$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "San Antonio",
+      "addressLocality": "San Antonio",
+      "addressRegion": "TX",
+      "postalCode": "78201",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 29.4241,
+      "longitude": -98.4936
+    },
+    "areaServed": {
+      "@type": "GeoCircle",
+      "geoMidpoint": {
+        "@type": "GeoCoordinates",
+        "latitude": 29.4241,
+        "longitude": -98.4936
+      },
+      "geoRadius": "30000"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "opens": "08:00",
+      "closes": "20:00"
+    }
+  };
+
   return (
     <>
-      {/* Hero Section */}
-      <div
+      <Helmet>
+        <title>SATX Bounce House Rentals | San Antonio Party Equipment Rental</title>
+        <meta name="description" content="San Antonio's premier bounce house rental service. Professional and timely bounce house rentals with free delivery and no deposit required. Water slides, party equipment, and more!" />
+        <meta name="keywords" content="bounce house rental, San Antonio party rentals, water slides, inflatable rentals, party equipment, event rentals, free delivery" />
+        
+        {/* Open Graph tags */}
+        <meta property="og:title" content="SATX Bounce House Rentals | San Antonio Party Equipment Rental" />
+        <meta property="og:description" content="San Antonio's premier bounce house rental service. Professional and timely bounce house rentals with free delivery and no deposit required." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:image" content="https://media3.giphy.com/media/wZQ8RoZAfj82CQFQyW/giphy.gif" />
+        
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="SATX Bounce House Rentals | San Antonio Party Equipment Rental" />
+        <meta name="twitter:description" content="San Antonio's premier bounce house rental service. Professional and timely bounce house rentals with free delivery and no deposit required." />
+        <meta name="twitter:image" content="https://media3.giphy.com/media/wZQ8RoZAfj82CQFQyW/giphy.gif" />
+        
+        {/* Location specific meta tags */}
+        <meta name="geo.region" content="US-TX" />
+        <meta name="geo.placename" content="San Antonio" />
+        <meta name="geo.position" content="29.4241;-98.4936" />
+        <meta name="ICBM" content="29.4241, -98.4936" />
+
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify(localBusinessSchema)}
+        </script>
+      </Helmet>
+
+      {/* Rest of the component remains unchanged */}
+       {/* Hero Section */}
+       <div
         className="relative min-h-[80vh] flex items-center justify-center bg-cover bg-center overflow-hidden"
         style={{
           backgroundImage:
