@@ -3,14 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useBlogManagement } from "../hooks/useBlogManagement";
 import { useProductManagement } from "../hooks/useProductManagement";
+import { useContactManagement } from "../hooks/useContactManagement";
 import { Blog } from "../types/blog";
 import { Product } from "../types/product";
+import { Contact } from "../types/contact";
 import BlogForm from "./blog/BlogForm";
 import BlogTable from "./blog/BlogTable";
 import ProductForm from "./product/ProductForm";
 import ProductTable from "./product/ProductTable";
+import ContactForm from "./contact/ContactForm";
+import ContactTable from "./contact/ContactTable";
 
-type ActivePanel = "blogs" | "products";
+type ActivePanel = "blogs" | "products" | "contacts";
 
 export default function AdminPanel() {
   const { isAuthenticated } = useAuth();
@@ -35,11 +39,22 @@ export default function AdminPanel() {
     deleteProduct,
   } = useProductManagement();
 
+  const {
+    contacts,
+    loading: contactsLoading,
+    error: contactsError,
+    fetchContacts,
+    updateContact,
+    deleteContact,
+  } = useContactManagement();
+
   const [activePanel, setActivePanel] = useState<ActivePanel>("blogs");
   const [showBlogForm, setShowBlogForm] = useState(false);
   const [showProductForm, setShowProductForm] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [editingContact, setEditingContact] = useState<Contact | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -50,7 +65,8 @@ export default function AdminPanel() {
   useEffect(() => {
     fetchBlogs();
     fetchProducts();
-  }, [fetchBlogs, fetchProducts]);
+    fetchContacts();
+  }, [fetchBlogs, fetchProducts, fetchContacts]);
 
   const handleBlogSubmit = async (formData: any) => {
     const success = editingBlog
@@ -74,6 +90,16 @@ export default function AdminPanel() {
     }
   };
 
+  const handleContactSubmit = async (formData: Partial<Contact>) => {
+    if (editingContact) {
+      const success = await updateContact(editingContact._id, formData);
+      if (success) {
+        setShowContactForm(false);
+        setEditingContact(null);
+      }
+    }
+  };
+
   const handleBlogEdit = (blog: Blog) => {
     setEditingBlog(blog);
     setShowBlogForm(true);
@@ -82,6 +108,11 @@ export default function AdminPanel() {
   const handleProductEdit = (product: Product) => {
     setEditingProduct(product);
     setShowProductForm(true);
+  };
+
+  const handleContactEdit = (contact: Contact) => {
+    setEditingContact(contact);
+    setShowContactForm(true);
   };
 
   const handleBlogCancel = () => {
@@ -94,7 +125,12 @@ export default function AdminPanel() {
     setEditingProduct(null);
   };
 
-  if (blogsLoading || productsLoading) {
+  const handleContactCancel = () => {
+    setShowContactForm(false);
+    setEditingContact(null);
+  };
+
+  if (blogsLoading || productsLoading || contactsLoading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-xl text-gray-600">Loading...</div>
@@ -118,6 +154,7 @@ export default function AdminPanel() {
                 >
                   <option value="blogs">Blog Management</option>
                   <option value="products">Product Management</option>
+                  <option value="contacts">Contact Management</option>
                 </select>
               </div>
               <div className="hidden sm:block">
@@ -141,6 +178,16 @@ export default function AdminPanel() {
                     }`}
                   >
                     Product Management
+                  </button>
+                  <button
+                    onClick={() => setActivePanel("contacts")}
+                    className={`px-3 py-2 font-medium text-sm rounded-md ${
+                      activePanel === "contacts"
+                        ? "bg-primary-purple text-white"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    Contact Management
                   </button>
                 </nav>
               </div>
@@ -219,6 +266,36 @@ export default function AdminPanel() {
                     products={products}
                     onEdit={handleProductEdit}
                     onDelete={deleteProduct}
+                  />
+                )}
+              </div>
+            )}
+
+            {activePanel === "contacts" && (
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    Contact Management
+                  </h1>
+                </div>
+
+                {contactsError && (
+                  <div className="mb-4 p-4 text-red-700 bg-red-100 rounded-md">
+                    {contactsError}
+                  </div>
+                )}
+
+                {showContactForm ? (
+                  <ContactForm
+                    onSubmit={handleContactSubmit}
+                    onCancel={handleContactCancel}
+                    initialData={editingContact || undefined}
+                  />
+                ) : (
+                  <ContactTable
+                    contacts={contacts}
+                    onEdit={handleContactEdit}
+                    onDelete={deleteContact}
                   />
                 )}
               </div>
