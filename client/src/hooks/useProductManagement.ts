@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import axios from 'axios';
 import { Product } from '../types/product';
 
 export const useProductManagement = () => {
@@ -10,16 +11,12 @@ export const useProductManagement = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch('/api/v1/products', {
+            const response = await axios.get('/api/v1/products', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            if (!response.ok) {
-                throw new Error('Failed to fetch products');
-            }
-            const data = await response.json();
-            setProducts(data);
+            setProducts(response.data);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
         } finally {
@@ -30,22 +27,16 @@ export const useProductManagement = () => {
     const createProduct = async (formData: FormData) => {
         setError(null);
         try {
-            const response = await fetch('/api/v1/products', {
-                method: 'POST',
+            await axios.post('/api/v1/products', formData, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: formData
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'multipart/form-data'
+                }
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to create product');
-            }
-
             await fetchProducts();
             return true;
         } catch (err) {
+            console.error('Error creating product:', err);
             setError(err instanceof Error ? err.message : 'An error occurred');
             return false;
         }
@@ -54,22 +45,16 @@ export const useProductManagement = () => {
     const updateProduct = async (slug: string, formData: FormData) => {
         setError(null);
         try {
-            const response = await fetch(`/api/v1/products/${slug}`, {
-                method: 'PUT',
+            await axios.put(`/api/v1/products/${slug}`, formData, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: formData
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'multipart/form-data'
+                }
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to update product');
-            }
-
             await fetchProducts();
             return true;
         } catch (err) {
+            console.error('Error updating product:', err);
             setError(err instanceof Error ? err.message : 'An error occurred');
             return false;
         }
@@ -78,47 +63,32 @@ export const useProductManagement = () => {
     const deleteProduct = async (slug: string) => {
         setError(null);
         try {
-            const response = await fetch(`/api/v1/products/${slug}`, {
-                method: 'DELETE',
+            await axios.delete(`/api/v1/products/${slug}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to delete product');
-            }
-
             await fetchProducts();
             return true;
         } catch (err) {
+            console.error('Error deleting product:', err);
             setError(err instanceof Error ? err.message : 'An error occurred');
             return false;
         }
     };
 
-    const deleteImage = async (slug: string, imageName: string) => {
+    const deleteImage = async (slug: string, public_id: string) => {
         setError(null);
         try {
-            // Remove 'uploads/' from the imageName if it exists
-            const cleanImageName = imageName.replace('uploads/', '');
-
-            const response = await fetch(`/api/v1/products/${slug}/images/${cleanImageName}`, {
-                method: 'DELETE',
+            await axios.delete(`/api/v1/products/${slug}/images/${public_id}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to delete image');
-            }
-
             await fetchProducts();
             return true;
         } catch (err) {
+            console.error('Error deleting image:', err);
             setError(err instanceof Error ? err.message : 'An error occurred');
             return false;
         }

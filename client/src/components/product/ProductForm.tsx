@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import {
@@ -8,7 +8,6 @@ import {
   Availability,
 } from "../../types/product";
 import { modules, formats } from "../blog/QuillConfig";
-import { useProductManagement } from "../../hooks/useProductManagement";
 
 interface ProductFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
@@ -19,7 +18,8 @@ interface ProductFormProps {
 interface ImagePreview {
   url: string;
   file?: File;
-  existingPath?: string;
+  public_id?: string;
+  filename?: string;
 }
 
 export default function ProductForm({
@@ -27,14 +27,6 @@ export default function ProductForm({
   onCancel,
   initialData,
 }: ProductFormProps) {
-  const { deleteImage } = useProductManagement();
-
-  // Helper function to get full image URL
-  const getImageUrl = (path: string) => {
-    if (path.startsWith("http")) return path;
-    return `${import.meta.env.VITE_API_URL || "http://localhost:8080"}/${path}`;
-  };
-
   const [formData, setFormData] = useState<ProductFormData>({
     name: "",
     description: "",
@@ -65,6 +57,8 @@ export default function ProductForm({
   });
 
   const [imagePreviews, setImagePreviews] = useState<ImagePreview[]>([]);
+  const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (initialData) {
@@ -97,11 +91,14 @@ export default function ProductForm({
         availability: initialData.availability,
       });
 
-      // Set existing images
+      // Set existing images with proper mapping of all fields
+      console.log("Initial images data:", initialData.images);
       const existingImages = initialData.images.map((img) => ({
-        url: getImageUrl(img.url),
-        existingPath: img.url,
+        url: img.url,
+        public_id: img.url.split("/products/")[1]?.split(".")[0], // Extract public_id from URL
+        filename: img.alt,
       }));
+      console.log("Mapped existing images:", existingImages);
       setImagePreviews(existingImages);
     }
   }, [initialData]);
@@ -119,22 +116,28 @@ export default function ProductForm({
     e.target.value = "";
   };
 
-  const removeImage = async (index: number) => {
+  const removeImage = (index: number) => {
     const imageToRemove = imagePreviews[index];
+    console.log("Removing image:", imageToRemove);
 
-    if (imageToRemove.existingPath && initialData?.slug) {
-      // Extract just the filename from the path
-      const filename = imageToRemove.existingPath.split("/").pop();
-      if (!filename) return;
-
-      const success = await deleteImage(initialData.slug, filename);
-      if (success) {
-        setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+    if (!imageToRemove.file) {
+      // Only handle deletion for existing images
+      const identifier = imageToRemove.public_id;
+      if (identifier) {
+        setImagesToDelete((prev) => {
+          const newImagesToDelete = [...prev, identifier];
+          console.log("Updated imagesToDelete:", newImagesToDelete);
+          return newImagesToDelete;
+        });
       }
-    } else {
-      // If it's a new image that hasn't been uploaded yet, just remove it from the previews
-      setImagePreviews((prev) => prev.filter((_, i) => i !== index));
     }
+
+    // If it's a new image that hasn't been uploaded yet, revoke the object URL
+    if (imageToRemove.url.startsWith("blob:")) {
+      URL.revokeObjectURL(imageToRemove.url);
+    }
+
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -149,16 +152,36 @@ export default function ProductForm({
       if (preview.file) {
         submitFormData.append("images", preview.file);
       }
-      if (preview.existingPath) {
-        submitFormData.append("existingImages", preview.existingPath);
-      }
     });
+
+    // Add existing images info
+    const existingImages = imagePreviews
+      .filter((preview) => !preview.file) // Only include non-new images
+      .map((preview) => ({
+        url: preview.url,
+        public_id: preview.public_id,
+        filename: preview.filename,
+      }));
+    submitFormData.append("existingImages", JSON.stringify(existingImages));
+
+    // Add images to delete
+    if (imagesToDelete.length > 0) {
+      console.log("Submitting imagesToDelete:", imagesToDelete);
+      submitFormData.append("imagesToDelete", JSON.stringify(imagesToDelete));
+    }
+
+    // Debug log the form data
+    console.log("Form Data being sent:");
+    for (const [key, value] of submitFormData.entries()) {
+      console.log(key, ":", typeof value === "string" ? value : "File or Blob");
+    }
 
     await onSubmit(submitFormData);
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Rest of the form JSX remains unchanged */}
       <div>
         <label className="block text-sm font-medium text-gray-700">Name</label>
         <input
@@ -509,64 +532,64 @@ export default function ProductForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700">
           Images
         </label>
         <input
           type="file"
-          accept="image/*"
-          multiple
+          ref={fileInputRef}
           onChange={handleImageChange}
-          className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-purple file:text-white hover:file:bg-primary-blue"
+          multiple
+          accept="image/*"
+          className="mt-1 block w-full text-sm text-gray-500
+          file:mr-4 file:py-2 file:px-4
+          file:rounded-md file:border-0
+          file:text-sm file:font-semibold
+          file:bg-primary-purple file:text-white
+          hover:file:bg-primary-blue"
         />
-        {imagePreviews.length > 0 && (
-          <div className="mt-4 grid grid-cols-4 gap-4">
+      </div>
+
+      {/* Display image previews */}
+      {imagePreviews.length > 0 && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Product Images
+          </label>
+          <div className="grid grid-cols-3 gap-4">
             {imagePreviews.map((preview, index) => (
-              <div key={index} className="relative group">
+              <div key={index} className="relative">
                 <img
                   src={preview.url}
                   alt={`Preview ${index + 1}`}
-                  className="h-24 w-24 object-cover rounded"
+                  className="w-full h-32 object-cover rounded-lg"
                 />
                 <button
                   type="button"
                   onClick={() => removeImage(index)}
-                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  ×
                 </button>
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      <div className="flex justify-end space-x-4">
+      <div className="flex justify-end space-x-3">
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-purple"
+          className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-purple"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-purple hover:bg-primary-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-purple"
+          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-purple hover:bg-primary-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-purple"
         >
-          {initialData ? "Update Product" : "Create Product"}
+          {initialData ? "Update" : "Create"} Product
         </button>
       </div>
     </form>

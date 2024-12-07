@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { getCloudinaryImageProps } from "../utils/cloudinary";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -55,10 +56,10 @@ const ImageWithFallback = ({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  // If the path doesn't start with /uploads, prepend it
-  const imageSrc = src.startsWith("/uploads") ? src : `/uploads/${src}`;
+  const imageProps = getCloudinaryImageProps(src);
+  console.log("Image props:", imageProps);
   console.log("Rendering ImageWithFallback:", {
-    imageSrc,
+    cloudinaryProps: imageProps,
     originalSrc: src,
     alt,
   });
@@ -70,18 +71,17 @@ const ImageWithFallback = ({
       }`}
     >
       <img
-        src={imageSrc}
+        {...imageProps}
         alt={alt}
         className={`w-full h-full object-cover transition-opacity duration-300 ${
           imageLoaded ? "opacity-100" : "opacity-0"
         } ${className}`}
-        loading="lazy"
         onLoad={() => {
-          console.log("Image loaded:", imageSrc);
+          console.log("Image loaded:", imageProps.src);
           setImageLoaded(true);
         }}
         onError={(e) => {
-          console.error("Image failed to load:", imageSrc, e);
+          console.error("Image failed to load:", imageProps.src, e);
           setImageError(true);
           setImageLoaded(true);
         }}

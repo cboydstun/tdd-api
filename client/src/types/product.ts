@@ -14,6 +14,8 @@ export interface ProductImage {
     url: string;
     alt?: string;
     isPrimary: boolean;
+    public_id?: string;
+    filename?: string;
 }
 
 export interface ProductAgeRange {

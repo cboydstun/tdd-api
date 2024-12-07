@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Blog, BlogFormData } from "../../types/blog";
 import { modules, formats } from "./QuillConfig";
 
 interface BlogFormProps {
-  onSubmit: (data: BlogFormData) => Promise<void>;
+  onSubmit: (data: FormData) => Promise<void>;
   onCancel: () => void;
   initialData?: Blog;
 }
@@ -26,6 +26,14 @@ export default function BlogForm({
     status: "draft",
   });
 
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [existingImages, setExistingImages] = useState<
+    Array<{ url: string; filename: string }>
+  >([]);
+  const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -38,12 +46,65 @@ export default function BlogForm({
         tags: initialData.tags?.join(", ") || "",
         status: initialData.status,
       });
+
+      if (initialData.images) {
+        setExistingImages(
+          initialData.images.map((img) => ({
+            url: img.url,
+            filename: img.filename,
+          }))
+        );
+      }
     }
   }, [initialData]);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setSelectedImages((prev) => [...prev, ...files]);
+
+    // Create preview URLs
+    const newPreviews = files.map((file) => URL.createObjectURL(file));
+    setImagePreviews((prev) => [...prev, ...newPreviews]);
+  };
+
+  const removeSelectedImage = (index: number) => {
+    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+
+    // Revoke the object URL to avoid memory leaks
+    URL.revokeObjectURL(imagePreviews[index]);
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingImage = (index: number) => {
+    const imageToDelete = existingImages[index];
+    setImagesToDelete((prev) => [...prev, imageToDelete.filename]);
+    setExistingImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
+
+    const formDataToSend = new FormData();
+
+    // Append text fields
+    Object.entries(formData).forEach(([key, value]) => {
+      formDataToSend.append(key, value);
+    });
+
+    // Append new images
+    selectedImages.forEach((image) => {
+      formDataToSend.append("images", image);
+    });
+
+    // Append existing images info
+    formDataToSend.append("existingImages", JSON.stringify(existingImages));
+
+    // Append images to delete
+    if (imagesToDelete.length > 0) {
+      formDataToSend.append("imagesToDelete", JSON.stringify(imagesToDelete));
+    }
+
+    await onSubmit(formDataToSend);
   };
 
   return (
@@ -110,6 +171,79 @@ export default function BlogForm({
           />
         </div>
       </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Images
+        </label>
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleImageChange}
+          multiple
+          accept="image/*"
+          className="mt-1 block w-full text-sm text-gray-500
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-md file:border-0
+            file:text-sm file:font-semibold
+            file:bg-primary-purple file:text-white
+            hover:file:bg-primary-blue"
+        />
+      </div>
+
+      {/* Display existing images */}
+      {existingImages.length > 0 && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Existing Images
+          </label>
+          <div className="grid grid-cols-3 gap-4">
+            {existingImages.map((image, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={image.url}
+                  alt={`Existing ${index + 1}`}
+                  className="w-full h-32 object-cover rounded-lg"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeExistingImage(index)}
+                  className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Display new image previews */}
+      {imagePreviews.length > 0 && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            New Images
+          </label>
+          <div className="grid grid-cols-3 gap-4">
+            {imagePreviews.map((preview, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={preview}
+                  alt={`Preview ${index + 1}`}
+                  className="w-full h-32 object-cover rounded-lg"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeSelectedImage(index)}
+                  className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div>
         <label className="block text-sm font-medium text-gray-700">

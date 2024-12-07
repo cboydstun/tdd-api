@@ -19,41 +19,33 @@ export const useBlogManagement = () => {
         }
     }, []);
 
-    const createBlog = useCallback(async (blogData: BlogFormData) => {
+    const createBlog = useCallback(async (blogData: FormData) => {
         try {
-            const formattedData = {
-                ...blogData,
-                categories: blogData.categories
-                    ? blogData.categories.split(",").map((c) => c.trim())
-                    : [],
-                tags: blogData.tags
-                    ? blogData.tags.split(",").map((t) => t.trim())
-                    : [],
-            };
-            await axios.post("/api/v1/blogs", formattedData);
+            await axios.post("/api/v1/blogs", blogData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             await fetchBlogs();
             return true;
         } catch (err) {
+            console.error('Error creating blog:', err);
             setError("Failed to create blog");
             return false;
         }
     }, [fetchBlogs]);
 
-    const updateBlog = useCallback(async (slug: string, blogData: BlogFormData) => {
+    const updateBlog = useCallback(async (slug: string, blogData: FormData) => {
         try {
-            const formattedData = {
-                ...blogData,
-                categories: blogData.categories
-                    ? blogData.categories.split(",").map((c) => c.trim())
-                    : [],
-                tags: blogData.tags
-                    ? blogData.tags.split(",").map((t) => t.trim())
-                    : [],
-            };
-            await axios.put(`/api/v1/blogs/${slug}`, formattedData);
+            await axios.put(`/api/v1/blogs/${slug}`, blogData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             await fetchBlogs();
             return true;
         } catch (err) {
+            console.error('Error updating blog:', err);
             setError("Failed to update blog");
             return false;
         }

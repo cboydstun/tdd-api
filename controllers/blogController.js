@@ -2,8 +2,30 @@
 const Blog = require('../models/blogSchema');
 const slugify = require('slugify');
 const sanitizeHtml = require('sanitize-html');
-const path = require('path');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs').promises;
+
+// Helper function to upload image to Cloudinary
+const uploadToCloudinary = async (file) => {
+    try {
+        const result = await cloudinary.uploader.upload(file.path, {
+            folder: 'blogs',
+            resource_type: 'auto'
+        });
+        // Delete local file after upload
+        await fs.unlink(file.path);
+        return {
+            filename: file.originalname,
+            url: result.secure_url,
+            public_id: result.public_id,
+            mimetype: file.mimetype,
+            size: file.size
+        };
+    } catch (error) {
+        console.error('Error uploading to Cloudinary:', error);
+        throw error;
+    }
+};
 
 // GET /blogs - should return all blogs
 const getAllBlogs = async (req, res) => {
@@ -50,25 +72,17 @@ const getBlogBySlug = async (req, res) => {
 // POST /blogs - should create a new blog
 const createBlog = async (req, res) => {
     try {
-        const blogData = req.body;
-
+        // Parse form fields
         const {
             title,
             introduction,
             body,
             conclusion,
             excerpt,
-            featuredImage,
             categories,
             tags,
             status,
-            publishDate,
-            comments,
-            meta,
-            seo,
-            readTime,
-            isFeature
-        } = blogData;
+        } = req.body;
 
         if (!title || !introduction || !body || !conclusion) {
             return res.status(400).json({ error: "Title, introduction, body, and conclusion are required" });
@@ -106,6 +120,16 @@ const createBlog = async (req, res) => {
             ? sanitizeHtml(excerpt.substring(0, 197)) + '...'
             : sanitizeHtml(sanitizedIntroduction.substring(0, 197)) + '...';
 
+        // Upload images to Cloudinary if present
+        let uploadedImages = [];
+        if (req.files && req.files.length > 0) {
+            uploadedImages = await Promise.all(req.files.map(file => uploadToCloudinary(file)));
+        }
+
+        // Parse categories and tags from comma-separated strings
+        const categoriesArray = categories ? categories.split(',').map(cat => cat.trim()) : [];
+        const tagsArray = tags ? tags.split(',').map(tag => tag.trim()) : [];
+
         const newBlog = new Blog({
             title: sanitizeHtml(title),
             slug,
@@ -114,30 +138,11 @@ const createBlog = async (req, res) => {
             conclusion: sanitizedConclusion,
             author: req.user._id,
             excerpt: truncatedExcerpt,
-            featuredImage,
-            categories: categories?.map(cat => sanitizeHtml(cat)) || [],
-            tags: tags?.map(tag => sanitizeHtml(tag)) || [],
+            categories: categoriesArray,
+            tags: tagsArray,
             status,
             publishDate: status === 'published' ? new Date() : null,
-            comments: comments ? comments.map(comment => ({
-                ...comment,
-                content: sanitizeHtml(comment.content)
-            })) : [],
-            meta,
-            seo: seo ? {
-                metaTitle: sanitizeHtml(seo.metaTitle),
-                metaDescription: sanitizeHtml(seo.metaDescription),
-                focusKeyword: sanitizeHtml(seo.focusKeyword)
-            } : {},
-            readTime,
-            isFeature,
-            publishDate,
-            images: req.files ? req.files.map(file => ({
-                filename: file.filename,
-                path: file.path,
-                mimetype: file.mimetype,
-                size: file.size
-            })) : []
+            images: uploadedImages
         });
 
         const savedBlog = await newBlog.save();
@@ -160,39 +165,72 @@ const updateBlog = async (req, res) => {
             return res.status(404).json({ error: 'Blog not found' });
         }
 
-        let updates = req.body;
+        // Parse form fields
+        const {
+            title,
+            introduction,
+            body,
+            conclusion,
+            excerpt,
+            categories,
+            tags,
+            status,
+        } = req.body;
 
-        // Handle image deletions
-        const imagesToDelete = req.body.imagesToDelete || [];
+        // Handle image deletions from Cloudinary
+        const imagesToDelete = req.body.imagesToDelete ? JSON.parse(req.body.imagesToDelete) : [];
 
         for (const imageName of imagesToDelete) {
-            const imagePath = path.join(__dirname, '..', 'uploads', imageName);
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
+            const imageToDelete = blog.images.find(img =>
+                img.filename === imageName || img.public_id === imageName
+            );
+            if (imageToDelete && imageToDelete.public_id) {
+                try {
+                    await cloudinary.uploader.destroy(imageToDelete.public_id);
+                } catch (err) {
+                    console.error(`Failed to delete image from Cloudinary: ${imageToDelete.public_id}`, err);
+                }
             }
-            blog.images = blog.images.filter(img => img.filename !== imageName);
+            blog.images = blog.images.filter(img =>
+                img.filename !== imageName && img.public_id !== imageName
+            );
         }
 
-        // Handle new image uploads
+        // Handle new image uploads to Cloudinary
+        let newImages = [];
         if (req.files && req.files.length > 0) {
-            const newImages = req.files.map(file => ({
-                filename: file.filename,
-                path: file.path,
-                mimetype: file.mimetype,
-                size: file.size
-            }));
-            blog.images = [...blog.images, ...newImages];
+            newImages = await Promise.all(req.files.map(file => uploadToCloudinary(file)));
         }
 
-        // Update other fields
-        Object.keys(updates).forEach(key => {
-            if (key !== 'images' && key !== 'imagesToDelete') {
-                blog[key] = updates[key];
-            }
-        });
+        // Parse categories and tags from comma-separated strings
+        const categoriesArray = categories ? categories.split(',').map(cat => cat.trim()) : blog.categories;
+        const tagsArray = tags ? tags.split(',').map(tag => tag.trim()) : blog.tags;
+
+        const sanitizeOptions = {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'video', 'iframe']),
+            allowedAttributes: {
+                ...sanitizeHtml.defaults.allowedAttributes,
+                'img': ['src', 'alt', 'width', 'height'],
+                'video': ['src', 'controls', 'width', 'height'],
+                'iframe': ['src', 'width', 'height', 'frameborder', 'allowfullscreen']
+            },
+            allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com']
+        };
+
+        // Update blog fields
+        if (title) blog.title = sanitizeHtml(title);
+        if (introduction) blog.introduction = sanitizeHtml(introduction, sanitizeOptions);
+        if (body) blog.body = sanitizeHtml(body, sanitizeOptions);
+        if (conclusion) blog.conclusion = sanitizeHtml(conclusion, sanitizeOptions);
+        if (excerpt) blog.excerpt = sanitizeHtml(excerpt);
+        if (status) blog.status = status;
+        if (categoriesArray) blog.categories = categoriesArray;
+        if (tagsArray) blog.tags = tagsArray;
+
+        // Add new images
+        blog.images = [...blog.images, ...newImages];
 
         const updatedBlog = await blog.save();
-
         res.status(200).json(updatedBlog);
     } catch (err) {
         console.error('Error updating blog:', err);
@@ -206,11 +244,26 @@ const updateBlog = async (req, res) => {
 // DELETE /blogs/:slug - should delete a single blog
 const deleteBlog = async (req, res) => {
     try {
-        const blog = await Blog.findOneAndDelete({ slug: req.params.slug });
+        const blog = await Blog.findOne({ slug: req.params.slug });
 
         if (!blog) {
             return res.status(404).json({ error: 'Blog not found' });
         }
+
+        // Delete images from Cloudinary
+        if (blog.images && blog.images.length > 0) {
+            for (const image of blog.images) {
+                if (image.public_id) {
+                    try {
+                        await cloudinary.uploader.destroy(image.public_id);
+                    } catch (err) {
+                        console.error(`Failed to delete image from Cloudinary: ${image.public_id}`, err);
+                    }
+                }
+            }
+        }
+
+        await Blog.deleteOne({ _id: blog._id });
 
         res.status(200).json({ message: 'Blog successfully deleted', deletedBlog: blog });
     } catch (err) {
@@ -232,22 +285,27 @@ const removeImage = async (req, res) => {
             return res.status(404).json({ error: 'Blog not found' });
         }
 
-        const imageIndex = blog.images.findIndex(img => img.filename === imageName);
-        if (imageIndex === -1) {
+        const imageToDelete = blog.images.find(img =>
+            img.filename === imageName || img.public_id === imageName
+        );
+
+        if (!imageToDelete) {
             return res.status(404).json({ error: 'Image not found in blog' });
         }
 
-        // Remove image from filesystem
-        const imagePath = path.join(__dirname, '..', 'uploads', imageName);
-
-        if (fs.existsSync(imagePath)) {
-            fs.unlinkSync(imagePath);
-        } else {
-            console.log(`File not found in filesystem, proceeding with database update`);
+        // Delete from Cloudinary if public_id exists
+        if (imageToDelete.public_id) {
+            try {
+                await cloudinary.uploader.destroy(imageToDelete.public_id);
+            } catch (err) {
+                console.error(`Failed to delete image from Cloudinary: ${imageToDelete.public_id}`, err);
+            }
         }
 
         // Remove image from blog document
-        blog.images.splice(imageIndex, 1);
+        blog.images = blog.images.filter(img =>
+            img.filename !== imageName && img.public_id !== imageName
+        );
         await blog.save();
 
         res.status(200).json({ message: 'Image removed successfully' });

@@ -4,9 +4,33 @@ const path = require('path');
 const Product = require('../models/productSchema');
 const slugify = require('slugify');
 const sanitizeHtml = require('sanitize-html');
+const cloudinary = require('cloudinary').v2;
 
 const VALID_DIMENSION_UNITS = ['feet', 'meters', 'inches'];
 
+// Helper function to upload image to Cloudinary
+const uploadToCloudinary = async (file) => {
+    try {
+        const result = await cloudinary.uploader.upload(file.path, {
+            folder: 'products',
+            resource_type: 'auto'
+        });
+        // Delete local file after upload
+        await fs.unlink(file.path);
+        return {
+            filename: file.originalname,
+            url: result.secure_url,
+            public_id: result.public_id,
+            mimetype: file.mimetype,
+            size: file.size
+        };
+    } catch (error) {
+        console.error('Error uploading to Cloudinary:', error);
+        throw error;
+    }
+};
+
+// ... (keep all validation helpers unchanged)
 // Validation helpers
 const validatePrice = (price) => {
     if (!price || !price.base || typeof price.base !== 'number') {
@@ -149,17 +173,19 @@ const createProduct = async (req, res) => {
             return res.status(400).json({ error: 'A product with this name already exists' });
         }
 
+        // Upload images to Cloudinary if present
+        let uploadedImages = [];
+        if (req.files && req.files.length > 0) {
+            uploadedImages = await Promise.all(req.files.map(file => uploadToCloudinary(file)));
+        }
+
         const newProduct = new Product({
             ...productData,
             slug,
             name: sanitizeHtml(productData.name),
             description: sanitizeHtml(productData.description, sanitizeOptions),
             category: sanitizeHtml(productData.category),
-            images: req.files ? req.files.map(file => ({
-                url: file.path,
-                alt: sanitizeHtml(file.originalname),
-                isPrimary: false
-            })) : (productData.images || [])
+            images: uploadedImages
         });
 
         const savedProduct = await newProduct.save();
@@ -177,100 +203,97 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { slug } = req.params;
+        console.log('Update request received for slug:', slug);
+        console.log('Request body:', req.body);
 
-        let productData;
+        // Find the existing product first
+        const existingProduct = await Product.findOne({ slug });
+        if (!existingProduct) {
+            console.log('Product not found for slug:', slug);
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        console.log('Found existing product:', existingProduct.name);
+
+        // Handle image deletions first, before parsing product data
+        let imagesToDelete = [];
         try {
-            productData = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-            if (req.body.productData) {
-                productData = typeof req.body.productData === 'string' ?
-                    JSON.parse(req.body.productData) : req.body.productData;
+            if (req.body.imagesToDelete) {
+                console.log('Raw imagesToDelete from request:', req.body.imagesToDelete);
+                imagesToDelete = JSON.parse(req.body.imagesToDelete);
+                console.log('Parsed imagesToDelete:', imagesToDelete);
             }
         } catch (parseErr) {
+            console.error('Error parsing imagesToDelete:', parseErr);
+            return res.status(400).json({ error: 'Invalid imagesToDelete format' });
+        }
+
+        console.log('Current images:', existingProduct.images);
+
+        // Process image deletions
+        let updatedImages = [...existingProduct.images];
+        for (const identifier of imagesToDelete) {
+            console.log('Processing image deletion for identifier:', identifier);
+
+            // Find the image by matching either the URL-extracted ID or the alt text
+            const imageToDelete = existingProduct.images.find(img => {
+                const urlId = img.url.split('/').pop()?.split('.')[0];
+                return urlId === identifier || img.alt === identifier;
+            });
+
+            console.log('Found image to delete:', imageToDelete);
+
+            if (imageToDelete) {
+                // Extract public_id from the URL
+                const urlParts = imageToDelete.url.split('/');
+                const publicId = `products/${urlParts[urlParts.length - 1].split('.')[0]}`;
+
+                try {
+                    console.log('Attempting to delete from Cloudinary:', publicId);
+                    await cloudinary.uploader.destroy(publicId);
+                    console.log('Successfully deleted from Cloudinary');
+                } catch (err) {
+                    console.error(`Failed to delete image from Cloudinary: ${publicId}`, err);
+                }
+
+                // Remove the image from updatedImages array
+                updatedImages = updatedImages.filter(img => img !== imageToDelete);
+            }
+        }
+
+        console.log('Images after deletion:', updatedImages);
+
+        // Now parse the product data
+        let productData;
+        try {
+            console.log('Raw productData from request:', req.body.productData);
+            productData = typeof req.body.productData === 'string' ?
+                JSON.parse(req.body.productData) : req.body.productData;
+            console.log('Parsed productData:', productData);
+        } catch (parseErr) {
+            console.error('Error parsing productData:', parseErr);
             return res.status(400).json({ error: 'Invalid product data format' });
         }
 
-        // Find the existing product
-        const existingProduct = await Product.findOne({ slug });
-        if (!existingProduct) {
-            return res.status(404).json({ error: 'Product not found' });
+        // Upload new images to Cloudinary
+        let newImages = [];
+        if (req.files && req.files.length > 0) {
+            console.log('Processing new images:', req.files.length);
+            newImages = await Promise.all(req.files.map(file => uploadToCloudinary(file)));
+            console.log('Uploaded new images:', newImages);
         }
-
-        // Validate updated fields
-        try {
-            if (productData.price) validatePrice(productData.price);
-            if (productData.dimensions) validateDimensions(productData.dimensions);
-            if (productData.capacity !== undefined) validateCapacity(productData.capacity);
-            if (productData.ageRange) validateAgeRange(productData.ageRange);
-        } catch (validationError) {
-            return res.status(400).json({ error: validationError.message });
-        }
-
-        // Handle image removal
-        if (productData.removedImages && productData.removedImages.length > 0) {
-            for (const imageId of productData.removedImages) {
-                const imageToRemove = existingProduct.images.find(img => img._id.toString() === imageId);
-                if (imageToRemove) {
-                    try {
-                        await fs.unlink(path.join(__dirname, '..', imageToRemove.url));
-                    } catch (err) {
-                        console.error(`Failed to delete file: ${imageToRemove.url}`, err);
-                    }
-                }
-            }
-            existingProduct.images = existingProduct.images.filter(img =>
-                !productData.removedImages.includes(img._id.toString())
-            );
-        }
-
-        // Generate new slug if name has changed
-        let newSlug = slug;
-        if (productData.name && productData.name !== existingProduct.name) {
-            newSlug = slugify(productData.name, { lower: true, strict: true });
-            const slugExists = await Product.findOne({ slug: newSlug, _id: { $ne: existingProduct._id } });
-            if (slugExists) {
-                return res.status(400).json({ error: 'A product with this name already exists' });
-            }
-        }
-
-        // Validate enums if provided
-        if (productData.rentalDuration &&
-            !['hourly', 'half-day', 'full-day', 'weekend'].includes(productData.rentalDuration)) {
-            return res.status(400).json({ error: 'Invalid rental duration' });
-        }
-
-        if (productData.availability &&
-            !['available', 'rented', 'maintenance', 'retired'].includes(productData.availability)) {
-            return res.status(400).json({ error: 'Invalid availability status' });
-        }
-
-        const sanitizeOptions = {
-            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
-            allowedAttributes: {
-                ...sanitizeHtml.defaults.allowedAttributes,
-                'img': ['src', 'alt', 'width', 'height']
-            }
-        };
 
         // Prepare update data
         const updateData = {
             ...productData,
-            slug: newSlug,
+            slug,
             name: productData.name ? sanitizeHtml(productData.name) : existingProduct.name,
             description: productData.description ?
-                sanitizeHtml(productData.description, sanitizeOptions) : existingProduct.description,
+                sanitizeHtml(productData.description) : existingProduct.description,
             category: productData.category ? sanitizeHtml(productData.category) : existingProduct.category,
-            images: existingProduct.images
+            images: [...updatedImages, ...newImages]
         };
 
-        // Handle new image uploads
-        if (req.files && req.files.length > 0) {
-            const newImages = req.files.map(file => ({
-                url: file.path,
-                alt: sanitizeHtml(file.originalname),
-                isPrimary: false
-            }));
-            updateData.images = [...updateData.images, ...newImages];
-        }
+        console.log('Final update data:', updateData);
 
         // Update the product
         const updatedProduct = await Product.findOneAndUpdate(
@@ -280,9 +303,11 @@ const updateProduct = async (req, res) => {
         );
 
         if (!updatedProduct) {
+            console.log('Product not found after update attempt');
             return res.status(404).json({ error: 'Product not found after update' });
         }
 
+        console.log('Successfully updated product:', updatedProduct.name);
         res.status(200).json(updatedProduct);
     } catch (err) {
         console.error('Error in updateProduct:', err);
@@ -296,22 +321,26 @@ const updateProduct = async (req, res) => {
 // DELETE /products/:slug - should delete a single product
 const deleteProduct = async (req, res) => {
     try {
-        const product = await Product.findOneAndDelete({ slug: req.params.slug });
+        const product = await Product.findOne({ slug: req.params.slug });
 
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        // Remove associated images from filesystem
+        // Delete images from Cloudinary
         if (product.images && product.images.length > 0) {
             for (const image of product.images) {
-                try {
-                    await fs.unlink(path.join(__dirname, '..', image.url));
-                } catch (err) {
-                    console.error(`Failed to delete file: ${image.url}`, err);
+                if (image.public_id) {
+                    try {
+                        await cloudinary.uploader.destroy(image.public_id);
+                    } catch (err) {
+                        console.error(`Failed to delete image from Cloudinary: ${image.public_id}`, err);
+                    }
                 }
             }
         }
+
+        await Product.deleteOne({ _id: product._id });
 
         res.status(200).json({ message: 'Product successfully deleted', deletedProduct: product });
     } catch (err) {
@@ -330,21 +359,27 @@ const removeImage = async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        // Find the image by filename
-        const imageIndex = product.images.findIndex(img => path.basename(img.url) === imageName);
-        if (imageIndex === -1) {
-            return res.status(404).json({ error: 'Image not found' });
+        const imageToDelete = product.images.find(img =>
+            img.filename === imageName || img.public_id === imageName
+        );
+
+        if (!imageToDelete) {
+            return res.status(404).json({ error: 'Image not found in product' });
         }
 
-        // Remove image from filesystem
-        try {
-            await fs.unlink(path.join(__dirname, '..', product.images[imageIndex].url));
-        } catch (err) {
-            console.error(`Failed to delete file: ${product.images[imageIndex].url}`, err);
+        // Delete from Cloudinary if public_id exists
+        if (imageToDelete.public_id) {
+            try {
+                await cloudinary.uploader.destroy(imageToDelete.public_id);
+            } catch (err) {
+                console.error(`Failed to delete image from Cloudinary: ${imageToDelete.public_id}`, err);
+            }
         }
 
         // Remove image from product document
-        product.images.splice(imageIndex, 1);
+        product.images = product.images.filter(img =>
+            img.filename !== imageName && img.public_id !== imageName
+        );
         await product.save();
 
         res.status(200).json({ message: 'Image removed successfully' });

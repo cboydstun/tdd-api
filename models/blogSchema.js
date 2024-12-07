@@ -21,9 +21,10 @@ const blogSchema = new Schema({
   conclusion: { type: String, required: true },
   images: [{
     filename: { type: String, required: true },
-    path: { type: String, required: true },
-    mimetype: { type: String, required: true },
-    size: { type: Number, required: true }
+    url: { type: String, required: true },
+    public_id: { type: String, required: true },
+    mimetype: { type: String },
+    size: { type: Number }
   }],
   excerpt: { type: String, maxlength: 200 },
   featuredImage: { type: String },
