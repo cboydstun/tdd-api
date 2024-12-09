@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getApiUrl } from "../utils/env";
-import { Product, Specification } from '../types/product';
+import { Product, Specification } from "../types/product";
 
 const ProductCarousel = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -14,7 +14,7 @@ const ProductCarousel = () => {
   // Number of items to show per page based on screen size
   const getItemsPerPage = () => {
     if (window.innerWidth >= 1024) return 3; // lg
-    if (window.innerWidth >= 768) return 2;  // md
+    if (window.innerWidth >= 768) return 2; // md
     return 1; // mobile
   };
 
@@ -26,44 +26,58 @@ const ProductCarousel = () => {
       setCurrentPage(0); // Reset to first page on resize
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(`${API_URL}/api/v1/products`);
-        if (!response.ok) throw new Error('Failed to fetch products');
+        if (!response.ok) throw new Error("Failed to fetch products");
         const data = await response.json();
-        
+
         const filteredAndSortedProducts = [...data]
-          .filter((product: Product) => 
-            product.specifications.some((spec: Specification) => 
-              spec.name === "Type" && spec.value === "DRY"
+          .filter((product: Product) =>
+            product.specifications.some(
+              (spec: Specification) =>
+                spec.name === "Type" && spec.value === "DRY"
             )
           )
           .sort((a: Product, b: Product) => b.price.base - a.price.base);
-        
+
         setProducts(filteredAndSortedProducts);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchProducts();
   }, [API_URL]);
 
-  if (loading) return <div className="text-center text-primary-blue font-semibold">Loading products...</div>;
-  if (error) return <div className="text-red-500 text-center font-semibold">{error}</div>;
-  if (!products.length) return <div className="text-center text-primary-blue font-semibold">No products available</div>;
+  if (loading)
+    return (
+      <div className="text-center text-primary-blue font-semibold">
+        Loading products...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="text-red-500 text-center font-semibold">{error}</div>
+    );
+  if (!products.length)
+    return (
+      <div className="text-center text-primary-blue font-semibold">
+        No products available
+      </div>
+    );
 
   const pageCount = Math.ceil(products.length / itemsPerPage);
   const visibleProducts = products.slice(
     currentPage * itemsPerPage,
-    (currentPage * itemsPerPage) + itemsPerPage
+    currentPage * itemsPerPage + itemsPerPage
   );
 
   return (
@@ -78,16 +92,18 @@ const ProductCarousel = () => {
           {pageCount > 1 && (
             <>
               <button
-                onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
                 disabled={currentPage === 0}
                 className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 text-primary-blue p-2 rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Previous products"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
-              
+
               <button
-                onClick={() => setCurrentPage(prev => Math.min(pageCount - 1, prev + 1))}
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(pageCount - 1, prev + 1))
+                }
                 disabled={currentPage === pageCount - 1}
                 className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 text-primary-blue p-2 rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Next products"
@@ -146,7 +162,9 @@ const ProductCarousel = () => {
                   key={index}
                   onClick={() => setCurrentPage(index)}
                   className={`w-2 h-2 rounded-full transition-all ${
-                    index === currentPage ? 'bg-primary-blue w-4' : 'bg-gray-300'
+                    index === currentPage
+                      ? "bg-primary-blue w-4"
+                      : "bg-gray-300"
                   }`}
                   aria-label={`Go to page ${index + 1}`}
                 />

@@ -8,12 +8,24 @@ const TermsPage: React.FC = () => {
     <>
       <Helmet>
         <title>Terms of Service | SATX Bounce House Rentals</title>
-        <meta name="description" content="Read our terms of service for bounce house rentals in San Antonio, TX. Learn about our rental agreement, safety requirements, delivery policies, and more." />
-        <meta name="keywords" content="bounce house rental terms, rental agreement, safety requirements, delivery policy, weather policy, San Antonio bounce house terms" />
-        
+        <meta
+          name="description"
+          content="Read our terms of service for bounce house rentals in San Antonio, TX. Learn about our rental agreement, safety requirements, delivery policies, and more."
+        />
+        <meta
+          name="keywords"
+          content="bounce house rental terms, rental agreement, safety requirements, delivery policy, weather policy, San Antonio bounce house terms"
+        />
+
         {/* Open Graph tags */}
-        <meta property="og:title" content="Terms of Service | SATX Bounce House Rentals" />
-        <meta property="og:description" content="Read our terms of service for bounce house rentals in San Antonio, TX. Learn about our rental agreement, safety requirements, delivery policies, and more." />
+        <meta
+          property="og:title"
+          content="Terms of Service | SATX Bounce House Rentals"
+        />
+        <meta
+          property="og:description"
+          content="Read our terms of service for bounce house rentals in San Antonio, TX. Learn about our rental agreement, safety requirements, delivery policies, and more."
+        />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
 
@@ -42,16 +54,25 @@ const TermsPage: React.FC = () => {
 
               <div className="space-y-8 text-gray-600">
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">1. Rental Agreement</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    1. Rental Agreement
+                  </h2>
                   <p>
-                    By renting equipment from SATX Bounce House Rentals, you agree to these terms and conditions. Our rental agreement constitutes a legal contract between SATX Bounce House Rentals and the customer.
+                    By renting equipment from SATX Bounce House Rentals, you
+                    agree to these terms and conditions. Our rental agreement
+                    constitutes a legal contract between SATX Bounce House
+                    Rentals and the customer.
                   </p>
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">2. Safety Requirements</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    2. Safety Requirements
+                  </h2>
                   <p>
-                    All equipment must be used in accordance with safety guidelines provided. Adult supervision is required at all times when equipment is in use.
+                    All equipment must be used in accordance with safety
+                    guidelines provided. Adult supervision is required at all
+                    times when equipment is in use.
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Maximum capacity must be observed for all equipment</li>
@@ -62,9 +83,13 @@ const TermsPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">3. Delivery and Setup</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    3. Delivery and Setup
+                  </h2>
                   <p>
-                    We provide free delivery within Loop 1604. Setup and takedown are included in the rental price. A clear, flat area must be provided for installation.
+                    We provide free delivery within Loop 1604. Setup and
+                    takedown are included in the rental price. A clear, flat
+                    area must be provided for installation.
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Access to electrical outlet within 100 feet</li>
@@ -74,9 +99,12 @@ const TermsPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">4. Weather Policy</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    4. Weather Policy
+                  </h2>
                   <p>
-                    For safety reasons, equipment must not be used in severe weather conditions including:
+                    For safety reasons, equipment must not be used in severe
+                    weather conditions including:
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Winds exceeding 15 mph</li>
@@ -84,28 +112,41 @@ const TermsPage: React.FC = () => {
                     <li>Extreme temperatures</li>
                   </ul>
                   <p>
-                    We reserve the right to cancel or postpone rentals due to adverse weather conditions.
+                    We reserve the right to cancel or postpone rentals due to
+                    adverse weather conditions.
                   </p>
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">5. Damage and Liability</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    5. Damage and Liability
+                  </h2>
                   <p>
-                    Customers are responsible for any damage to equipment during the rental period beyond normal wear and tear. SATX Bounce House Rentals maintains liability insurance for equipment malfunction.
+                    Customers are responsible for any damage to equipment during
+                    the rental period beyond normal wear and tear. SATX Bounce
+                    House Rentals maintains liability insurance for equipment
+                    malfunction.
                   </p>
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">6. Cancellation Policy</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    6. Cancellation Policy
+                  </h2>
                   <p>
-                    Cancellations must be made at least 24 hours in advance for a full refund. Weather-related cancellations may be rescheduled without penalty.
+                    Cancellations must be made at least 24 hours in advance for
+                    a full refund. Weather-related cancellations may be
+                    rescheduled without penalty.
                   </p>
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">7. Payment Terms</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    7. Payment Terms
+                  </h2>
                   <p>
-                    Full payment is required to confirm bookings. We accept major credit cards, cash, and digital payment methods.
+                    Full payment is required to confirm bookings. We accept
+                    major credit cards, cash, and digital payment methods.
                   </p>
                 </section>
 

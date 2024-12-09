@@ -80,19 +80,23 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
       setLoadError(null);
       try {
         const response = await axios.get(`${API_URL}/api/v1/products`);
-        
+
         const filteredBouncers = response.data.filter((product: Bouncer) => {
-          const typeSpec = product.specifications?.find(spec => 
-            spec.name === "Type" && (spec.value === "WET" || spec.value === "DRY")
+          const typeSpec = product.specifications?.find(
+            (spec) =>
+              spec.name === "Type" &&
+              (spec.value === "WET" || spec.value === "DRY")
           );
           return typeSpec !== undefined;
         });
-        
+
         setBouncers(filteredBouncers);
 
         // Set selected bouncer image if initialBouncerId is provided
         if (initialBouncerId) {
-          const selectedBouncer = filteredBouncers.find((b: Bouncer) => b._id === initialBouncerId);
+          const selectedBouncer = filteredBouncers.find(
+            (b: Bouncer) => b._id === initialBouncerId
+          );
           if (selectedBouncer?.images[0]?.url) {
             setSelectedBouncerImage(selectedBouncer.images[0].url);
           }
@@ -168,7 +172,9 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
@@ -185,14 +191,15 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
   };
 
   return (
-    <form 
-      onSubmit={handleSubmit} 
+    <form
+      onSubmit={handleSubmit}
       className="w-full max-w-2xl mx-auto bg-white/90 backdrop-blur-sm rounded-2xl border-2 border-secondary-blue/20 shadow-lg p-8 space-y-6"
     >
       {/* Status Messages */}
       {submitStatus === "success" && (
         <div className="bg-green-100 text-green-700 p-4 rounded-xl text-center text-lg animate-fade-in">
-          🎊 Woohoo! Your message is on its way! We'll be in touch super soon! 🌟
+          🎊 Woohoo! Your message is on its way! We'll be in touch super soon!
+          🌟
         </div>
       )}
 
@@ -204,7 +211,10 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
 
       {/* Bouncer Selection */}
       <div>
-        <label htmlFor="bouncer" className="block text-lg font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="bouncer"
+          className="block text-lg font-medium text-gray-700 mb-2"
+        >
           🎪 Select a Bouncer
         </label>
         {isLoading ? (
@@ -221,7 +231,9 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
           >
             <option value="">Choose a bouncer...</option>
             {bouncers.map((bouncer) => {
-              const type = bouncer.specifications.find(spec => spec.name === "Type")?.value;
+              const type = bouncer.specifications.find(
+                (spec) => spec.name === "Type"
+              )?.value;
               return (
                 <option key={bouncer._id} value={bouncer._id}>
                   {bouncer.name} ({type})
@@ -249,7 +261,10 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
       {/* Contact Details */}
       <div className="space-y-4">
         <div>
-          <label htmlFor="email" className="block text-lg font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="email"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
             📧 Email Address
           </label>
           <input
@@ -267,7 +282,10 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
         </div>
 
         <div>
-          <label htmlFor="partyDate" className="block text-lg font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="partyDate"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
             📅 When's the Big Day?
           </label>
           <input
@@ -284,7 +302,10 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
         </div>
 
         <div>
-          <label htmlFor="partyZipCode" className="block text-lg font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="partyZipCode"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
             📍 Party Location (Zip Code)
           </label>
           <input
@@ -302,7 +323,10 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-lg font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="phone"
+            className="block text-lg font-medium text-gray-700 mb-2"
+          >
             📞 Phone Number
           </label>
           <input
@@ -338,13 +362,15 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
             <div
               key={id}
               className="flex items-center space-x-2 bg-secondary-blue/5 p-3 rounded-lg hover:bg-secondary-blue/10 transition-colors cursor-pointer"
-              onClick={() => handleChange({
-                target: {
-                  type: "checkbox",
-                  name: id,
-                  checked: !formData[id as keyof typeof formData]
-                }
-              } as React.ChangeEvent<HTMLInputElement>)}
+              onClick={() =>
+                handleChange({
+                  target: {
+                    type: "checkbox",
+                    name: id,
+                    checked: !formData[id as keyof typeof formData],
+                  },
+                } as React.ChangeEvent<HTMLInputElement>)
+              }
             >
               <input
                 type="checkbox"
@@ -354,7 +380,10 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
                 onChange={handleChange}
                 className="rounded border-2 border-secondary-blue/20 text-primary-purple focus:ring-primary-purple"
               />
-              <label htmlFor={id} className="text-sm text-gray-700 cursor-pointer">
+              <label
+                htmlFor={id}
+                className="text-sm text-gray-700 cursor-pointer"
+              >
                 {label}
               </label>
             </div>
@@ -364,7 +393,10 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
 
       {/* Message Field */}
       <div>
-        <label htmlFor="message" className="block text-lg font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="message"
+          className="block text-lg font-medium text-gray-700 mb-2"
+        >
           💭 Tell Us About Your Dream Party!
         </label>
         <textarea

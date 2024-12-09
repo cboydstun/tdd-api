@@ -136,10 +136,15 @@ const BlogPost = () => {
       <>
         <Helmet>
           <title>Blog Post Not Found | SATX Bounce House Rentals</title>
-          <meta name="description" content="The requested blog post could not be found." />
+          <meta
+            name="description"
+            content="The requested blog post could not be found."
+          />
         </Helmet>
         <div className="min-h-[400px] flex flex-col justify-center items-center">
-          <p className="text-red-500 font-semibold text-lg mb-4">{error || "Blog post not found"}</p>
+          <p className="text-red-500 font-semibold text-lg mb-4">
+            {error || "Blog post not found"}
+          </p>
           <button
             onClick={() => navigate("/blogs")}
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-400 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-500 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-[1.02]"
@@ -155,10 +160,18 @@ const BlogPost = () => {
   return (
     <>
       <Helmet>
-        <title>{blog.seo.metaTitle || `${blog.title} | SATX Bounce House Rentals`}</title>
-        <meta name="description" content={blog.seo.metaDescription || blog.excerpt} />
-        <meta name="keywords" content={`${blog.seo.focusKeyword}, ${blog.tags.join(', ')}`} />
-        
+        <title>
+          {blog.seo.metaTitle || `${blog.title} | SATX Bounce House Rentals`}
+        </title>
+        <meta
+          name="description"
+          content={blog.seo.metaDescription || blog.excerpt}
+        />
+        <meta
+          name="keywords"
+          content={`${blog.seo.focusKeyword}, ${blog.tags.join(", ")}`}
+        />
+
         {/* Open Graph tags */}
         <meta property="og:title" content={blog.title} />
         <meta property="og:description" content={blog.excerpt} />
@@ -167,7 +180,7 @@ const BlogPost = () => {
         {blog.featuredImage && (
           <meta property="og:image" content={blog.featuredImage} />
         )}
-        
+
         {/* Article specific meta tags */}
         <meta property="article:published_time" content={blog.createdAt} />
         <meta property="article:modified_time" content={blog.updatedAt} />
@@ -254,10 +267,15 @@ const BlogPost = () => {
 
               {blog.images && blog.images.length > 0 && (
                 <div className="my-12">
-                  <h3 className="text-2xl font-bold text-primary-purple mb-6">Gallery</h3>
+                  <h3 className="text-2xl font-bold text-primary-purple mb-6">
+                    Gallery
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {blog.images.map((image, index) => (
-                      <div key={index} className="rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
+                      <div
+                        key={index}
+                        className="rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
+                      >
                         <ImageWithFallback
                           src={image.filename}
                           alt={`Image ${index + 1} for ${blog.title}`}
@@ -277,7 +295,9 @@ const BlogPost = () => {
 
             {blog.tags.length > 0 && (
               <div className="mt-12 pt-8 border-t border-gray-100">
-                <h2 className="text-xl font-bold text-primary-purple mb-4">Tags</h2>
+                <h2 className="text-xl font-bold text-primary-purple mb-4">
+                  Tags
+                </h2>
                 <div className="flex flex-wrap gap-2">
                   {blog.tags.map((tag, index) => (
                     <span

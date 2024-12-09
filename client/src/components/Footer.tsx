@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand Section */}
           <div className="space-y-6">
-            <Link 
+            <Link
               to="/"
               className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text hover:scale-105 transition-transform duration-300 inline-block"
             >
@@ -38,7 +38,9 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div className="space-y-6">
-            <h4 className="text-xl font-bold text-primary-purple">Quick Links</h4>
+            <h4 className="text-xl font-bold text-primary-purple">
+              Quick Links
+            </h4>
             <ul className="space-y-4">
               {[
                 { to: "/", label: "Home" },
@@ -64,8 +66,8 @@ const Footer: React.FC = () => {
             <h4 className="text-xl font-bold text-primary-purple">Contact</h4>
             <ul className="space-y-4">
               <li>
-                <a 
-                  href="tel:(210) 555-0123" 
+                <a
+                  href="tel:(210) 555-0123"
                   className="flex items-center gap-3 text-gray-600 hover:text-primary-blue transition-colors duration-300 group"
                 >
                   <div className="p-2 bg-secondary-blue/5 rounded-lg group-hover:bg-secondary-blue/10 transition-colors duration-300">
@@ -75,7 +77,7 @@ const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a 
+                <a
                   href="mailto:info@satxbounce.com"
                   className="flex items-center gap-3 text-gray-600 hover:text-primary-blue transition-colors duration-300 group"
                 >
@@ -123,16 +125,18 @@ const Footer: React.FC = () => {
         {/* Copyright */}
         <div className="mt-16 pt-8 border-t border-gray-100">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-gray-600">
-            <p>© {new Date().getFullYear()} SATX Bounce. All rights reserved.</p>
+            <p>
+              © {new Date().getFullYear()} SATX Bounce. All rights reserved.
+            </p>
             <div className="flex gap-6">
-              <Link 
-                to="/privacy-policy" 
+              <Link
+                to="/privacy-policy"
                 className="hover:text-primary-blue transition-colors duration-300"
               >
                 Privacy Policy
               </Link>
-              <Link 
-                to="/tos" 
+              <Link
+                to="/tos"
                 className="hover:text-primary-blue transition-colors duration-300"
               >
                 Terms of Service

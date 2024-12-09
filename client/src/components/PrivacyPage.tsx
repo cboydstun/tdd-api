@@ -8,12 +8,24 @@ const PrivacyPage: React.FC = () => {
     <>
       <Helmet>
         <title>Privacy Policy | SATX Bounce House Rentals</title>
-        <meta name="description" content="Learn about how SATX Bounce House Rentals protects your privacy. Read our privacy policy to understand how we collect, use, and protect your personal information." />
-        <meta name="keywords" content="privacy policy, data protection, personal information, customer privacy, SATX Bounce House privacy" />
-        
+        <meta
+          name="description"
+          content="Learn about how SATX Bounce House Rentals protects your privacy. Read our privacy policy to understand how we collect, use, and protect your personal information."
+        />
+        <meta
+          name="keywords"
+          content="privacy policy, data protection, personal information, customer privacy, SATX Bounce House privacy"
+        />
+
         {/* Open Graph tags */}
-        <meta property="og:title" content="Privacy Policy | SATX Bounce House Rentals" />
-        <meta property="og:description" content="Learn about how SATX Bounce House Rentals protects your privacy. Read our privacy policy to understand how we collect, use, and protect your personal information." />
+        <meta
+          property="og:title"
+          content="Privacy Policy | SATX Bounce House Rentals"
+        />
+        <meta
+          property="og:description"
+          content="Learn about how SATX Bounce House Rentals protects your privacy. Read our privacy policy to understand how we collect, use, and protect your personal information."
+        />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
 
@@ -42,9 +54,12 @@ const PrivacyPage: React.FC = () => {
 
               <div className="space-y-8 text-gray-600">
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">1. Information We Collect</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    1. Information We Collect
+                  </h2>
                   <p>
-                    We collect information that you provide directly to us, including:
+                    We collect information that you provide directly to us,
+                    including:
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Name and contact information</li>
@@ -55,10 +70,10 @@ const PrivacyPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">2. How We Use Your Information</h2>
-                  <p>
-                    We use the information we collect to:
-                  </p>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    2. How We Use Your Information
+                  </h2>
+                  <p>We use the information we collect to:</p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Process your rental orders</li>
                     <li>Communicate about your rental</li>
@@ -69,9 +84,12 @@ const PrivacyPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">3. Information Sharing</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    3. Information Sharing
+                  </h2>
                   <p>
-                    We do not sell or share your personal information with third parties except:
+                    We do not sell or share your personal information with third
+                    parties except:
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>With your consent</li>
@@ -81,9 +99,12 @@ const PrivacyPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">4. Data Security</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    4. Data Security
+                  </h2>
                   <p>
-                    We implement appropriate security measures to protect your personal information, including:
+                    We implement appropriate security measures to protect your
+                    personal information, including:
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Encryption of sensitive data</li>
@@ -93,10 +114,10 @@ const PrivacyPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">5. Your Rights</h2>
-                  <p>
-                    You have the right to:
-                  </p>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    5. Your Rights
+                  </h2>
+                  <p>You have the right to:</p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Access your personal information</li>
                     <li>Request corrections to your data</li>
@@ -106,10 +127,10 @@ const PrivacyPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">6. Cookies and Tracking</h2>
-                  <p>
-                    We use cookies and similar technologies to:
-                  </p>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    6. Cookies and Tracking
+                  </h2>
+                  <p>We use cookies and similar technologies to:</p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Improve website functionality</li>
                     <li>Analyze website traffic</li>
@@ -119,16 +140,23 @@ const PrivacyPage: React.FC = () => {
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">7. Children's Privacy</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    7. Children's Privacy
+                  </h2>
                   <p>
-                    Our services are not intended for children under 13. We do not knowingly collect information from children under 13.
+                    Our services are not intended for children under 13. We do
+                    not knowingly collect information from children under 13.
                   </p>
                 </section>
 
                 <section className="space-y-4">
-                  <h2 className="text-2xl font-bold text-primary-purple">8. Changes to Privacy Policy</h2>
+                  <h2 className="text-2xl font-bold text-primary-purple">
+                    8. Changes to Privacy Policy
+                  </h2>
                   <p>
-                    We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page.
+                    We may update this privacy policy from time to time. We will
+                    notify you of any changes by posting the new policy on this
+                    page.
                   </p>
                 </section>
 

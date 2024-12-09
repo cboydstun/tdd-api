@@ -24,9 +24,8 @@ const Navigation: React.FC = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-        
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="text-2xl text-[#663399] font-bold hover:scale-105 transition-transform duration-300 inline-block"
             >
               🎉 SATX Bounce

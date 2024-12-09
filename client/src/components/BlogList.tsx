@@ -23,19 +23,20 @@ const BlogList = () => {
     return {
       "@context": "https://schema.org",
       "@type": "Blog",
-      "name": "SATX Bounce House Rentals Blog",
-      "description": "Latest news, tips, and insights about bounce house rentals and party planning in San Antonio",
-      "blogPost": blogs.map(blog => ({
+      name: "SATX Bounce House Rentals Blog",
+      description:
+        "Latest news, tips, and insights about bounce house rentals and party planning in San Antonio",
+      blogPost: blogs.map((blog) => ({
         "@type": "BlogPosting",
-        "headline": blog.title,
-        "description": blog.excerpt,
-        "image": blog.featuredImage,
-        "datePublished": blog.publishDate,
-        "mainEntityOfPage": {
+        headline: blog.title,
+        description: blog.excerpt,
+        image: blog.featuredImage,
+        datePublished: blog.publishDate,
+        mainEntityOfPage: {
           "@type": "WebPage",
-          "@id": `${window.location.origin}/blogs/${blog.slug}`
-        }
-      }))
+          "@id": `${window.location.origin}/blogs/${blog.slug}`,
+        },
+      })),
     };
   };
 
@@ -59,7 +60,10 @@ const BlogList = () => {
       <>
         <Helmet>
           <title>Loading Blog Posts... | SATX Bounce House Rentals</title>
-          <meta name="description" content="Loading our latest blog posts and party planning insights..." />
+          <meta
+            name="description"
+            content="Loading our latest blog posts and party planning insights..."
+          />
         </Helmet>
         <div className="min-h-[400px] flex justify-center items-center">
           <div
@@ -76,7 +80,10 @@ const BlogList = () => {
       <>
         <Helmet>
           <title>Error | SATX Bounce House Rentals Blog</title>
-          <meta name="description" content="An error occurred while loading our blog posts." />
+          <meta
+            name="description"
+            content="An error occurred while loading our blog posts."
+          />
         </Helmet>
         <div className="min-h-[400px] flex justify-center items-center">
           <p className="text-red-500 font-semibold text-lg">{error}</p>
@@ -88,13 +95,27 @@ const BlogList = () => {
   return (
     <>
       <Helmet>
-        <title>Blog | Party Planning Tips & News | SATX Bounce House Rentals</title>
-        <meta name="description" content="Read our latest blog posts about party planning tips, bounce house safety, event ideas, and more. Stay updated with SATX Bounce House Rentals in San Antonio." />
-        <meta name="keywords" content="party planning blog, bounce house tips, event ideas, San Antonio parties, party safety tips, event planning guide" />
-        
+        <title>
+          Blog | Party Planning Tips & News | SATX Bounce House Rentals
+        </title>
+        <meta
+          name="description"
+          content="Read our latest blog posts about party planning tips, bounce house safety, event ideas, and more. Stay updated with SATX Bounce House Rentals in San Antonio."
+        />
+        <meta
+          name="keywords"
+          content="party planning blog, bounce house tips, event ideas, San Antonio parties, party safety tips, event planning guide"
+        />
+
         {/* Open Graph tags */}
-        <meta property="og:title" content="Blog | Party Planning Tips & News | SATX Bounce House Rentals" />
-        <meta property="og:description" content="Read our latest blog posts about party planning tips, bounce house safety, event ideas, and more. Stay updated with SATX Bounce House Rentals in San Antonio." />
+        <meta
+          property="og:title"
+          content="Blog | Party Planning Tips & News | SATX Bounce House Rentals"
+        />
+        <meta
+          property="og:description"
+          content="Read our latest blog posts about party planning tips, bounce house safety, event ideas, and more. Stay updated with SATX Bounce House Rentals in San Antonio."
+        />
         <meta property="og:type" content="blog" />
         <meta property="og:url" content={window.location.href} />
         {blogs[0]?.featuredImage && (
@@ -117,9 +138,14 @@ const BlogList = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4 text-white">
-              Our <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">Blog Posts</span>
+              Our{" "}
+              <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">
+                Blog Posts
+              </span>
             </h1>
-            <p className="text-white text-lg">Stay updated with our latest news and insights</p>
+            <p className="text-white text-lg">
+              Stay updated with our latest news and insights
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -142,9 +168,13 @@ const BlogList = () => {
                   <h2 className="text-xl font-bold text-primary-blue mb-3 line-clamp-2">
                     {blog.title}
                   </h2>
-                  <p className="text-gray-600 mb-4 line-clamp-3">{blog.excerpt}</p>
+                  <p className="text-gray-600 mb-4 line-clamp-3">
+                    {blog.excerpt}
+                  </p>
                   <div className="flex items-center text-sm text-gray-500 border-t border-gray-100 pt-4">
-                    <span className="font-medium">{new Date(blog.publishDate).toLocaleDateString()}</span>
+                    <span className="font-medium">
+                      {new Date(blog.publishDate).toLocaleDateString()}
+                    </span>
                     {blog.readTime && (
                       <>
                         <span className="mx-2">•</span>
