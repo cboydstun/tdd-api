@@ -58,10 +58,10 @@ const ContactPage: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h1 className="text-5xl font-bold mb-6">
+              <h1 className="text-5xl font-bold mb-6 text-white">
                 Get in <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">Touch</span>
               </h1>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-xl text-white max-w-2xl mx-auto">
                 Ready to make your event unforgettable? Let's start planning your perfect party!
               </p>
             </div>

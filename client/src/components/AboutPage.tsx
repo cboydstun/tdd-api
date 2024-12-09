@@ -53,12 +53,12 @@ const AboutPage: React.FC = () => {
       <div className="w-full bg-secondary-blue/5 py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-5xl font-bold text-center mb-12">
+            <h1 className="text-5xl font-bold text-center mb-12 text-white">
               About <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">SATX Bounce House Rentals</span>
             </h1>
             
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-primary-purple mb-4">Our Family Photo</h2>
+              <h2 className="text-3xl font-bold text-white mb-4">Our Family Photo</h2>
               {/* Photo placeholder - add actual photo later */}
             </div>
 
