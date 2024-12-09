@@ -129,25 +129,32 @@ const HomePage: React.FC = () => {
       {/* Product Carousel */}
       <ProductCarousel />
 
-      {/* Info Sections */}
-      <InfoSections />
-
       {/* Occasions Section */}
+      <div className="flex justify-center items-center py-4 my-4">
+
+      <div className="w-full max-w-[80%] bg-primary-blue rounded-xl px-8 py-8 text-center">
+
       <OccasionsSection />
+      </div>
+      </div>
+
 
       {/* Contact Form Section */}
       <div id="contact-form" className="container mx-auto px-4 py-16">
         <h2 className="text-3xl font-bold text-center mb-12 text-white">
           Get in Touch
         </h2>
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-[1000px] mx-auto">
           <ContactForm />
         </div>
       </div>
 
+      {/* Info Sections */}
+      <InfoSections />
+
       {/* CTA Section */}
       <div className="flex justify-center items-center py-4 my-4">
-        <div className="w-full max-w-[90%] bg-primary-blue rounded-xl px-8 py-8 text-center">
+        <div className="w-full max-w-[80%] bg-primary-blue rounded-xl px-8 py-8 text-center">
           <h2 className="text-3xl font-bold mb-6 text-white">
             Ready to Make Your Event Unforgettable?
           </h2>

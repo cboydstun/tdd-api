@@ -81,8 +81,8 @@ const ProductCarousel = () => {
   );
 
   return (
-    <div className="w-full bg-secondary-blue/5 py-12 rounded-xl">
-      <div className="container mx-auto px-4">
+    <div className="w-full bg-[#663399] py-12 rounded-b-xl">
+    <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-8 text-white">
           Featured Products
         </h2>

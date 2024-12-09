@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { ArrowRight, Shield, Clock, Truck, Heart, Star, Phone } from "lucide-react";
 import { Helmet } from "react-helmet";
 
 const AboutPage: React.FC = () => {
@@ -38,8 +39,6 @@ const AboutPage: React.FC = () => {
           name="keywords"
           content="about SATX Bounce House, San Antonio party rentals, bounce house company, inflatable rentals history, party equipment provider, customer service, safety commitment"
         />
-
-        {/* Open Graph tags */}
         <meta
           property="og:title"
           content="About SATX Bounce House Rentals | San Antonio's Premier Party Rental Service"
@@ -50,42 +49,31 @@ const AboutPage: React.FC = () => {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
-
-        {/* Location specific meta tags */}
         <meta name="geo.region" content="US-TX" />
         <meta name="geo.placename" content="San Antonio" />
         <meta name="geo.position" content="29.4241;-98.4936" />
         <meta name="ICBM" content="29.4241, -98.4936" />
-
-        {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify(organizationSchema)}
         </script>
       </Helmet>
 
-      <div className="w-full bg-secondary-blue/5 py-12">
+      <div className="w-full bg-gradient-to-b from-primary-blue/10 to-transparent py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-5xl font-bold text-center mb-12 text-white">
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-5xl font-bold text-center mb-16 text-white animate-fade-in-up">
               About{" "}
               <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">
                 SATX Bounce House Rentals
               </span>
             </h1>
 
-            <div className="mb-12">
-              <h2 className="text-3xl font-bold text-white mb-4">
-                Our Family Photo
-              </h2>
-              {/* Photo placeholder - add actual photo later */}
-            </div>
-
             {/* Story Section */}
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8 transform transition-all duration-300 hover:shadow-xl">
+            <div className="bg-white backdrop-blur-sm rounded-2xl shadow-lg p-8 mb-16 transform transition-all duration-300">
               <h2 className="text-3xl font-bold text-primary-purple mb-6">
                 Our Story
               </h2>
-              <div className="space-y-4 text-gray-600 text-lg">
+              <div className="space-y-4 text-primary-blue text-lg">
                 <p>
                   We began our journey with a clear vision: to elevate every San
                   Antonio event with fun and engaging bounce houses and water
@@ -96,185 +84,136 @@ const AboutPage: React.FC = () => {
                   service and an expansive inventory.
                 </p>
                 <p>
-                  As time passed, not only did our collection of bounce house
-                  rentals in San Antonio grow, but so did our dedication to our
-                  cherished customers.
-                </p>
-                <p>
                   From wet inflatables to dry slides, combo units, and even
                   unique party additions like popcorn makers and petting zoos,
                   SATX Bounce House Rentals always seeks to surpass
                   expectations.
                 </p>
-                <p>
-                  Today, we take pride in being the foremost name in bounce
-                  house rental San Antonio, TX, and the neighboring regions
-                  trust.
-                </p>
               </div>
             </div>
 
-            {/* Promise Section */}
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8 transform transition-all duration-300 hover:shadow-xl">
-              <h2 className="text-3xl font-bold text-primary-purple mb-6">
-                Our Promise
+            {/* Why Choose Us Grid */}
+            <div className="mb-16">
+              <h2 className="text-3xl font-bold text-white mb-8 text-center">
+                Why Choose SATX?
               </h2>
-              <div className="space-y-6">
-                <div className="bg-secondary-blue/5 p-6 rounded-lg">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-6 transform transition-all duration-300">
+                  <Shield className="w-12 h-12 text-blue-400 mb-4" />
+                  <h3 className="text-xl font-bold text-primary-purple mb-3">Safety First</h3>
+                  <p className="text-primary-blue">
+                    We prioritize safety with meticulously maintained equipment and strict protocols for worry-free fun.
+                  </p>
+                </div>
+
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-6 transform transition-all duration-300">
+                  <Clock className="w-12 h-12 text-purple-400 mb-4" />
+                  <h3 className="text-xl font-bold text-primary-purple mb-3">Reliable Service</h3>
+                  <p className="text-primary-blue">
+                    Count on us for punctual delivery and setup, ensuring your event starts right on time.
+                  </p>
+                </div>
+
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-6 transform transition-all duration-300">
+                  <Truck className="w-12 h-12 text-blue-400 mb-4" />
+                  <h3 className="text-xl font-bold text-primary-purple mb-3">Free Delivery</h3>
+                  <p className="text-primary-blue">
+                    Enjoy complimentary delivery within Loop 1604, making party planning easier and more affordable.
+                  </p>
+                </div>
+
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-6 transform transition-all duration-300">
+                  <Heart className="w-12 h-12 text-purple-400 mb-4" />
+                  <h3 className="text-xl font-bold text-primary-purple mb-3">Customer Care</h3>
+                  <p className="text-primary-blue">
+                    We treat every customer like family, providing personalized attention and support.
+                  </p>
+                </div>
+
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-6 transform transition-all duration-300">
+                  <Star className="w-12 h-12 text-blue-400 mb-4" />
+                  <h3 className="text-xl font-bold text-primary-purple mb-3">Quality Equipment</h3>
+                  <p className="text-primary-blue">
+                    Premium, well-maintained inflatables and party equipment for the best experience.
+                  </p>
+                </div>
+
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-6 transform transition-all duration-300">
+                  <Phone className="w-12 h-12 text-purple-400 mb-4" />
+                  <h3 className="text-xl font-bold text-primary-purple mb-3">24/7 Support</h3>
+                  <p className="text-primary-blue">
+                    Always here when you need us, providing round-the-clock assistance for your peace of mind.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Values Grid */}
+            <div className="mb-16">
+              <h2 className="text-3xl font-bold text-white mb-8 text-center">
+                Our Values
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-8 transform transition-all duration-300">
                   <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text mb-4">
-                    Safety First
+                    Customer Satisfaction
                   </h3>
-                  <div className="space-y-4 text-gray-600 text-lg">
+                  <div className="space-y-4 text-primary-blue">
                     <p>
-                      Ensuring the well-being of your guests is our utmost
-                      priority.
+                      Our customers are the essence of everything we do. We're unwavering in our mission to offer the peak of service, from initial booking to event day.
                     </p>
+                  </div>
+                </div>
+
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-8 transform transition-all duration-300">
+                  <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text mb-4">
+                    Transparency
+                  </h3>
+                  <div className="space-y-4 text-primary-blue">
                     <p>
-                      At SATX Bounce, we meticulously maintain our equipment,
-                      especially our water slide rentals, adhering to stringent
-                      safety protocols.
+                      No hidden fees or surprises. Our transparent pricing means you'll always know exactly what you're getting.
                     </p>
+                  </div>
+                </div>
+
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-8 transform transition-all duration-300">
+                  <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text mb-4">
+                    Community Focus
+                  </h3>
+                  <div className="space-y-4 text-primary-blue">
                     <p>
-                      This commitment ensures a joyous and carefree experience
-                      for everyone.
+                      We're proud to serve San Antonio and surrounding areas, contributing to countless memorable celebrations in our community.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-white backdrop-blur-sm rounded-2xl p-8 transform transition-all duration-300">
+                  <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text mb-4">
+                    Continuous Improvement
+                  </h3>
+                  <div className="space-y-4 text-primary-blue">
+                    <p>
+                      We constantly update our inventory and improve our services based on customer feedback and industry trends.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Customer Satisfaction Section */}
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8 transform transition-all duration-300 hover:shadow-xl">
-              <h2 className="text-3xl font-bold text-primary-purple mb-6">
-                Customer Satisfaction
-              </h2>
-              <div className="space-y-4 text-gray-600 text-lg">
-                <p>
-                  Our customers are the essence of everything we do at San
-                  Antonio bounce house rentals.
-                </p>
-                <p>
-                  We're unwavering in our mission to offer the peak of service,
-                  from the initial booking to the event day.
-                </p>
-                <p>Your confidence and satisfaction are paramount to us.</p>
-              </div>
-            </div>
-
-            {/* Why Us Section */}
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8 transform transition-all duration-300 hover:shadow-xl">
-              <h2 className="text-3xl font-bold text-primary-purple mb-6">
-                Why us?
-              </h2>
-              <div className="bg-secondary-blue/5 p-6 rounded-lg">
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text mb-4">
-                  Flexibility
-                </h3>
-                <div className="space-y-4 text-gray-600 text-lg">
-                  <p>
-                    Life's unpredictable nature, especially when planning
-                    events, is something we fully recognize.
-                  </p>
-                  <p>
-                    That's why our team at SATX Bounce House Rentals emphasizes
-                    flexibility, ensuring we're always ready to adapt with you.
-                  </p>
-                  <p>
-                    We believe in treating people the way our family wants to be
-                    treated.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Rental Terms Section */}
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8 transform transition-all duration-300 hover:shadow-xl">
-              <h2 className="text-3xl font-bold text-primary-purple mb-6">
-                Rental Terms
-              </h2>
-              <div className="bg-secondary-blue/5 p-6 rounded-lg">
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text mb-4">
-                  Transparency
-                </h3>
-                <div className="space-y-4 text-gray-600 text-lg">
-                  <p>Absolutely no hidden fees or unpleasant surprises.</p>
-                  <p>
-                    Our transparent and affordable inflatable party rental
-                    pricing model means you'll always be clear on what you're
-                    getting, streamlining your event preparations.
-                  </p>
-                  <p>
-                    We are always happy to answer any questions you may have!
-                    Just ask!
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Why Choose SATX Section */}
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-8 transform transition-all duration-300 hover:shadow-xl">
-              <h2 className="text-3xl font-bold text-primary-purple mb-6">
-                Why Choose SATX?
-              </h2>
-              <div className="space-y-4 text-gray-600 text-lg">
-                <p>
-                  Beyond our premier inventory, which includes top-notch water
-                  slide rentals San Antonio relies on, and our unwavering
-                  service commitment, we believe in nurturing lasting
-                  relationships.
-                </p>
-                <p>
-                  Choosing us means you're not just opting for a bounce house
-                  rental; you're partnering with a dedicated team passionate
-                  about ensuring your event's triumph.
-                </p>
-                <p>
-                  Our legacy stands on the countless joyous laughter and
-                  memories we've facilitated, and we're excited to be a part of
-                  your next memorable event.
-                </p>
-              </div>
-            </div>
-
-            {/* Join Us Section */}
-            <div className="bg-white rounded-xl shadow-lg p-8 mb-12 transform transition-all duration-300 hover:shadow-xl">
-              <h2 className="text-3xl font-bold text-primary-purple mb-6">
-                Join Us in Our Journey
-              </h2>
-              <div className="space-y-4 text-gray-600 text-lg">
-                <p>
-                  Whether it's a cozy backyard gathering or a grand festivity,
-                  each celebration holds its own charm.
-                </p>
-                <p>
-                  Let's join forces to make your next event the buzz of San
-                  Antonio!
-                </p>
-                <p>
-                  We cordially invite you to delve into our offerings, pose
-                  queries, and get in touch with us.
-                </p>
-                <p>
-                  At SATX Bounce House Rentals, we're not just about bounce
-                  houses or waterslide rentals San Antonio cherishes; we're your
-                  comrades in crafting indelible memories.
-                </p>
-              </div>
-            </div>
-
             {/* CTA Section */}
-            <div className="bg-gradient-to-r from-blue-400 to-purple-600 text-white rounded-xl shadow-lg p-8 mb-12 text-center">
-              <h2 className="text-3xl font-bold mb-4">
+            <div className="w-full max-w-[90%] mx-auto bg-gradient-to-r from-blue-400 to-purple-600 rounded-2xl px-8 py-8 text-center transform transition-all duration-300 hover:scale-[1.02]">
+              <h2 className="text-3xl font-bold mb-6 text-white">
                 Ready to Create Memories?
               </h2>
-              <p className="text-xl mb-6">
+              <p className="text-xl mb-8 text-white/90">
                 Let's make your next event unforgettable!
               </p>
               <Link
                 to="/contact"
-                className="inline-block bg-white text-primary-purple px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300 transform hover:scale-105"
+                className="bg-white text-primary-blue px-8 py-3 rounded-lg font-semibold hover:bg-primary-blue hover:text-white transition-all duration-300 inline-flex items-center gap-2"
               >
-                Contact Us Today
+                Contact Now
+                <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
           </div>

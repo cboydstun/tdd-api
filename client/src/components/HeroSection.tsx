@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 const HeroSection: React.FC = () => {
   return (
-    <div className="relative w-full min-h-screen flex items-center justify-center bg-cover bg-center bg-fixed overflow-hidden">
+    <div className="relative w-full min-h-[800px] flex items-center justify-center bg-cover bg-center bg-fixed overflow-hidden">
       {/* Background Video/Image */}
       <div
         className="absolute inset-0 w-full h-full"
@@ -77,8 +77,26 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/20 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 right-0 w-full">
+        <div
+          className="absolute bottom-0 left-0 right-0 h-48 z-10"
+          style={{
+            background: "linear-gradient(to top, #663399, transparent)",
+          }}
+        />
+        <svg
+          className="relative block w-full"
+          style={{ height: "75px" }}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M0,0 Q600,120 1200,0 L1200,120 L0,120 Z"
+            className="bg-transparent"
+          ></path>
+        </svg>
+      </div>
     </div>
   );
 };

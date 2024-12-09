@@ -67,24 +67,24 @@ const Footer: React.FC = () => {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="tel:(210) 555-0123"
+                  href="tel:(512) 210-0194"
                   className="flex items-center gap-3 text-gray-600 hover:text-primary-blue transition-colors duration-300 group"
                 >
                   <div className="p-2 bg-secondary-blue/5 rounded-lg group-hover:bg-secondary-blue/10 transition-colors duration-300">
                     <Phone className="w-5 h-5" />
                   </div>
-                  (210) 555-0123
+                  (512) 210-0194
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:info@satxbounce.com"
+                  href="mailto:satxbounce@gmail.com"
                   className="flex items-center gap-3 text-gray-600 hover:text-primary-blue transition-colors duration-300 group"
                 >
                   <div className="p-2 bg-secondary-blue/5 rounded-lg group-hover:bg-secondary-blue/10 transition-colors duration-300">
                     <Mail className="w-5 h-5" />
                   </div>
-                  info@satxbounce.com
+                  satxbounce@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-3 text-gray-600">

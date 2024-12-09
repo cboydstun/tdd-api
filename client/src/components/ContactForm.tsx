@@ -193,7 +193,7 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-2xl mx-auto bg-white/90 backdrop-blur-sm rounded-2xl border-2 border-secondary-blue/20 shadow-lg p-8 space-y-6"
+      className="w-full max-w-[800px] mx-auto bg-white/90 backdrop-blur-sm rounded-2xl border-2 border-secondary-blue/20 shadow-lg p-8 space-y-6"
     >
       {/* Status Messages */}
       {submitStatus === "success" && (
