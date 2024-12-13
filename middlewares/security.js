@@ -25,7 +25,8 @@ const speedLimiter = slowDown({
 const allowedOrigins = [
   process.env.CLIENT_URL || 'https://www.satxbounce.com',
   'http://localhost:5173', // Vite development server
-  'http://127.0.0.1:5173'
+  'http://127.0.0.1:5173',
+  'https://bounce-v2-ruby.vercel.app/'
 ];
 
 const enhancedLoggingMiddleware = (req, res, next) => {
