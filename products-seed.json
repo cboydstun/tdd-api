@@ -1,0 +1,1040 @@
+{
+  "products": [
+    {
+      "name": "Castle with Slide",
+      "slug": "castle-with-slide",
+      "description": "An impressive castle-themed bounce house featuring a thrilling slide attachment. Perfect for royal celebrations and active play, this bouncer combines the magic of a castle with the excitement of sliding fun.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 224.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/txippidbt8t2zqp3tszc.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 25,
+        "width": 15,
+        "height": 15,
+        "unit": "feet"
+      },
+      "capacity": 10,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "30x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Slide", "Large Bouncing Area", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 10 children at once. No shoes, sharp objects, or food inside.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "Large Castle",
+      "slug": "large-castle",
+      "description": "A spacious castle-themed bounce house perfect for multiple children to enjoy simultaneously. Features medieval-inspired design elements and plenty of bouncing space.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 199.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/eipgpncv4edtvaovx6yb.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 15,
+        "width": 15,
+        "height": 12,
+        "unit": "feet"
+      },
+      "capacity": 8,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "20x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Large Bouncing Area", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 8 children at once. No shoes, sharp objects, or food inside.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "Medium Castle",
+      "slug": "medium-castle",
+      "description": "A perfectly sized castle bounce house ideal for smaller gatherings and limited spaces. Features classic castle design elements and safe bouncing area.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 149.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/tsupopd4y0voxanhw8ja.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 13,
+        "width": 13,
+        "height": 12,
+        "unit": "feet"
+      },
+      "capacity": 6,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "18x18 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Bouncing Area", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 6 children at once. No shoes, sharp objects, or food inside.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "Junior Bounce",
+      "slug": "junior-bounce",
+      "description": "Versatile bounce house suitable for both dry and wet use. Perfect for young children with its manageable size and safety features.",
+      "category": "Combo Units",
+      "price": {
+        "base": 149.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/in8jdevacukdhfw2sxrv.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["DRY", "WET"]
+        }
+      ],
+      "dimensions": {
+        "length": 19,
+        "width": 12,
+        "height": 10,
+        "unit": "feet"
+      },
+      "capacity": 6,
+      "ageRange": {
+        "min": 3,
+        "max": 10
+      },
+      "setupRequirements": {
+        "space": "24x17 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": ["Bouncing Area", "Water Sprayers", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 6 children at once. No shoes, sharp objects, or food inside. Extra caution when wet.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F for water features"
+      ]
+    },
+    {
+      "name": "Tropical Combo",
+      "slug": "tropical-combo",
+      "description": "Tropical-themed combination unit featuring both dry bouncing area and water play options. Perfect for summer parties and versatile entertainment.",
+      "category": "Combo Units",
+      "price": {
+        "base": 199.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/fh1s4w0p3pyysl0lrbzi.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["DRY", "WET"]
+        }
+      ],
+      "dimensions": {
+        "length": 20,
+        "width": 15,
+        "height": 12,
+        "unit": "feet"
+      },
+      "capacity": 8,
+      "ageRange": {
+        "min": 4,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "25x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": [
+        "Bouncing Area",
+        "Water Sprayers",
+        "Tropical Theme",
+        "Safety Netting"
+      ],
+      "safetyGuidelines": "Adult supervision required. Maximum 8 children at once. No shoes, sharp objects, or food inside. Extra caution when wet.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F for water features"
+      ]
+    },
+    {
+      "name": "Lime Water Slide",
+      "slug": "lime-waterslide",
+      "description": "Exciting lime-themed water slide perfect for hot summer days. Features a long sliding surface and splash landing area.",
+      "category": "Water Slides",
+      "price": {
+        "base": 224.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733554346/products/rtwuzqa7a6l56ovjmiss.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "WET"
+        }
+      ],
+      "dimensions": {
+        "length": 25,
+        "width": 15,
+        "height": 14,
+        "unit": "feet"
+      },
+      "capacity": 4,
+      "ageRange": {
+        "min": 5,
+        "max": 14
+      },
+      "setupRequirements": {
+        "space": "30x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": ["Water Slide", "Splash Pool", "Safety Rails"],
+      "safetyGuidelines": "Adult supervision required. One slider at a time. No running on wet surfaces. No horseplay on stairs.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F"
+      ]
+    },
+    {
+      "name": "TALL Red Water Slide",
+      "slug": "red-waterslide",
+      "description": "Our tallest water slide featuring an impressive height and extended slide length. Delivers maximum excitement with a thrilling descent and splash landing.",
+      "category": "Water Slides",
+      "price": {
+        "base": 249.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733554346/products/mrmwo3qatme5e516zghm.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "WET"
+        }
+      ],
+      "dimensions": {
+        "length": 30,
+        "width": 20,
+        "height": 18,
+        "unit": "feet"
+      },
+      "capacity": 4,
+      "ageRange": {
+        "min": 6,
+        "max": 14
+      },
+      "setupRequirements": {
+        "space": "35x25 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": [
+        "Water Slide",
+        "Extended Length",
+        "Splash Pool",
+        "Safety Rails"
+      ],
+      "safetyGuidelines": "Adult supervision required. One slider at a time. No running on wet surfaces. No horseplay on stairs.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F"
+      ]
+    },
+    {
+      "name": "White Bouncer",
+      "slug": "white-bouncer",
+      "description": "Classic white bounce house suitable for any event theme. Clean design and reliable construction make it perfect for various celebrations.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 199.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/kpsplolnqxm2hxafqyap.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 13,
+        "width": 12,
+        "height": 12,
+        "unit": "feet"
+      },
+      "capacity": 6,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "18x17 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Bouncing Area", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 6 children at once. No shoes, sharp objects, or food inside.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "Arch Bounce",
+      "slug": "arch-bounce",
+      "description": "Distinctive arched design bounce house offering unique aesthetic appeal and plenty of jumping space. Perfect for special events and parties.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 199.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/j2is6zp87y3bbwtqkbfq.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 15,
+        "width": 15,
+        "height": 12,
+        "unit": "feet"
+      },
+      "capacity": 8,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "20x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Arched Design", "Bouncing Area", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 8 children at once. No shoes, sharp objects, or food inside.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "Balloon Bounce",
+      "slug": "balloon-bounce",
+      "description": "Festive balloon-themed bounce house perfect for birthday parties and celebrations. Colorful design and reliable construction ensure hours of fun.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 174.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/gcbyjq1qteoyw03v59df.png",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 15,
+        "width": 15,
+        "height": 12,
+        "unit": "feet"
+      },
+      "capacity": 8,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "20x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Balloon Theme", "Bouncing Area", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 8 children at once. No shoes, sharp objects, or food inside.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "Balloon with Slide",
+      "slug": "balloon-with-slide",
+      "description": "Enhanced balloon-themed bounce house featuring an exciting slide. Combines bouncing fun with sliding excitement in a festive package.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 224.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/wjpam1gzw0xyxxrj1eqm.jpg",
+          "alt": "Balloon Combo with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 20,
+        "width": 20,
+        "height": 15,
+        "unit": "feet"
+      },
+      "capacity": 10,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "25x25 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Balloon Theme", "Slide", "Bouncing Area", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 10 children at once. No shoes, sharp objects, or food inside. One at a time on slide.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "Basketball Shoot",
+      "slug": "basketball-shoot",
+      "description": "Inflatable basketball game perfect for sports-themed events and active entertainment. Features basketball hoop and enclosed play area.",
+      "category": "Games",
+      "price": {
+        "base": 99.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/ibnzriwkem5mmfh6mjwl.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 8,
+        "width": 6,
+        "height": 8,
+        "unit": "feet"
+      },
+      "capacity": 2,
+      "ageRange": {
+        "min": 5,
+        "max": 15
+      },
+      "setupRequirements": {
+        "space": "13x11 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": [
+        "Basketball Hoop",
+        "Ball Return",
+        "Score Counter",
+        "Safety Netting"
+      ],
+      "safetyGuidelines": "Adult supervision required. Maximum 2 players at once. No hanging on rim or aggressive play.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "Mini Bounce",
+      "slug": "mini-bounce",
+      "description": "Compact bounce house perfect for smaller spaces and younger children. Versatile design allows for both dry and wet use.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 99.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/xl6urlqmuwie0bvnqyoe.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["DRY", "WET"]
+        }
+      ],
+      "dimensions": {
+        "length": 6,
+        "width": 6,
+        "height": 8,
+        "unit": "feet"
+      },
+      "capacity": 3,
+      "ageRange": {
+        "min": 2,
+        "max": 8
+      },
+      "setupRequirements": {
+        "space": "11x11 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete"]
+      },
+      "features": ["Compact Size", "Water Sprayer Option", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 3 children at once. No shoes, sharp objects, or food inside.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F for water features"
+      ]
+    },
+    {
+      "name": "Blue Water Slide",
+      "slug": "blue-waterslide",
+      "description": "Refreshing blue water slide perfect for summer fun. Features smooth sliding surface and safe landing area.",
+      "category": "Water Slides",
+      "price": {
+        "base": 199.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733554346/products/qhpxa4jm9wbic5w1qmxf.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "WET"
+        }
+      ],
+      "dimensions": {
+        "length": 20,
+        "width": 10,
+        "height": 12,
+        "unit": "feet"
+      },
+      "capacity": 4,
+      "ageRange": {
+        "min": 5,
+        "max": 14
+      },
+      "setupRequirements": {
+        "space": "25x15 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": ["Water Slide", "Splash Pool", "Safety Rails"],
+      "safetyGuidelines": "Adult supervision required. One slider at a time. No running on wet surfaces. No horseplay on stairs.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F"
+      ]
+    },
+    {
+      "name": "Tables and Chairs",
+      "slug": "tables-chairs",
+      "description": "Complete seating solution including one table and six chairs. Perfect for party setup and guest accommodation.",
+      "category": "Party Equipment",
+      "price": {
+        "base": 19.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/gggcfopwjz162ehliomh.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["ALL", "DRY", "WET"]
+        },
+        {
+          "name": "Set Contents",
+          "value": "1 table / 6 chairs"
+        }
+      ],
+      "dimensions": {
+        "length": 6,
+        "width": 4,
+        "height": 2.5,
+        "unit": "feet"
+      },
+      "capacity": 6,
+      "ageRange": {
+        "min": 2,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "8x6 feet flat surface",
+        "powerSource": false,
+        "surfaceType": ["Grass", "Concrete", "Asphalt", "Wood"]
+      },
+      "features": ["Portable", "Weather Resistant", "Easy Setup"],
+      "safetyGuidelines": "Ensure stable placement on flat surface. Do not stand on chairs or table. Maximum weight capacity 300 lbs per table, 250 lbs per chair.",
+      "weatherRestrictions": ["Secure or store indoors during high winds"]
+    },
+    {
+      "name": "Popcorn Machine",
+      "slug": "popcorn-machine",
+      "description": "Professional popcorn machine capable of serving over 100 guests. Perfect for adding a classic concession stand touch to any event.",
+      "category": "Concessions",
+      "price": {
+        "base": 49.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/cybljbcbc4aoh99higs7.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["ALL", "DRY", "WET"]
+        },
+        {
+          "name": "Capacity",
+          "value": ">100 servings"
+        }
+      ],
+      "dimensions": {
+        "length": 2,
+        "width": 2,
+        "height": 3,
+        "unit": "feet"
+      },
+      "capacity": 100,
+      "ageRange": {
+        "min": 18,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "4x4 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Concrete", "Wood"]
+      },
+      "features": [
+        "Built-in Warmer",
+        "Easy Clean",
+        "Scoop Included",
+        "Serving Bags"
+      ],
+      "safetyGuidelines": "Adult operation only. Keep away from water. Hot surfaces during operation. Follow provided operating instructions.",
+      "weatherRestrictions": ["Indoor use only", "Keep away from water"]
+    },
+    {
+      "name": "Snow Cone Machine",
+      "slug": "snow-cone-machine",
+      "description": "Refreshing snow cone machine perfect for summer events. Produces approximately 50 servings of fluffy shaved ice for sweet treats.",
+      "category": "Concessions",
+      "price": {
+        "base": 49.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/hunacmolrw05vcbwiddx.png",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["ALL", "DRY", "WET"]
+        },
+        {
+          "name": "Capacity",
+          "value": "~50 servings"
+        }
+      ],
+      "dimensions": {
+        "length": 2,
+        "width": 2,
+        "height": 2.5,
+        "unit": "feet"
+      },
+      "capacity": 50,
+      "ageRange": {
+        "min": 18,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "4x4 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Concrete", "Wood"]
+      },
+      "features": [
+        "Ice Shaver",
+        "Syrup Dispensers",
+        "Serving Cups",
+        "Ice Scoop"
+      ],
+      "safetyGuidelines": "Adult operation only. Keep hands away from ice shaver. Follow provided operating instructions.",
+      "weatherRestrictions": [
+        "Indoor use recommended",
+        "Protect from direct sunlight"
+      ]
+    },
+    {
+      "name": "Pink Bounce",
+      "slug": "pink-bounce",
+      "description": "Charming pink-themed bounce house perfect for princess parties and pink-themed celebrations. Features feminine design elements and spacious bouncing area.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 199.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/zr58ftg7pbp0hjg9vkpy.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "alt": "Castle with Slide Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "alt": "Castle Slide Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 15,
+        "width": 15,
+        "height": 12,
+        "unit": "feet"
+      },
+      "capacity": 8,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "20x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Pink Theme", "Bouncing Area", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 8 children at once. No shoes, sharp objects, or food inside.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    }
+  ]
+}

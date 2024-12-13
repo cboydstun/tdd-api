@@ -19,6 +19,9 @@ const getAllContacts = async (req, res) => {
 const getContactById = async (req, res) => {
     try {
         const contact = await Contact.findById(req.params.id);
+        if (!contact) {
+            return res.status(500).json({ error: "Contact not found" });
+        }
         res.status(200).json(contact);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -69,9 +72,7 @@ const createContact = async (req, res, next) => {
 
         transporter.sendMail(mailOptions, function (err, data) {
             if (err) {
-                console.log('Error Occurs', err);
-            } else {
-                console.log('Email sent!!!');
+                console.log('Error: ', err);
             }
         });
 
@@ -90,8 +91,6 @@ const createContact = async (req, res, next) => {
             to: process.env.USER_PHONE_NUMBER
         });
 
-        console.log('SMS sent!!!');
-
         const contact = await Contact.create(req.body);
 
         res.status(201).json(contact);
@@ -103,9 +102,12 @@ const createContact = async (req, res, next) => {
 // @PUT - /contacts/:id - Update a contact by id - private
 const updateContact = async (req, res) => {
     try {
-        const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json(contact);
-
+        const contact = await Contact.findById(req.params.id);
+        if (!contact) {
+            return res.status(500).json({ error: "Contact not found" });
+        }
+        const updatedContact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json(updatedContact);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -114,8 +116,12 @@ const updateContact = async (req, res) => {
 // @DELETE - /contacts/:id - Delete a contact by id - private
 const deleteContact = async (req, res) => {
     try {
-        const contact = await Contact.findByIdAndDelete(req.params.id);
-        res.status(200).json(contact);
+        const contact = await Contact.findById(req.params.id);
+        if (!contact) {
+            return res.status(500).json({ error: "Contact not found" });
+        }
+        const deletedContact = await Contact.findByIdAndDelete(req.params.id);
+        res.status(200).json(deletedContact);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
