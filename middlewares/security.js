@@ -61,48 +61,6 @@ const enhancedLoggingMiddleware = (req, res, next) => {
   next();
 };
 
-const strictSecurityCheck = (req, res, next) => {
-  const origin = req.get('Origin');
-  const referer = req.get('Referer');
-
-  // Allow access to uploads directory and health check
-  if (req.path.startsWith('/uploads/') || req.path === '/api/health') {
-    return next();
-  }
-
-  // Check if the request is coming from an allowed origin
-  if (origin && !allowedOrigins.includes(origin)) {
-    if (!referer || !allowedOrigins.some(allowed => referer.startsWith(allowed))) {
-      logger.warn(`Blocked unauthorized request: ${req.method} ${req.path} from ${req.ip}`, {
-        origin: origin || 'Unknown',
-        referer: referer || 'Unknown',
-        path: req.path,
-      });
-      return res.status(403).send('Access Denied');
-    }
-  }
-
-  // Only allow specific HTTP methods
-  const allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
-  if (!allowedMethods.includes(req.method)) {
-    logger.warn(`Blocked unauthorized method: ${req.method} from ${req.ip}`, {
-      method: req.method,
-      path: req.path,
-    });
-    return res.status(405).send('Method Not Allowed');
-  }
-
-  // Only allow requests to your API routes, uploads, or health check
-  if (!req.path.startsWith('/api/v1/') && !req.path.startsWith('/uploads/') && req.path !== '/api/health') {
-    logger.warn(`Blocked unauthorized path: ${req.method} ${req.path} from ${req.ip}`, {
-      path: req.path,
-    });
-    return res.status(404).send('Not Found');
-  }
-
-  next();
-};
-
 const blockedIPs = new Map();
 const trackBlockedAttempts = (req, res, next) => {
   if ([403, 405, 404].includes(res.statusCode)) {
@@ -123,7 +81,6 @@ module.exports = {
   xss,
   hsts,
   compression,
-  strictSecurityCheck,
   enhancedLoggingMiddleware,
   trackBlockedAttempts
 };
