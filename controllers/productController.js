@@ -30,7 +30,6 @@ const uploadToCloudinary = async (file) => {
     }
 };
 
-// ... (keep all validation helpers unchanged)
 // Validation helpers
 const validatePrice = (price) => {
     if (!price || !price.base || typeof price.base !== 'number') {
@@ -92,6 +91,17 @@ const getAllProducts = async (req, res) => {
     }
 };
 
+// Helper function to extract identifier from Cloudinary URL
+const extractPublicIdFromUrl = (url) => {
+    try {
+        const matches = url.match(/\/v\d+\/products\/([^/]+)\./);
+        return matches ? `products/${matches[1]}` : null;
+    } catch (err) {
+        console.error('Error extracting public_id from URL:', err);
+        return null;
+    }
+};
+
 // GET /products/:slug - should return a single product
 const getProductBySlug = async (req, res) => {
     try {
@@ -116,13 +126,9 @@ const getProductBySlug = async (req, res) => {
 const createProduct = async (req, res) => {
     try {
         let productData;
-
         try {
-            productData = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-            if (req.body.productData) {
-                productData = typeof req.body.productData === 'string' ?
-                    JSON.parse(req.body.productData) : req.body.productData;
-            }
+            productData = typeof req.body.productData === 'string' ?
+                JSON.parse(req.body.productData) : req.body.productData || req.body;
         } catch (parseErr) {
             return res.status(400).json({ error: 'Invalid product data format' });
         }
@@ -210,65 +216,133 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        // Handle image deletions first, before parsing product data
-        let imagesToDelete = [];
+        // Parse product data
+        let productData;
         try {
-            if (req.body.imagesToDelete) {
-                imagesToDelete = JSON.parse(req.body.imagesToDelete);
-            }
+            productData = typeof req.body.productData === 'string' ?
+                JSON.parse(req.body.productData) : req.body.productData || req.body;
         } catch (parseErr) {
-            console.error('Error parsing imagesToDelete:', parseErr);
-            return res.status(400).json({ error: 'Invalid imagesToDelete format' });
+            console.error('Error parsing product data:', parseErr);
+            return res.status(400).json({ error: 'Invalid product data format' });
+        }
+
+        // Validate updated data if provided
+        if (productData.price) {
+            try {
+                validatePrice(productData.price);
+            } catch (validationError) {
+                return res.status(400).json({ error: validationError.message });
+            }
+        }
+
+        if (productData.dimensions) {
+            try {
+                validateDimensions(productData.dimensions);
+            } catch (validationError) {
+                return res.status(400).json({ error: validationError.message });
+            }
+        }
+
+        // Handle image deletions
+        let imagesToDelete = [];
+        if (req.body.imagesToDelete) {
+            try {
+                imagesToDelete = typeof req.body.imagesToDelete === 'string' ?
+                    JSON.parse(req.body.imagesToDelete) : req.body.imagesToDelete;
+                console.log('Images to delete:', imagesToDelete);
+            } catch (parseErr) {
+                console.error('Error parsing imagesToDelete:', parseErr);
+                return res.status(400).json({ error: 'Invalid imagesToDelete format' });
+            }
         }
 
         // Process image deletions
         let updatedImages = [...existingProduct.images];
+        
         for (const identifier of imagesToDelete) {
-            // Find the image by matching either the URL-extracted ID or the alt text
+            // Find the image using multiple methods
             const imageToDelete = existingProduct.images.find(img => {
-                const urlId = img.url.split('/').pop()?.split('.')[0];
-                return urlId === identifier || img.alt === identifier;
+                console.log('Checking image:', {
+                    filename: img.filename,
+                    public_id: img.public_id,
+                    url: img.url
+                });
+
+                // Check filename
+                if (img.filename === identifier) {
+                    console.log('Found match by filename');
+                    return true;
+                }
+
+                // Check public_id
+                if (img.public_id === identifier) {
+                    console.log('Found match by public_id');
+                    return true;
+                }
+
+                // Check public_id with products/ prefix
+                if (img.public_id === `products/${identifier}`) {
+                    console.log('Found match by public_id with prefix');
+                    return true;
+                }
+
+                // If no filename or public_id, try to extract from URL
+                if (!img.public_id && img.url) {
+                    const extractedId = extractPublicIdFromUrl(img.url);
+                    console.log('Extracted public_id from URL:', extractedId);
+                    if (extractedId === identifier || extractedId === `products/${identifier}`) {
+                        console.log('Found match by extracted public_id');
+                        return true;
+                    }
+                }
+
+                return false;
             });
 
             if (imageToDelete) {
-                // Extract public_id from the URL
-                const urlParts = imageToDelete.url.split('/');
-                const publicId = `products/${urlParts[urlParts.length - 1].split('.')[0]}`;
+                // Get the public_id for Cloudinary deletion
+                const publicId = imageToDelete.public_id || extractPublicIdFromUrl(imageToDelete.url);
 
-                try {
-                    await cloudinary.uploader.destroy(publicId);
-                } catch (err) {
-                    console.error(`Failed to delete image from Cloudinary: ${publicId}`, err);
+                // Delete from Cloudinary if we have a public_id
+                if (publicId) {
+                    try {
+                        console.log('Attempting to delete from Cloudinary:', publicId);
+                        const result = await cloudinary.uploader.destroy(publicId);
+                        console.log('Cloudinary deletion result:', result);
+                    } catch (err) {
+                        console.error('Failed to delete image from Cloudinary:', err);
+                        // Continue with database update even if Cloudinary delete fails
+                    }
                 }
 
-                // Remove the image from updatedImages array
                 updatedImages = updatedImages.filter(img => img !== imageToDelete);
+            } else {
+                console.log('No matching image found for identifier:', identifier);
             }
-        }
-
-        // Now parse the product data
-        let productData;
-        try {
-            productData = typeof req.body.productData === 'string' ?
-                JSON.parse(req.body.productData) : req.body.productData;
-        } catch (parseErr) {
-            console.error('Error parsing productData:', parseErr);
-            return res.status(400).json({ error: 'Invalid product data format' });
         }
 
         // Upload new images to Cloudinary
         let newImages = [];
         if (req.files && req.files.length > 0) {
+            console.log('Uploading new images:', req.files.length);
             newImages = await Promise.all(req.files.map(file => uploadToCloudinary(file)));
         }
 
+        const sanitizeOptions = {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+            allowedAttributes: {
+                ...sanitizeHtml.defaults.allowedAttributes,
+                'img': ['src', 'alt', 'width', 'height']
+            }
+        };
+
         // Prepare update data
         const updateData = {
+            ...existingProduct.toObject(),
             ...productData,
-            slug,
             name: productData.name ? sanitizeHtml(productData.name) : existingProduct.name,
             description: productData.description ?
-                sanitizeHtml(productData.description) : existingProduct.description,
+                sanitizeHtml(productData.description, sanitizeOptions) : existingProduct.description,
             category: productData.category ? sanitizeHtml(productData.category) : existingProduct.category,
             images: [...updatedImages, ...newImages]
         };
@@ -276,7 +350,7 @@ const updateProduct = async (req, res) => {
         // Update the product
         const updatedProduct = await Product.findOneAndUpdate(
             { slug },
-            { $set: updateData },
+            updateData,
             { new: true, runValidators: true }
         );
 
@@ -329,39 +403,101 @@ const deleteProduct = async (req, res) => {
 const removeImage = async (req, res) => {
     try {
         const { slug, imageName } = req.params;
+        console.log('Attempting to remove image:', { slug, imageName });
 
         const product = await Product.findOne({ slug });
         if (!product) {
+            console.log('Product not found:', slug);
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        const imageToDelete = product.images.find(img =>
-            img.filename === imageName || img.public_id === imageName
-        );
+        // Decode the URL-encoded imageName parameter
+        const decodedImageName = decodeURIComponent(imageName);
+        console.log('Decoded image name:', decodedImageName);
+
+        // Find the image to delete using multiple methods
+        let imageToDelete = product.images.find(img => {
+            // Log the current image being checked
+            console.log('Checking image:', {
+                filename: img.filename,
+                public_id: img.public_id,
+                url: img.url
+            });
+
+            // Check filename
+            if (img.filename === decodedImageName) {
+                console.log('Found match by filename');
+                return true;
+            }
+
+            // Check public_id
+            if (img.public_id === decodedImageName) {
+                console.log('Found match by public_id');
+                return true;
+            }
+
+            // Check public_id with products/ prefix
+            if (img.public_id === `products/${decodedImageName}`) {
+                console.log('Found match by public_id with prefix');
+                return true;
+            }
+
+            // If no filename or public_id, try to extract from URL
+            if (!img.public_id && img.url) {
+                const extractedId = extractPublicIdFromUrl(img.url);
+                console.log('Extracted public_id from URL:', extractedId);
+                if (extractedId === decodedImageName || extractedId === `products/${decodedImageName}`) {
+                    console.log('Found match by extracted public_id');
+                    return true;
+                }
+            }
+
+            return false;
+        });
 
         if (!imageToDelete) {
+            console.log('Image not found in product');
             return res.status(404).json({ error: 'Image not found in product' });
         }
 
-        // Delete from Cloudinary if public_id exists
-        if (imageToDelete.public_id) {
+        // Get the public_id for Cloudinary deletion
+        const publicId = imageToDelete.public_id || extractPublicIdFromUrl(imageToDelete.url);
+        console.log('Public ID for deletion:', publicId);
+
+        // Delete from Cloudinary if we have a public_id
+        if (publicId) {
             try {
-                await cloudinary.uploader.destroy(imageToDelete.public_id);
+                console.log('Attempting to delete from Cloudinary:', publicId);
+                const result = await cloudinary.uploader.destroy(publicId);
+                console.log('Cloudinary deletion result:', result);
             } catch (err) {
-                console.error(`Failed to delete image from Cloudinary: ${imageToDelete.public_id}`, err);
+                console.error('Failed to delete image from Cloudinary:', err);
+                // Continue with database update even if Cloudinary delete fails
             }
         }
 
         // Remove image from product document
-        product.images = product.images.filter(img =>
-            img.filename !== imageName && img.public_id !== imageName
-        );
-        await product.save();
+        const originalLength = product.images.length;
+        product.images = product.images.filter(img => img !== imageToDelete);
+        console.log(`Removed ${originalLength - product.images.length} images from product`);
 
-        res.status(200).json({ message: 'Image removed successfully' });
+        await product.save();
+        console.log('Product saved successfully');
+
+        res.status(200).json({ 
+            message: 'Image removed successfully',
+            removedImage: {
+                filename: imageToDelete.filename,
+                public_id: imageToDelete.public_id,
+                url: imageToDelete.url
+            }
+        });
     } catch (err) {
         console.error('Error removing image:', err);
-        res.status(500).json({ error: 'An error occurred while removing the image' });
+        res.status(500).json({ 
+            error: 'An error occurred while removing the image',
+            details: err.message
+        });
     }
 };
 

@@ -3,6 +3,14 @@ const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const app = require('../app');
 const Blog = require('../models/blogSchema');
+const fs = require('fs').promises;
+
+// Mock Cloudinary
+jest.mock('cloudinary', () => require('./mocks/cloudinary'));
+
+// Mock specific fs operations
+jest.spyOn(fs, 'unlink').mockResolvedValue(undefined);
+jest.spyOn(require('fs'), 'unlinkSync').mockReturnValue(undefined);
 
 // Mock the JWT middleware
 jest.mock('../middlewares/jwtMiddleware', () => {
@@ -36,6 +44,8 @@ beforeEach(async () => {
     // Ensure mockUser is set in app.locals before each test
     app.locals.mockUser = mockUser;
     await Blog.deleteMany({});
+    // Reset mock counters
+    jest.clearAllMocks();
 });
 
 afterAll(async () => {
@@ -222,7 +232,8 @@ describe('Blog API Endpoints', () => {
                 author: mockUser._id,
                 images: [{
                     filename: 'test-image.jpg',
-                    path: '/uploads/test-image.jpg',
+                    url: 'https://test-cloudinary-url.com/image.jpg',
+                    public_id: 'test-public-id',
                     mimetype: 'image/jpeg',
                     size: 1024
                 }]

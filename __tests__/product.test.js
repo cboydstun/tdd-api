@@ -5,6 +5,10 @@ const app = require('../app');
 const Product = require('../models/productSchema');
 const path = require('path');
 const fs = require('fs').promises;
+const slugify = require('slugify');
+
+// Mock Cloudinary
+jest.mock('cloudinary', () => require('./mocks/cloudinary'));
 
 // Mock specific fs operations for product controller
 jest.spyOn(fs, 'unlink').mockResolvedValue(undefined);
@@ -49,7 +53,6 @@ const mockUser = {
 // Valid product data for testing
 const validProductData = {
     name: 'Bounce Castle',
-    slug: 'bounce-castle',
     description: 'A fun bounce castle for kids',
     category: 'Inflatables',
     price: {
@@ -110,7 +113,7 @@ describe('Product API Endpoints', () => {
     describe('GET /api/v1/products', () => {
         it('should return all products', async () => {
             await Product.create([
-                { ...validProductData },
+                { ...validProductData, slug: slugify(validProductData.name, { lower: true }) },
                 {
                     ...validProductData,
                     name: 'Water Slide',
@@ -128,7 +131,7 @@ describe('Product API Endpoints', () => {
 
         it('should only return available products for non-authenticated users', async () => {
             await Product.create([
-                { ...validProductData },
+                { ...validProductData, slug: slugify(validProductData.name, { lower: true }) },
                 {
                     ...validProductData,
                     name: 'Water Slide',
@@ -150,7 +153,10 @@ describe('Product API Endpoints', () => {
 
     describe('GET /api/v1/products/:slug', () => {
         it('should return a product by slug', async () => {
-            const product = await Product.create(validProductData);
+            const product = await Product.create({
+                ...validProductData,
+                slug: slugify(validProductData.name, { lower: true })
+            });
 
             const response = await request(app).get(`/api/v1/products/${product.slug}`);
 
@@ -222,7 +228,10 @@ describe('Product API Endpoints', () => {
 
         it('should enforce unique slug', async () => {
             // Create first product
-            await Product.create(validProductData);
+            await Product.create({
+                ...validProductData,
+                slug: slugify(validProductData.name, { lower: true })
+            });
 
             // Try to create another product with same name (which generates same slug)
             const response = await request(app)
@@ -303,7 +312,10 @@ describe('Product API Endpoints', () => {
 
     describe('PUT /api/v1/products/:slug', () => {
         it('should update an existing product', async () => {
-            const product = await Product.create(validProductData);
+            const product = await Product.create({
+                ...validProductData,
+                slug: slugify(validProductData.name, { lower: true })
+            });
 
             const updateData = {
                 name: 'Updated Bounce Castle',
@@ -335,7 +347,10 @@ describe('Product API Endpoints', () => {
         });
 
         it('should validate updated price', async () => {
-            const product = await Product.create(validProductData);
+            const product = await Product.create({
+                ...validProductData,
+                slug: slugify(validProductData.name, { lower: true })
+            });
 
             const updateData = {
                 price: {
@@ -353,7 +368,10 @@ describe('Product API Endpoints', () => {
         });
 
         it('should validate updated dimensions', async () => {
-            const product = await Product.create(validProductData);
+            const product = await Product.create({
+                ...validProductData,
+                slug: slugify(validProductData.name, { lower: true })
+            });
 
             const updateData = {
                 dimensions: {
@@ -377,8 +395,10 @@ describe('Product API Endpoints', () => {
         it('should delete an existing product', async () => {
             const product = await Product.create({
                 ...validProductData,
+                slug: slugify(validProductData.name, { lower: true }),
                 images: [{
-                    url: '/uploads/test-image.jpg',
+                    url: 'https://test-cloudinary-url.com/image.jpg',
+                    public_id: 'test-public-id',
                     alt: 'Test Image',
                     isPrimary: true
                 }]
@@ -393,7 +413,6 @@ describe('Product API Endpoints', () => {
 
             const deletedProduct = await Product.findOne({ slug: product.slug });
             expect(deletedProduct).toBeNull();
-            expect(fs.unlink).toHaveBeenCalled();
         });
 
         it('should return 404 for deleting non-existent product', async () => {
@@ -409,8 +428,11 @@ describe('Product API Endpoints', () => {
         it('should delete an image from a product', async () => {
             const product = await Product.create({
                 ...validProductData,
+                slug: slugify(validProductData.name, { lower: true }),
                 images: [{
-                    url: '/uploads/test-image.jpg',
+                    url: 'https://test-cloudinary-url.com/image.jpg',
+                    public_id: 'test-public-id',
+                    filename: 'test-image.jpg',
                     alt: 'Test Image',
                     isPrimary: true
                 }]
@@ -425,11 +447,13 @@ describe('Product API Endpoints', () => {
 
             const updatedProduct = await Product.findOne({ slug: product.slug });
             expect(updatedProduct.images).toHaveLength(0);
-            expect(fs.unlink).toHaveBeenCalled();
         });
 
         it('should return 404 for non-existent image', async () => {
-            const product = await Product.create(validProductData);
+            const product = await Product.create({
+                ...validProductData,
+                slug: slugify(validProductData.name, { lower: true })
+            });
 
             const response = await request(app)
                 .delete(`/api/v1/products/${product.slug}/images/non-existent.jpg`)

@@ -24,7 +24,9 @@ const productSchema = new Schema({
     images: [{
         url: { type: String, required: true },
         alt: { type: String },
-        isPrimary: { type: Boolean, default: false }
+        isPrimary: { type: Boolean, default: false },
+        filename: { type: String },
+        public_id: { type: String }
     }],
     specifications: [{
         name: { type: String, required: true },
