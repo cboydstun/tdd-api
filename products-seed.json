@@ -18,12 +18,12 @@
           "isPrimary": true
         },
         {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734552864/aerial_large_25_x_15_castle_with_slide_angle_c3rsuc.jpg",
           "alt": "Castle with Slide Side View",
           "isPrimary": false
         },
         {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734552864/aerial_large_25_x_15_castle_with_slide_front_wpgygk.jpg",
           "alt": "Castle Slide Detail View",
           "isPrimary": false
         }
@@ -70,16 +70,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/eipgpncv4edtvaovx6yb.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -124,16 +114,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/tsupopd4y0voxanhw8ja.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -178,16 +158,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/in8jdevacukdhfw2sxrv.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -221,6 +191,69 @@
       ]
     },
     {
+      "name": "Junior Water Park",
+      "slug": "junior-water-park",
+      "description": "Exciting water park perfect for younger children featuring splash zones and water activities. Compact design delivers maximum fun in a manageable space.",
+      "category": "Water Slides",
+      "price": {
+        "base": 199.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734555719/1000007647_us7cdb.jpg",
+          "alt": "Junior Water Park Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734555718/1000007649_pzmven.jpg",
+          "alt": "Junior Water Park Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734555717/1000007648_nsfini.jpg",
+          "alt": "Junior Water Park Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "WET"
+        }
+      ],
+      "dimensions": {
+        "length": 16,
+        "width": 18,
+        "height": 8,
+        "unit": "feet"
+      },
+      "capacity": 6,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "21x23 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": [
+        "Splash Zones",
+        "Water Sprayers",
+        "Safety Rails",
+        "Non-Slip Surfaces"
+      ],
+      "safetyGuidelines": "Adult supervision required. Maximum 6 children at once. No running on wet surfaces. No rough play. Proper swimwear required.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F"
+      ]
+    },
+    {
       "name": "Tropical Combo",
       "slug": "tropical-combo",
       "description": "Tropical-themed combination unit featuring both dry bouncing area and water play options. Perfect for summer parties and versatile entertainment.",
@@ -236,16 +269,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/fh1s4w0p3pyysl0lrbzi.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -299,16 +322,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733554346/products/rtwuzqa7a6l56ovjmiss.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -357,16 +370,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733554346/products/mrmwo3qatme5e516zghm.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -420,16 +423,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/kpsplolnqxm2hxafqyap.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -474,16 +467,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/j2is6zp87y3bbwtqkbfq.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -525,17 +508,17 @@
       "availability": "available",
       "images": [
         {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/gcbyjq1qteoyw03v59df.png",
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_crop,ar_1:1/v1734555292/1000006225_eqc0um.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
         },
         {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_crop,ar_1:1/v1734555293/1000006223_e82up2.jpg",
           "alt": "Castle with Slide Side View",
           "isPrimary": false
         },
         {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734555292/1000006225_eqc0um.jpg",
           "alt": "Castle Slide Detail View",
           "isPrimary": false
         }
@@ -582,16 +565,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/wjpam1gzw0xyxxrj1eqm.jpg",
           "alt": "Balloon Combo with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -636,16 +609,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/ibnzriwkem5mmfh6mjwl.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -695,16 +658,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/xl6urlqmuwie0bvnqyoe.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -753,16 +706,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733554346/products/qhpxa4jm9wbic5w1qmxf.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -796,6 +739,62 @@
       ]
     },
     {
+      "name": "4500W Generator",
+      "slug": "4500w-generator",
+      "description": "Reliable 4500-watt generator perfect for powering bounce houses and party equipment. Features quiet operation and fuel efficiency.",
+      "category": "Party Equipment",
+      "price": {
+        "base": 49.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_crop,ar_1:1/v1734556997/s-l400_aesvw9.jpg",
+          "alt": "4500W Generator Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["EXTRA"]
+        },
+        {
+          "name": "Power Output",
+          "value": "4500 watts"
+        }
+      ],
+      "dimensions": {
+        "length": 2.5,
+        "width": 2,
+        "height": 2,
+        "unit": "feet"
+      },
+      "capacity": 1,
+      "ageRange": {
+        "min": 18,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "4x4 feet flat surface",
+        "powerSource": false,
+        "surfaceType": ["Grass", "Concrete", "Asphalt", "Wood"]
+      },
+      "features": [
+        "4500W Power Output",
+        "Quiet Operation",
+        "Fuel Efficient",
+        "Multiple Outlets"
+      ],
+      "safetyGuidelines": "Adult operation only. Keep away from water and flammable materials. Maintain proper ventilation. Follow provided operating instructions.",
+      "weatherRestrictions": [
+        "Keep protected from rain and moisture",
+        "Proper ventilation required"
+      ]
+    },
+    {
       "name": "Tables and Chairs",
       "slug": "tables-chairs",
       "description": "Complete seating solution including one table and six chairs. Perfect for party setup and guest accommodation.",
@@ -811,22 +810,12 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/gggcfopwjz162ehliomh.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
         {
           "name": "Type",
-          "value": ["ALL", "DRY", "WET"]
+          "value": ["EXTRA"]
         },
         {
           "name": "Set Contents",
@@ -854,6 +843,63 @@
       "weatherRestrictions": ["Secure or store indoors during high winds"]
     },
     {
+      "name": "Cotton Candy Machine",
+      "slug": "cotton-candy-machine",
+      "description": "Professional cotton candy machine perfect for creating fluffy, sweet treats. Includes blue raspberry and pink vanilla sugar flavors with paper serving cones.",
+      "category": "Concessions",
+      "price": {
+        "base": 49.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734556728/cotton_candy_u5iz3l.jpg",
+          "alt": "Cotton Candy Machine Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["EXTRA"]
+        },
+        {
+          "name": "Capacity",
+          "value": "50 servings"
+        },
+        {
+          "name": "Included Flavors",
+          "value": "Blue Raspberry, Pink Vanilla"
+        }
+      ],
+      "dimensions": {
+        "length": 2,
+        "width": 2,
+        "height": 2.5,
+        "unit": "feet"
+      },
+      "capacity": 50,
+      "ageRange": {
+        "min": 18,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "4x4 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Concrete", "Wood"]
+      },
+      "features": [
+        "Two Sugar Flavors",
+        "Paper Serving Cones",
+        "Easy Clean",
+        "Continuous Production"
+      ],
+      "safetyGuidelines": "Adult operation only. Keep away from water. Hot surfaces during operation. Follow provided operating instructions.",
+      "weatherRestrictions": ["Indoor use only", "Keep away from moisture"]
+    },
+    {
       "name": "Popcorn Machine",
       "slug": "popcorn-machine",
       "description": "Professional popcorn machine capable of serving over 100 guests. Perfect for adding a classic concession stand touch to any event.",
@@ -869,22 +915,12 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/cybljbcbc4aoh99higs7.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
         {
           "name": "Type",
-          "value": ["ALL", "DRY", "WET"]
+          "value": ["EXTRA"]
         },
         {
           "name": "Capacity",
@@ -917,6 +953,147 @@
       "weatherRestrictions": ["Indoor use only", "Keep away from water"]
     },
     {
+      "name": "Slushy Machine",
+      "slug": "slushy-machine",
+      "description": "Professional slushy machine perfect for creating frozen drinks. Features dual tanks for multiple flavors and continuous production capability.",
+      "category": "Concessions",
+      "price": {
+        "base": 99.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_crop,ar_1:1/v1734553472/Image_20241014_134726_930_yfaqel.jpg",
+          "alt": "Slushy Machine Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553471/Image_20241014_134726_795_tusthv.jpg",
+          "alt": "Slushy Machine Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553471/Image_20241014_134726_660_tkel5s.jpg",
+          "alt": "Slushy Machine Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["EXTRA"]
+        },
+        {
+          "name": "Capacity",
+          "value": "~100 servings"
+        }
+      ],
+      "dimensions": {
+        "length": 2,
+        "width": 2,
+        "height": 3,
+        "unit": "feet"
+      },
+      "capacity": 100,
+      "ageRange": {
+        "min": 18,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "4x4 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Concrete", "Wood"]
+      },
+      "features": [
+        "3 Gallon Capacity Tank",
+        "Continuous Production",
+        "Easy Clean",
+        "Serving Cups"
+      ],
+      "safetyGuidelines": "Adult operation only. Keep away from water. Follow provided operating instructions.",
+      "weatherRestrictions": ["Indoor use only", "Keep away from water"]
+    },
+    {
+      "name": "Margarita Machine",
+      "slug": "margarita-machine",
+      "description": "Professional frozen margarita machine perfect for adult parties. Features high-capacity tank and consistent frozen drink production.",
+      "category": "Concessions",
+      "price": {
+        "base": 99.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_crop,ar_1:1/v1734553319/1000007636_jhrpow.jpg",
+          "alt": "Margarita Machine Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553319/1000007632_wjtbkp.jpg",
+          "alt": "Margarita Machine Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553319/1000007631_zhicwe.jpg",
+          "alt": "Margarita Machine Detail View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553318/1000007633_dnvqhy.jpg",
+          "alt": "Margarita Machine Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553318/1000007635_h3i34c.jpg",
+          "alt": "Margarita Machine Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553316/1000007634_kapj8p.jpg",
+          "alt": "Margarita Machine Detail View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["EXTRA"]
+        },
+        {
+          "name": "Capacity",
+          "value": "~80 servings"
+        }
+      ],
+      "dimensions": {
+        "length": 2,
+        "width": 2,
+        "height": 3,
+        "unit": "feet"
+      },
+      "capacity": 80,
+      "ageRange": {
+        "min": 21,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "4x4 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Concrete", "Wood"]
+      },
+      "features": [
+        "3 Gallon Capacity Tank",
+        "Consistent Freeze",
+        "Easy Clean",
+        "Serving Cups"
+      ],
+      "safetyGuidelines": "Adult operation only (21+). Keep away from water. Follow provided operating instructions. Valid ID required for rental.",
+      "weatherRestrictions": ["Indoor use only", "Keep away from water"]
+    },
+    {
       "name": "Snow Cone Machine",
       "slug": "snow-cone-machine",
       "description": "Refreshing snow cone machine perfect for summer events. Produces approximately 50 servings of fluffy shaved ice for sweet treats.",
@@ -932,22 +1109,12 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/hunacmolrw05vcbwiddx.png",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [
         {
           "name": "Type",
-          "value": ["ALL", "DRY", "WET"]
+          "value": ["EXTRA"]
         },
         {
           "name": "Capacity",
@@ -998,16 +1165,6 @@
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/zr58ftg7pbp0hjg9vkpy.jpg",
           "alt": "Castle with Slide Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Side+View",
-          "alt": "Castle with Slide Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://placehold.co/800x600?text=Castle+Slide+Detail",
-          "alt": "Castle Slide Detail View",
-          "isPrimary": false
         }
       ],
       "specifications": [

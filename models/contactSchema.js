@@ -48,15 +48,11 @@ const contactSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    pettingZoo: {
+    margaritaMachine: {
         type: Boolean,
         default: false
     },
-    ponyRides: {
-        type: Boolean,
-        default: false
-    },
-    dj: {
+    slushyMachine: {
         type: Boolean,
         default: false
     },
