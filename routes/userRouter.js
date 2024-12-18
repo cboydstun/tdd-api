@@ -10,7 +10,7 @@ const logger = require('../utils/logger');
 // define data routes
 router.get('/', authMiddleware, userController.getAllUsers);
 router.get('/:id', authMiddleware, userController.getUserById);
-router.post('/', userController.createUser); // PUBLIC
+router.post('/', authMiddleware, userController.createUser); // PRIVATE
 router.put('/:id', authMiddleware, userController.updateUser);
 router.delete('/:id', authMiddleware, userController.deleteUser);
 
