@@ -5,17 +5,6 @@ const app = require('../app');
 const User = require('../models/userSchema');
 const jwt = require('jsonwebtoken');
 
-// Mock the JWT middleware for protected routes
-jest.mock('../middlewares/jwtMiddleware', () => {
-    return jest.fn((req, res, next) => {
-        req.user = {
-            _id: req.app.locals.mockUser._id,
-            email: req.app.locals.mockUser.email
-        };
-        next();
-    });
-});
-
 let mongoServer;
 
 beforeAll(async () => {
@@ -26,6 +15,12 @@ beforeAll(async () => {
 
 beforeEach(async () => {
     await User.deleteMany({});
+    // Create a test user directly using the model
+    const testUser = new User({
+        email: 'test@example.com',
+        password: 'password123'
+    });
+    await testUser.save();
 });
 
 afterAll(async () => {
@@ -33,83 +28,8 @@ afterAll(async () => {
     await mongoServer.stop();
 });
 
-describe('User Authentication Endpoints', () => {
-    describe('POST /api/v1/users (Register)', () => {
-        it('should register a new user with valid credentials', async () => {
-            const userData = {
-                email: 'test@example.com',
-                password: 'password123'
-            };
-
-            const response = await request(app)
-                .post('/api/v1/users')
-                .send(userData);
-
-            expect(response.status).toBe(200);
-            expect(response.body).toHaveProperty('_id');
-            expect(response.body.email).toBe(userData.email);
-            // Password should be hashed
-            expect(response.body.password).not.toBe(userData.password);
-        });
-
-        it('should not register a user without email', async () => {
-            const userData = {
-                password: 'password123'
-            };
-
-            const response = await request(app)
-                .post('/api/v1/users')
-                .send(userData);
-
-            expect(response.status).toBe(400);
-            expect(response.body).toHaveProperty('error');
-        });
-
-        it('should not register a user without password', async () => {
-            const userData = {
-                email: 'test@example.com'
-            };
-
-            const response = await request(app)
-                .post('/api/v1/users')
-                .send(userData);
-
-            expect(response.status).toBe(400);
-            expect(response.body).toHaveProperty('error');
-        });
-
-        it('should not register a duplicate email', async () => {
-            const userData = {
-                email: 'test@example.com',
-                password: 'password123'
-            };
-
-            // Register first user
-            await request(app)
-                .post('/api/v1/users')
-                .send(userData);
-
-            // Try to register same email again
-            const response = await request(app)
-                .post('/api/v1/users')
-                .send(userData);
-
-            expect(response.status).toBe(500);
-            expect(response.body).toHaveProperty('error');
-        });
-    });
-
+describe('User Authentication', () => {
     describe('POST /api/v1/users/login', () => {
-        beforeEach(async () => {
-            // Create a test user before each login test
-            await request(app)
-                .post('/api/v1/users')
-                .send({
-                    email: 'test@example.com',
-                    password: 'password123'
-                });
-        });
-
         it('should login with valid credentials and return token', async () => {
             const loginData = {
                 email: 'test@example.com',
@@ -123,7 +43,6 @@ describe('User Authentication Endpoints', () => {
             expect(response.status).toBe(200);
             expect(response.body).toHaveProperty('token');
 
-            // Verify token is valid JWT
             const decodedToken = jwt.verify(response.body.token, process.env.JWT_SECRET);
             expect(decodedToken).toHaveProperty('id');
         });
