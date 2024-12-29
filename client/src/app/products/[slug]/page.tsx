@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import React, { use } from 'react';
 import { Product } from "../../../types/product";
 import { API_BASE_URL, API_ROUTES } from "../../../config/constants";
 import ContactForm from "../../../components/ContactForm";
@@ -17,10 +18,9 @@ async function getProduct(slug: string): Promise<Product> {
   return res.json();
 }
 
-export async function generateMetadata(
-  { params }: { params: { slug: string } }
-): Promise<Metadata> {
-  const product = await getProduct(params.slug);
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProduct(slug);
 
   const getSpecValue = (name: string) => {
     const spec = product.specifications.find(s => s.name.toLowerCase() === name.toLowerCase());
@@ -43,8 +43,9 @@ export async function generateMetadata(
   };
 }
 
-export default async function ProductDetail({ params }: { params: { slug: string } }) {
-  const product = await getProduct(params.slug);
+export default async function ProductDetail({ params }: { params: { slug: string } }): Promise<React.ReactElement> {
+  const { slug } = await params;
+  const product = await getProduct(slug);
 
   const getSpecValue = (name: string) => {
     const spec = product.specifications.find(s => s.name.toLowerCase() === name.toLowerCase());

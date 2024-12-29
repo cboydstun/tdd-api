@@ -18,6 +18,18 @@ export interface ApiError {
   errors?: Record<string, string[]>;
 }
 
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export const login = async (credentials: LoginCredentials) => {
+  const response = await api.post<{ token: string }>('/api/v1/users/login', credentials);
+  const token = response.data.token;
+  setAuthToken(token);
+  return response.data;
+};
+
 // Request interceptor for API calls
 api.interceptors.request.use(
   (config) => {
