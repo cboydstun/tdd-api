@@ -1,67 +1,164 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 
 interface Contact {
   id: string;
-  name: string;
+  bouncer: string;
   email: string;
-  phone: string;
-  message: string;
-  status: 'new' | 'in-progress' | 'completed';
+  phone?: string;
+  partyDate: string;
+  partyZipCode: string;
+  message?: string;
+  confirmed: boolean;
   createdAt: string;
+  tablesChairs?: boolean;
+  generator?: boolean;
+  popcornMachine?: boolean;
+  cottonCandyMachine?: boolean;
+  snowConeMachine?: boolean;
+  margaritaMachine?: boolean;
+  slushyMachine?: boolean;
+  overnight?: boolean;
+  sourcePage: string;
 }
 
 export default function AdminContacts() {
-  const [contacts, setContacts] = useState<Contact[]>([
-    {
-      id: '1',
-      name: 'John Doe',
-      email: 'john@example.com',
-      phone: '(555) 123-4567',
-      message: 'Interested in booking a bounce house for next weekend.',
-      status: 'new',
-      createdAt: '2024-01-20T10:30:00Z',
-    },
-    {
-      id: '2',
-      name: 'Jane Smith',
-      email: 'jane@example.com',
-      phone: '(555) 987-6543',
-      message: 'Looking for party package options for a birthday.',
-      status: 'in-progress',
-      createdAt: '2024-01-19T15:45:00Z',
-    },
-    {
-      id: '3',
-      name: 'Mike Johnson',
-      email: 'mike@example.com',
-      phone: '(555) 456-7890',
-      message: 'Need information about water slide rentals.',
-      status: 'completed',
-      createdAt: '2024-01-18T09:15:00Z',
-    },
-  ]);
+  const router = useRouter();
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleUpdateStatus = async (id: string, newStatus: 'new' | 'in-progress' | 'completed') => {
-    setIsLoading(true);
-    // TODO: Implement actual API call to update status
-    setContacts(contacts.map(contact => 
-      contact.id === id ? { ...contact, status: newStatus } : contact
-    ));
-    setIsLoading(false);
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const token = localStorage.getItem('auth_token');
+
+        const response = await fetch('http://localhost:8080/api/v1/contacts', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch contacts');
+        }
+
+        const data = await response.json();
+        setContacts(data.map((contact: any) => ({
+          id: contact._id,
+          bouncer: contact.bouncer,
+          email: contact.email,
+          phone: contact.phone,
+          partyDate: contact.partyDate,
+          partyZipCode: contact.partyZipCode,
+          message: contact.message,
+          confirmed: contact.confirmed,
+          createdAt: contact.createdAt,
+          tablesChairs: contact.tablesChairs,
+          generator: contact.generator,
+          popcornMachine: contact.popcornMachine,
+          cottonCandyMachine: contact.cottonCandyMachine,
+          snowConeMachine: contact.snowConeMachine,
+          margaritaMachine: contact.margaritaMachine,
+          slushyMachine: contact.slushyMachine,
+          overnight: contact.overnight,
+          sourcePage: contact.sourcePage
+        })));
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'An error occurred');
+        console.error('Error fetching contacts:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchContacts();
+  }, [router]);
+
+  const handleUpdateStatus = async (id: string, confirmed: boolean) => {
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem('auth_token');
+      
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      const response = await fetch(`http://localhost:8080/api/v1/contacts/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ confirmed })
+      });
+      
+      if (response.status === 401) {
+        localStorage.removeItem('auth_token');
+        router.push('/login');
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error('Failed to update status');
+      }
+      
+      setContacts(contacts.map(contact => 
+        contact.id === id ? { ...contact, confirmed } : contact
+      ));
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to update status');
+      console.error('Error updating status:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this contact request?')) {
       return;
     }
-    setIsLoading(true);
-    // TODO: Implement actual delete API call
-    setContacts(contacts.filter(contact => contact.id !== id));
-    setIsLoading(false);
+    
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem('auth_token');
+      
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      const response = await fetch(`http://localhost:8080/api/v1/contacts/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.status === 401) {
+        localStorage.removeItem('auth_token');
+        router.push('/login');
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error('Failed to delete contact');
+      }
+      
+      setContacts(contacts.filter(contact => contact.id !== id));
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to delete contact');
+      console.error('Error deleting contact:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -74,18 +171,19 @@ export default function AdminContacts() {
     });
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'new':
-        return 'bg-blue-100 text-blue-800';
-      case 'in-progress':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
+  const getStatusColor = (confirmed: boolean) => {
+    return confirmed 
+      ? 'bg-green-100 text-green-800'
+      : 'bg-yellow-100 text-yellow-800';
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner className="w-8 h-8" />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -96,7 +194,21 @@ export default function AdminContacts() {
             A list of all contact requests including customer details and current status.
           </p>
         </div>
+        <div className="mt-4 sm:ml-16 sm:mt-0">
+          <Link
+            href="/admin/contacts/new"
+            className="block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            New Contact
+          </Link>
+        </div>
       </div>
+      
+      {error && (
+        <div className="mt-4 p-4 bg-red-50 text-red-700 rounded-md">
+          {error}
+        </div>
+      )}
       
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -106,16 +218,16 @@ export default function AdminContacts() {
                 <thead className="bg-gray-50">
                   <tr>
                     <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                      Contact Info
+                      Bouncer Info
                     </th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Message
+                      Party Details
                     </th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Status
+                      Extras
                     </th>
                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Date
+                      Confirmed
                     </th>
                     <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                       <span className="sr-only">Actions</span>
@@ -126,31 +238,49 @@ export default function AdminContacts() {
                   {contacts.map((contact) => (
                     <tr key={contact.id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                        <div className="font-medium text-gray-900">{contact.name}</div>
+                        <div className="font-medium text-gray-900">{contact.bouncer}</div>
                         <div className="text-gray-500">{contact.email}</div>
                         <div className="text-gray-500">{contact.phone}</div>
                       </td>
                       <td className="px-3 py-4 text-sm text-gray-500">
-                        <div className="max-w-xs overflow-hidden text-ellipsis">
-                          {contact.message}
-                        </div>
+                        <div>Date: {new Date(contact.partyDate).toLocaleDateString()}</div>
+                        <div>Zip: {contact.partyZipCode}</div>
+                        {contact.message && (
+                          <div className="max-w-xs overflow-hidden text-ellipsis">
+                            Note: {contact.message}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-3 py-4 text-sm text-gray-500">
+                        <ul>
+                          {contact.tablesChairs && <li>Tables & Chairs</li>}
+                          {contact.generator && <li>Generator</li>}
+                          {contact.popcornMachine && <li>Popcorn Machine</li>}
+                          {contact.cottonCandyMachine && <li>Cotton Candy Machine</li>}
+                          {contact.snowConeMachine && <li>Snow Cone Machine</li>}
+                          {contact.margaritaMachine && <li>Margarita Machine</li>}
+                          {contact.slushyMachine && <li>Slushy Machine</li>}
+                          {contact.overnight && <li>Overnight</li>}
+                        </ul>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <select
-                          value={contact.status}
-                          onChange={(e) => handleUpdateStatus(contact.id, e.target.value as 'new' | 'in-progress' | 'completed')}
-                          className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${getStatusColor(contact.status)}`}
+                          value={contact.confirmed.toString()}
+                          onChange={(e) => handleUpdateStatus(contact.id, e.target.value === 'true')}
+                          className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${getStatusColor(contact.confirmed)}`}
                           disabled={isLoading}
                         >
-                          <option value="new">New</option>
-                          <option value="in-progress">In Progress</option>
-                          <option value="completed">Completed</option>
+                          <option value="false">Pending</option>
+                          <option value="true">Confirmed</option>
                         </select>
                       </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {formatDate(contact.createdAt)}
-                      </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                        <Link
+                          href={`/admin/contacts/${contact.id}/edit`}
+                          className="text-blue-600 hover:text-blue-900 mr-4"
+                        >
+                          Edit
+                        </Link>
                         <button
                           onClick={() => handleDelete(contact.id)}
                           className="text-red-600 hover:text-red-900"
