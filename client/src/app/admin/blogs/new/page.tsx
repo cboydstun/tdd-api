@@ -2,43 +2,42 @@
 
 import { useRouter } from 'next/navigation';
 import BlogForm from '../BlogForm';
+import api from '@/utils/api';
 
-interface BlogFormData {
-  title: string;
-  content: string;
-  slug: string;
-  status: 'draft' | 'published';
-}
-
-export default function NewBlogPage() {
+export default function NewBlog() {
   const router = useRouter();
 
-  const handleSubmit = async (data: BlogFormData) => {
-    // TODO: Implement actual API call to create blog
-    console.log('Creating blog:', data);
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Redirect back to blogs list
-    router.push('/admin/blogs');
+  const handleSubmit = async (data: any) => {
+    try {
+      // Convert arrays to comma-separated strings
+      const formattedData = {
+        ...data,
+        categories: Array.isArray(data.categories) ? data.categories.join(',') : data.categories,
+        tags: Array.isArray(data.tags) ? data.tags.join(',') : data.tags
+      };
+      
+      await api.post('/api/v1/blogs', formattedData);
+      router.push('/admin/blogs');
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Failed to create blog post');
+    }
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-          Create New Blog Post
-        </h2>
-        <p className="mt-2 text-sm text-gray-500">
-          Create a new blog post by filling out the form below.
-        </p>
-      </div>
-
-      <div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
-        <div className="px-4 py-6 sm:p-8">
-          <BlogForm onSubmit={handleSubmit} />
+    <div className="py-10 px-4 sm:px-6 lg:px-8">
+      <div className="sm:flex sm:items-center">
+        <div className="sm:flex-auto">
+          <h1 className="text-2xl font-semibold leading-6 text-gray-900">Create New Blog Post</h1>
+          <p className="mt-2 text-sm text-gray-700">
+            Fill in the details below to create a new blog post.
+          </p>
         </div>
+      </div>
+      <div className="mt-8">
+        <BlogForm onSubmit={handleSubmit} />
       </div>
     </div>
   );

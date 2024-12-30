@@ -1,52 +1,105 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import api from '@/utils/api';
 
 interface Blog {
-  id: string;
+  _id: string;
   title: string;
   slug: string;
-  publishedAt: string;
-  status: 'draft' | 'published';
+  author: string;
+  introduction: string;
+  body: string;
+  conclusion: string;
+  images: Array<{
+    filename: string;
+    url: string;
+    public_id: string;
+    mimetype?: string;
+    size?: number;
+  }>;
+  excerpt?: string;
+  featuredImage?: string;
+  categories: string[];
+  tags: string[];
+  status: 'draft' | 'published' | 'archived';
+  publishDate?: Date;
+  lastModified?: Date;
+  meta: {
+    views: number;
+    likes: number;
+    shares: number;
+  };
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    focusKeyword?: string;
+  };
+  readTime?: number;
+  isFeature: boolean;
 }
 
 export default function AdminBlogs() {
-  const [blogs, setBlogs] = useState<Blog[]>([
-    {
-      id: '1',
-      title: 'Top 10 Party Planning Tips',
-      slug: 'top-10-party-planning-tips',
-      publishedAt: '2024-01-15',
-      status: 'published',
-    },
-    {
-      id: '2',
-      title: 'How to Choose the Perfect Bounce House',
-      slug: 'how-to-choose-bounce-house',
-      publishedAt: '2024-01-10',
-      status: 'published',
-    },
-    {
-      id: '3',
-      title: 'Summer Party Ideas',
-      slug: 'summer-party-ideas',
-      publishedAt: '',
-      status: 'draft',
-    },
-  ]);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>('');
 
-  const handleDelete = async (id: string) => {
+  // Fetch blogs on component mount
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setIsLoading(true);
+        const response = await api.get('/api/v1/blogs');
+        setBlogs(response.data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  const handleDelete = async (slug: string) => {
     if (!window.confirm('Are you sure you want to delete this blog post?')) {
       return;
     }
-    setIsLoading(true);
-    // TODO: Implement actual delete API call
-    setBlogs(blogs.filter(blog => blog.id !== id));
-    setIsLoading(false);
+    
+    try {
+      setIsLoading(true);
+      await api.delete(`/api/v1/blogs/${slug}`);
+      setBlogs(blogs.filter(blog => blog.slug !== slug));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete blog');
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  if (isLoading && blogs.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-48">
+        <LoadingSpinner className="w-8 h-8" />
+      </div>
+    );
+  }
+
+  if (error && blogs.length === 0) {
+    return (
+      <div className="text-center text-red-600 p-4">
+        <p>Error: {error}</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="mt-2 text-indigo-600 hover:text-indigo-900"
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -66,6 +119,12 @@ export default function AdminBlogs() {
           </Link>
         </div>
       </div>
+      
+      {error && (
+        <div className="mt-4 p-4 bg-red-50 text-red-600 rounded-md">
+          Error: {error}
+        </div>
+      )}
       
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -90,29 +149,31 @@ export default function AdminBlogs() {
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {blogs.map((blog) => (
-                    <tr key={blog.id}>
+                    <tr key={blog._id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                         {blog.title}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                          blog.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                          blog.status === 'published' ? 'bg-green-100 text-green-800' : 
+                          blog.status === 'draft' ? 'bg-yellow-100 text-yellow-800' : 
+                          'bg-gray-100 text-gray-800'
                         }`}>
                           {blog.status.charAt(0).toUpperCase() + blog.status.slice(1)}
                         </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {blog.publishedAt || 'Not published'}
+                        {blog.publishDate ? new Date(blog.publishDate).toLocaleDateString() : 'Not published'}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <Link
-                          href={`/admin/blogs/${blog.id}/edit`}
+                          href={`/admin/blogs/${blog.slug}/edit`}
                           className="text-indigo-600 hover:text-indigo-900 mr-4"
                         >
                           Edit
                         </Link>
                         <button
-                          onClick={() => handleDelete(blog.id)}
+                          onClick={() => handleDelete(blog.slug)}
                           className="text-red-600 hover:text-red-900"
                           disabled={isLoading}
                         >

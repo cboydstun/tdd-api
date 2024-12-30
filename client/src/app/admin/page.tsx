@@ -1,13 +1,37 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import api from '@/utils/api';
 
 export default function AdminDashboard() {
-  const stats = [
-    { name: 'Total Blogs', stat: '24', href: '/admin/blogs' },
-    { name: 'Total Products', stat: '12', href: '/admin/products' },
-    { name: 'Contact Requests', stat: '8', href: '/admin/contacts' },
-  ];
+  const [stats, setStats] = useState([
+    { name: 'Total Blogs', stat: '...', href: '/admin/blogs' },
+    { name: 'Total Products', stat: '...', href: '/admin/products' },
+    { name: 'Contact Requests', stat: '...', href: '/admin/contacts' },
+  ]);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const [blogsRes, productsRes, contactsRes] = await Promise.all([
+          api.get('/api/v1/blogs'),
+          api.get('/api/v1/products'),
+          api.get('/api/v1/contacts'),
+        ]);
+
+        setStats([
+          { name: 'Total Blogs', stat: String(blogsRes.data.length), href: '/admin/blogs' },
+          { name: 'Total Products', stat: String(productsRes.data.length), href: '/admin/products' },
+          { name: 'Contact Requests', stat: String(contactsRes.data.length), href: '/admin/contacts' },
+        ]);
+      } catch (error) {
+        console.error('Failed to fetch stats:', error);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   return (
     <div>

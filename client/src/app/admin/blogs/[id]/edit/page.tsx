@@ -1,56 +1,109 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import BlogForm from '../../BlogForm';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import api from '@/utils/api';
 
-interface BlogFormData {
-  title: string;
-  content: string;
-  slug: string;
-  status: 'draft' | 'published';
+interface PageProps {
+  params: Promise<{
+    id: string;
+  }>;
 }
 
-export default function EditBlogPage({ params }: { params: { id: string } }) {
+export default function EditBlog({ params }: PageProps) {
   const router = useRouter();
+  const [blog, setBlog] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+  const resolvedParams = React.use(params);
 
-  // TODO: Replace with actual API call to fetch blog data
-  const mockBlogData: BlogFormData = {
-    title: 'Sample Blog Post',
-    content: 'This is a sample blog post content.',
-    slug: 'sample-blog-post',
-    status: 'draft',
+  useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        const response = await api.get(`/api/v1/blogs/${resolvedParams.id}`);
+        // Ensure arrays are initialized even if null in response
+        const formattedBlog = {
+          ...response.data,
+          categories: response.data.categories || [],
+          tags: response.data.tags || [],
+          meta: response.data.meta || {
+            views: 0,
+            likes: 0,
+            shares: 0
+          }
+        };
+        setBlog(formattedBlog);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlog();
+  }, [resolvedParams.id]);
+
+  const handleSubmit = async (data: any) => {
+    try {
+      // Convert arrays to comma-separated strings
+      const formattedData = {
+        ...data,
+        categories: Array.isArray(data.categories) ? data.categories.join(',') : data.categories,
+        tags: Array.isArray(data.tags) ? data.tags.join(',') : data.tags
+      };
+
+      await api.put(`/api/v1/blogs/${resolvedParams.id}`, formattedData);
+      router.push('/admin/blogs');
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Failed to update blog post');
+    }
   };
 
-  const handleSubmit = async (data: BlogFormData) => {
-    // TODO: Implement actual API call to update blog
-    console.log('Updating blog:', params.id, data);
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Redirect back to blogs list
-    router.push('/admin/blogs');
-  };
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-48">
+        <LoadingSpinner className="w-8 h-8" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center text-red-600 p-4">
+        <p>Error: {error}</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="mt-2 text-indigo-600 hover:text-indigo-900"
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-          Edit Blog Post
-        </h2>
-        <p className="mt-2 text-sm text-gray-500">
-          Update the blog post by modifying the form below.
-        </p>
+    <div className="py-10 px-4 sm:px-6 lg:px-8">
+      <div className="sm:flex sm:items-center">
+        <div className="sm:flex-auto">
+          <h1 className="text-2xl font-semibold leading-6 text-gray-900">Edit Blog Post</h1>
+          <p className="mt-2 text-sm text-gray-700">
+            Make changes to the blog post below.
+          </p>
+        </div>
       </div>
-
-      <div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
-        <div className="px-4 py-6 sm:p-8">
+      <div className="mt-8">
+        {blog && (
           <BlogForm 
-            initialData={mockBlogData}
+            initialData={blog}
             onSubmit={handleSubmit}
             isEdit={true}
           />
-        </div>
+        )}
       </div>
     </div>
   );
