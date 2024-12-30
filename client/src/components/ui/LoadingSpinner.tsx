@@ -1,4 +1,8 @@
-export function LoadingSpinner({ className = 'w-5 h-5' }: { className?: string }) {
+interface LoadingSpinnerProps {
+  className?: string;
+}
+
+export function LoadingSpinner({ className = 'w-4 h-4' }: LoadingSpinnerProps) {
   return (
     <svg
       className={`animate-spin ${className}`}

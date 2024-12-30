@@ -1,30 +1,119 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ProductForm from '../ProductForm';
+import api from '@/utils/api';
 
 interface ProductFormData {
   name: string;
-  price: number;
   description: string;
   category: string;
-  status: 'active' | 'inactive';
-  imageUrl?: string;
+  price: {
+    base: number;
+    currency: string;
+  };
+  dimensions: {
+    length: number;
+    width: number;
+    height: number;
+    unit: 'feet' | 'meters' | 'inches';
+  };
+  capacity: number;
+  ageRange: {
+    min: number;
+    max: number;
+  };
+  setupRequirements: {
+    space: string;
+    powerSource: boolean;
+    surfaceType: string[];
+  };
+  safetyGuidelines: string;
+  rentalDuration?: 'hourly' | 'half-day' | 'full-day' | 'weekend';
+  availability?: 'available' | 'rented' | 'maintenance' | 'retired';
+  features?: string[];
+  weatherRestrictions?: string[];
+  additionalServices?: Array<{
+    name: string;
+    price: number;
+  }>;
 }
 
 export default function NewProductPage() {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (data: ProductFormData) => {
-    // TODO: Implement actual API call to create product
-    console.log('Creating product:', data);
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Redirect back to products list
-    router.push('/admin/products');
+  const handleSubmit = async (formData: ProductFormData) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const token = localStorage.getItem('auth_token');
+      if (!token) {
+        setError('Authentication required. Please log in.');
+        return;
+      }
+
+      // Prepare the product data with required fields
+      const productData = {
+        ...formData,
+        price: {
+          base: formData.price.base,
+          currency: formData.price.currency || 'USD'
+        },
+        availability: formData.availability || 'available',
+        rentalDuration: formData.rentalDuration || 'full-day',
+        setupRequirements: {
+          space: formData.setupRequirements.space,
+          powerSource: formData.setupRequirements.powerSource || true,
+          surfaceType: formData.setupRequirements.surfaceType || []
+        },
+        features: formData.features || [],
+        weatherRestrictions: formData.weatherRestrictions || [],
+        additionalServices: formData.additionalServices || []
+      };
+
+      await api.post('/api/v1/products', productData);
+      router.push('/admin/products');
+    } catch (err) {
+      console.error('Error creating product:', err);
+      if (err instanceof Error) {
+        if (err.message.includes('401')) {
+          setError('Authentication failed. Please log in again.');
+        } else {
+          setError(err.message);
+        }
+      } else {
+        setError('Failed to create product');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  if (error) {
+    return (
+      <div className="rounded-md bg-red-50 p-4">
+        <div className="flex">
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-red-800">{error}</h3>
+            {error.toLowerCase().includes('log in') && (
+              <div className="mt-2">
+                <button
+                  onClick={() => router.push('/login')}
+                  className="text-sm font-medium text-red-800 underline hover:text-red-600"
+                >
+                  Go to Login
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -39,7 +128,9 @@ export default function NewProductPage() {
 
       <div className="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
         <div className="px-4 py-6 sm:p-8">
-          <ProductForm onSubmit={handleSubmit} />
+          <ProductForm 
+            onSubmit={handleSubmit}
+          />
         </div>
       </div>
     </div>
