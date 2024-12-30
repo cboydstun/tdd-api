@@ -14,7 +14,7 @@ interface ProductFiltersProps {
 export function ProductFilters({ products, onFilteredProducts }: ProductFiltersProps) {
   const [sortAscending, setSortAscending] = useState(false);
   const [selectedType, setSelectedType] = useState<FilterType>('ALL');
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
   const [minSize, setMinSize] = useState<number>(0);
 

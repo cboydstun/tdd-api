@@ -13,21 +13,22 @@ const ProductCarousel = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
 
-  // Number of items to show per page based on screen size
-  const getItemsPerPage = () => {
-    if (window.innerWidth >= 1024) return 3; // lg
-    if (window.innerWidth >= 768) return 2; // md
-    return 1; // mobile
-  };
-
-  const [itemsPerPage, setItemsPerPage] = useState(getItemsPerPage());
+  // Initialize with mobile view for server-side rendering
+  const [itemsPerPage, setItemsPerPage] = useState(1);
 
   useEffect(() => {
+    // Update items per page based on window width
     const handleResize = () => {
-      setItemsPerPage(getItemsPerPage());
+      if (window.innerWidth >= 1024) setItemsPerPage(3); // lg
+      else if (window.innerWidth >= 768) setItemsPerPage(2); // md
+      else setItemsPerPage(1); // mobile
       setCurrentPage(0); // Reset to first page on resize
     };
 
+    // Initial check after component mount
+    handleResize();
+
+    // Update on window resize
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
