@@ -4,18 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import api from '@/utils/api';
-
-interface Product {
-  _id: string;
-  name: string;
-  price: {
-    base: number;
-    currency: string;
-  };
-  category: string;
-  availability: 'available' | 'rented' | 'maintenance' | 'retired';
-  slug: string;
-}
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
+import { Product } from '@/types/product';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -27,7 +17,7 @@ export default function AdminProducts() {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const response = await api.get('/api/v1/products');
+        const response = await api.get(`${API_BASE_URL}${API_ROUTES.PRODUCTS}`);
         setProducts(response.data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
@@ -52,7 +42,7 @@ export default function AdminProducts() {
         return;
       }
 
-      await api.delete(`/api/v1/products/${slug}`);
+      await api.delete(`${API_BASE_URL}${API_ROUTES.PRODUCTS}/${slug}`);
       setProducts(products.filter(product => product.slug !== slug));
     } catch (err) {
       console.error('Delete error:', err);
@@ -66,7 +56,7 @@ export default function AdminProducts() {
     }
   };
 
-  const formatPrice = (price: { base: number; currency: string }) => {
+  const formatPrice = (price: Product['price']) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: price.currency,

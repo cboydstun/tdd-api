@@ -89,7 +89,7 @@ export function ProductsContent() {
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center">
-        <LoadingSpinner color="#3B82F6" size={60} />
+        <LoadingSpinner />
       </div>
     );
   }

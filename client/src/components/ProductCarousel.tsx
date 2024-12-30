@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { getApiUrl } from "../utils/env";
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
 import { Product, Specification } from "../types/product";
 import { LoadingSpinner } from "./ui/LoadingSpinner";
 
@@ -12,7 +12,6 @@ const ProductCarousel = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
-  const API_URL = getApiUrl();
 
   // Number of items to show per page based on screen size
   const getItemsPerPage = () => {
@@ -36,7 +35,7 @@ const ProductCarousel = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/v1/products`);
+        const response = await fetch(`${API_BASE_URL}${API_ROUTES.PRODUCTS}`);
         if (!response.ok) throw new Error("Failed to fetch products");
         const data = await response.json();
 
@@ -58,12 +57,12 @@ const ProductCarousel = () => {
     };
 
     fetchProducts();
-  }, [API_URL]);
+  }, [API_BASE_URL]);
 
   if (loading)
     return (
       <div className="w-full bg-[#663399] py-12 rounded-b-xl">
-        <LoadingSpinner color="#ffffff" />
+        <LoadingSpinner />
       </div>
     );
   if (error)

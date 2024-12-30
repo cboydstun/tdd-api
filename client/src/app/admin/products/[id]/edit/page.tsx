@@ -6,6 +6,7 @@ import ProductForm from '../../ProductForm';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import type { ProductFormData } from '../../ProductForm';
 import api from '@/utils/api';
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
 
 interface Product extends ProductFormData {
   slug: string;
@@ -29,7 +30,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           return;
         }
 
-        const response = await api.get(`/api/v1/products/${unwrappedParams.id}`);
+        const response = await api.get(`${API_BASE_URL}${API_ROUTES.PRODUCTS}/${unwrappedParams.id}`);
         setProduct(response.data);
       } catch (err) {
         console.error('Fetch error:', err);
@@ -57,7 +58,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         return;
       }
 
-      await api.put(`/api/v1/products/${product?.slug}`, {
+      await api.put(`${API_BASE_URL}${API_ROUTES.PRODUCTS}/${product?.slug}`, {
         ...formData,
         slug: product?.slug, // Preserve the slug from the original product
       });

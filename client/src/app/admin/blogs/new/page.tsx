@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import BlogForm from '../BlogForm';
 import api from '@/utils/api';
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
 
 export default function NewBlog() {
   const router = useRouter();
@@ -16,7 +17,7 @@ export default function NewBlog() {
         tags: Array.isArray(data.tags) ? data.tags.join(',') : data.tags
       };
       
-      await api.post('/api/v1/blogs', formattedData);
+      await api.post(`${API_BASE_URL}${API_ROUTES.BLOGS}`, formattedData);
       router.push('/admin/blogs');
     } catch (error) {
       if (error instanceof Error) {

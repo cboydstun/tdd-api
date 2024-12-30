@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
 
 interface ContactFormData {
   bouncer: string;
@@ -56,7 +57,7 @@ export default function EditContact({ params }: PageProps) {
       try {
         setIsLoading(true);
         const token = localStorage.getItem('auth_token');
-        const response = await fetch(`http://localhost:8080/api/v1/contacts/${resolvedParams.id}`, {
+        const response = await fetch(`${API_BASE_URL}${API_ROUTES.CONTACTS}/${resolvedParams.id}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -108,7 +109,7 @@ export default function EditContact({ params }: PageProps) {
         return;
       }
 
-      const response = await fetch(`http://localhost:8080/api/v1/contacts/${resolvedParams.id}`, {
+      const response = await fetch(`${API_BASE_URL}${API_ROUTES.CONTACTS}/${resolvedParams.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ProductForm from '../ProductForm';
 import api from '@/utils/api';
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
 
 interface ProductFormData {
   name: string;
@@ -75,7 +76,7 @@ export default function NewProductPage() {
         additionalServices: formData.additionalServices || []
       };
 
-      await api.post('/api/v1/products', productData);
+      await api.post(`${API_BASE_URL}${API_ROUTES.PRODUCTS}`, productData);
       router.push('/admin/products');
     } catch (err) {
       console.error('Error creating product:', err);

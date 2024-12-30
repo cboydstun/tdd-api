@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import BlogForm from '../../BlogForm';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import api from '@/utils/api';
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
 
 interface PageProps {
   params: Promise<{
@@ -22,7 +23,7 @@ export default function EditBlog({ params }: PageProps) {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const response = await api.get(`/api/v1/blogs/${resolvedParams.id}`);
+        const response = await api.get(`${API_BASE_URL}${API_ROUTES.BLOGS}/${resolvedParams.id}`);
         // Ensure arrays are initialized even if null in response
         const formattedBlog = {
           ...response.data,
@@ -54,7 +55,7 @@ export default function EditBlog({ params }: PageProps) {
         tags: Array.isArray(data.tags) ? data.tags.join(',') : data.tags
       };
 
-      await api.put(`/api/v1/blogs/${resolvedParams.id}`, formattedData);
+      await api.put(`${API_BASE_URL}${API_ROUTES.BLOGS}/${resolvedParams.id}`, formattedData);
       router.push('/admin/blogs');
     } catch (error) {
       if (error instanceof Error) {

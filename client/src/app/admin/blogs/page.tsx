@@ -4,42 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import api from '@/utils/api';
+import {Blog} from '@/types/blog';
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
 
-interface Blog {
-  _id: string;
-  title: string;
-  slug: string;
-  author: string;
-  introduction: string;
-  body: string;
-  conclusion: string;
-  images: Array<{
-    filename: string;
-    url: string;
-    public_id: string;
-    mimetype?: string;
-    size?: number;
-  }>;
-  excerpt?: string;
-  featuredImage?: string;
-  categories: string[];
-  tags: string[];
-  status: 'draft' | 'published' | 'archived';
-  publishDate?: Date;
-  lastModified?: Date;
-  meta: {
-    views: number;
-    likes: number;
-    shares: number;
-  };
-  seo?: {
-    metaTitle?: string;
-    metaDescription?: string;
-    focusKeyword?: string;
-  };
-  readTime?: number;
-  isFeature: boolean;
-}
 
 export default function AdminBlogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -51,7 +18,7 @@ export default function AdminBlogs() {
     const fetchBlogs = async () => {
       try {
         setIsLoading(true);
-        const response = await api.get('/api/v1/blogs');
+        const response = await api.get(`${API_BASE_URL}${API_ROUTES.BLOGS}`);
         setBlogs(response.data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
@@ -70,7 +37,7 @@ export default function AdminBlogs() {
     
     try {
       setIsLoading(true);
-      await api.delete(`/api/v1/blogs/${slug}`);
+      await api.delete(`${API_BASE_URL}${API_ROUTES.BLOGS}/${slug}`);
       setBlogs(blogs.filter(blog => blog.slug !== slug));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete blog');

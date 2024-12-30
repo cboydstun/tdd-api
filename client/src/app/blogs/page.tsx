@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getApiUrl } from "@/utils/env";
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { Blog } from "@/types/blog";
 
@@ -10,12 +10,11 @@ export default function BlogList() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const API_URL = getApiUrl();
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/v1/blogs`);
+        const response = await fetch(`${API_BASE_URL}${API_ROUTES.BLOGS}`);
         if (!response.ok) throw new Error("Failed to fetch blogs");
         const data = await response.json();
         setBlogs(data);
@@ -27,12 +26,12 @@ export default function BlogList() {
     };
 
     fetchBlogs();
-  }, [API_URL]);
+  }, [API_BASE_URL]);
 
   if (loading) {
     return (
       <div className="min-h-[400px] flex justify-center items-center">
-        <LoadingSpinner color="#3B82F6" size={48} />
+        <LoadingSpinner />
       </div>
     );
   }

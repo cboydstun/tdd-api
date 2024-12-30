@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { getApiUrl } from "../utils/env";
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
 import { LoadingSpinner } from "./ui/LoadingSpinner";
 
 interface Specification {
@@ -74,8 +74,6 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  const API_URL = getApiUrl();
-
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
@@ -86,7 +84,7 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
       setIsLoading(true);
       setLoadError(null);
       try {
-        const response = await axios.get(`${API_URL}/api/v1/products`);
+        const response = await axios.get(`${API_BASE_URL}${API_ROUTES.PRODUCTS}`);
 
         const filteredBouncers = response.data.filter((product: Bouncer) => {
           const typeSpec = product.specifications?.find(
@@ -126,7 +124,7 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
     };
 
     fetchBouncers();
-  }, [API_URL, initialBouncerId]);
+  }, [API_BASE_URL, initialBouncerId]);
 
   const formatPhoneNumber = (value: string): string => {
     // Remove all non-digits
@@ -184,7 +182,7 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
     if (!validateForm() || !formData.consentToContact) return;
 
     try {
-      await axios.post(`${API_URL}/api/v1/contacts`, formData);
+      await axios.post(`${API_BASE_URL}${API_ROUTES.CONTACTS}`, formData);
       setSubmitStatus("success");
       setFormData({
         bouncer: "",
@@ -270,7 +268,7 @@ const ContactForm = ({ initialBouncerId }: ContactFormProps) => {
         </label>
         {isLoading ? (
           <div className="flex justify-center">
-            <LoadingSpinner color="#3B82F6" />
+            <LoadingSpinner />
           </div>
         ) : loadError ? (
           <div className="text-red-500">{loadError}</div>

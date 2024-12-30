@@ -1,12 +1,11 @@
-import { getApiUrl } from "@/utils/env";
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
 import { Metadata } from "next";
 import { Blog } from "@/types/blog";
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const API_URL = getApiUrl();
   const slug = (await params).slug;
   try {
-    const response = await fetch(`${API_URL}/api/v1/blogs/${slug}`);
+    const response = await fetch(`${API_BASE_URL}${API_ROUTES.PRODUCTS}/${slug}`);
     const blog: Blog = await response.json();
 
     return {
@@ -32,10 +31,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function BlogDetail({ params }: { params: { slug: string } }) {
-  const API_URL = getApiUrl();
   const slug = (await params).slug;
   
-  const response = await fetch(`${API_URL}/api/v1/blogs/${slug}`);
+  const response = await fetch(`${API_BASE_URL}${API_ROUTES.BLOGS}/${slug}`);
   
   if (!response.ok) {
     throw new Error("Blog post not found");

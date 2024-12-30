@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import api from '@/utils/api';
+import { API_BASE_URL, API_ROUTES } from '../../config/constants';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState([
@@ -15,9 +16,9 @@ export default function AdminDashboard() {
     const fetchStats = async () => {
       try {
         const [blogsRes, productsRes, contactsRes] = await Promise.all([
-          api.get('/api/v1/blogs'),
-          api.get('/api/v1/products'),
-          api.get('/api/v1/contacts'),
+          api.get(`${API_BASE_URL}${API_ROUTES.BLOGS}`),
+          api.get(`${API_BASE_URL}${API_ROUTES.PRODUCTS}`),
+          api.get(`${API_BASE_URL}${API_ROUTES.CONTACTS}`),
         ]);
 
         setStats([

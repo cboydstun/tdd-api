@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { API_BASE_URL, API_ROUTES } from '@/config/constants';
 
 interface ContactFormData {
   bouncer: string;
@@ -57,7 +58,7 @@ export default function NewContact() {
         return;
       }
 
-      const response = await fetch('http://localhost:8080/api/v1/contacts', {
+      const response = await fetch(`${API_BASE_URL}${API_ROUTES.CONTACTS}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
