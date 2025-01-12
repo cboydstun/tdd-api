@@ -6,7 +6,7 @@
       "description": "An impressive castle-themed bounce house featuring a thrilling slide attachment. Perfect for royal celebrations and active play, this bouncer combines the magic of a castle with the excitement of sliding fun.",
       "category": "Bounce Houses",
       "price": {
-        "base": 224.95,
+        "base": 249.95,
         "currency": "USD"
       },
       "rentalDuration": "full-day",
@@ -191,8 +191,74 @@
       ]
     },
     {
-      "name": "Junior Water Park",
-      "slug": "junior-water-park",
+      "name": "Green Junior Water Park",
+      "slug": "green-junior-water-park",
+      "description": "Ultimate junior water park experience featuring dual slides, water sprays, ball pit pool, and an exciting tunnel. This green and orange themed inflatable combines multiple play elements including bodyboarding, splash zones, and a slip slide for maximum entertainment.",
+      "category": "Water Slides",
+      "price": {
+        "base": 199.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_auto,h_500,w_500/products/green-junior/qp64eavwnctdfdfhi9tl",
+          "alt": "Mega Water Adventure Park Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["DRY", "WET"]
+        },
+        {
+          "name": "Blower",
+          "value": "750W (110-120V, 60HZ)"
+        },
+        {
+          "name": "Weight Limit",
+          "value": "400 lbs total"
+        }
+      ],
+      "dimensions": {
+        "length": 16.3,
+        "width": 16,
+        "height": 7.8,
+        "unit": "feet"
+      },
+      "capacity": 10,
+      "ageRange": {
+        "min": 4,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "21x21 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": [
+        "Dual Water Slides",
+        "Ball Pit Pool",
+        "Water Sprayers",
+        "Adventure Tunnel",
+        "Slip Slide",
+        "Bodyboards Included",
+        "Water Cannon",
+        "Basketballs Included",
+        "Green & Orange Theme"
+      ],
+      "safetyGuidelines": "Adult supervision required. Maximum 10 children at once. Maximum total weight 400 lbs. No running on wet surfaces. No rough play. Proper swimwear required.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F"
+      ]
+    },
+    {
+      "name": "Blue Junior Water Park",
+      "slug": "blue-junior-water-park",
       "description": "Exciting water park perfect for younger children featuring splash zones and water activities. Compact design delivers maximum fun in a manageable space.",
       "category": "Water Slides",
       "price": {
@@ -312,7 +378,7 @@
       "description": "Exciting lime-themed water slide perfect for hot summer days. Features a long sliding surface and splash landing area.",
       "category": "Water Slides",
       "price": {
-        "base": 224.95,
+        "base": 249.95,
         "currency": "USD"
       },
       "rentalDuration": "full-day",
@@ -555,7 +621,7 @@
       "description": "Enhanced balloon-themed bounce house featuring an exciting slide. Combines bouncing fun with sliding excitement in a festive package.",
       "category": "Bounce Houses",
       "price": {
-        "base": 224.95,
+        "base": 249.95,
         "currency": "USD"
       },
       "rentalDuration": "full-day",
@@ -953,9 +1019,9 @@
       "weatherRestrictions": ["Indoor use only", "Keep away from water"]
     },
     {
-      "name": "Slushy Machine",
-      "slug": "slushy-machine",
-      "description": "Professional slushy machine perfect for creating frozen drinks. Features 3 gallon tank for multiple flavors and continuous production capability.",
+      "name": "15L Slush Machine with Virgin Mix",
+      "slug": "15l-slushy-machine",
+      "description": "Professional-grade 15L/3 gallon slushy machine with advanced features. Stainless steel construction with food-grade PC tank and two-layer ABS lid ensure durability and easy maintenance. Features precise temperature control (26.6°F to 28.4°F), powerful 500W compressor for rapid cooling, and illuminated tank to showcase vibrant beverages. Perfect for events, parties, and commercial use.",
       "category": "Concessions",
       "price": {
         "base": 99.95,
@@ -987,7 +1053,19 @@
         },
         {
           "name": "Capacity",
-          "value": "~100 servings"
+          "value": "15L / 3 US gallons"
+        },
+        {
+          "name": "Power",
+          "value": "500W"
+        },
+        {
+          "name": "Temperature Range",
+          "value": "26.6°F to 28.4°F (-3°C to -2°C)"
+        },
+        {
+          "name": "Preparation Time",
+          "value": "50 minutes"
         }
       ],
       "dimensions": {
@@ -996,7 +1074,7 @@
         "height": 3,
         "unit": "feet"
       },
-      "capacity": 100,
+      "capacity": 50,
       "ageRange": {
         "min": 18,
         "max": 99
@@ -1004,24 +1082,86 @@
       "setupRequirements": {
         "space": "4x4 feet flat surface",
         "powerSource": true,
-        "surfaceType": ["Concrete", "Wood"]
+        "surfaceType": ["Metal", "Wood", "Counter Top"]
       },
       "features": [
-        "3 Gallon Capacity Tank",
-        "Continuous Production",
-        "Easy Clean",
-        "Serving Cups"
+        "15L/3 Gallon Tank",
+        "Interior Bowl Light",
+        "Stainless Steel Body",
+        "Food-Grade PC Tank",
+        "360° Mixing Stirrer",
+        "Temperature Control",
+        "Antifreeze System",
+        "Large Discharge Faucet",
+        "Detachable Drip Tray",
+        "Energy Efficient",
+        "Low Noise Operation",
+        "Serving Cups Included"
       ],
-      "safetyGuidelines": "Adult operation only. Keep away from water. Follow provided operating instructions.",
+      "safetyGuidelines": "Adult operation only. Keep away from water. Follow provided operating instructions. Clean thoroughly after use.",
       "weatherRestrictions": ["Indoor use only", "Keep away from water"]
     },
     {
-      "name": "Margarita Machine",
-      "slug": "margarita-machine",
-      "description": "Professional frozen margarita machine perfect for adult parties. Features high-capacity tank and consistent frozen drink production.",
+      "name": "Large White Combo with Slide",
+      "slug": "large-white-combo-with-slide",
+      "description": "Elegant white-themed combo unit featuring a spacious bounce area and thrilling slide. Perfect for weddings, formal events, and celebrations requiring a sophisticated touch while providing maximum entertainment.",
+      "category": "Combo Units",
+      "price": {
+        "base": 249.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/t_white-bouncer-500-500/products/white-combo/w7ej5favoxhb0b0ggkl9",
+          "alt": "Large White Combo Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_auto,h_500,w_500/products/white-combo/fnojvnbh9iqovxll9pup",
+          "alt": "Large White Combo Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_auto,h_500,w_500/products/white-combo/tjcif6rvnq1fq7sg31cs",
+          "alt": "Large White Combo Aerial View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 16,
+        "width": 14,
+        "height": 10.5,
+        "unit": "feet"
+      },
+      "capacity": 5,
+      "ageRange": {
+        "min": 3,
+        "max": 8
+      },
+      "setupRequirements": {
+        "space": "30x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Slide", "Ball Pit", "Large Bouncing Area", "Safety Netting", "White Theme"],
+      "safetyGuidelines": "Adult supervision required. Maximum 10 children at once. No shoes, sharp objects, or food inside. One at a time on slide.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "15L Slush Machine with Alcoholic Mix",
+      "slug": "15l-slush-machine-alcoholic-mix",
+      "description": "Professional-grade 15L/3 gallon frozen margarita machine with advanced features. Stainless steel construction with food-grade PC tank and two-layer ABS lid ensure durability and easy maintenance. Features precise temperature control (26.6°F to 28.4°F), powerful 500W compressor for rapid cooling, and illuminated tank to showcase your frozen cocktails. Includes your choice of one gallon of margarita mix, pina colada mix, or strawberry daiquiri mix. Perfect for adult parties and events.",
       "category": "Concessions",
       "price": {
-        "base": 99.95,
+        "base": 124.95,
         "currency": "USD"
       },
       "rentalDuration": "full-day",
@@ -1065,7 +1205,23 @@
         },
         {
           "name": "Capacity",
-          "value": "~80 servings"
+          "value": "15L / 3 US gallons"
+        },
+        {
+          "name": "Power",
+          "value": "500W"
+        },
+        {
+          "name": "Temperature Range",
+          "value": "26.6°F to 28.4°F (-3°C to -2°C)"
+        },
+        {
+          "name": "Preparation Time",
+          "value": "50 minutes"
+        },
+        {
+          "name": "Included Mix Options",
+          "value": "Choice of Margarita, Pina Colada, or Strawberry Daiquiri (1 gallon)"
         }
       ],
       "dimensions": {
@@ -1074,7 +1230,7 @@
         "height": 3,
         "unit": "feet"
       },
-      "capacity": 80,
+      "capacity": 50,
       "ageRange": {
         "min": 21,
         "max": 99
@@ -1082,15 +1238,170 @@
       "setupRequirements": {
         "space": "4x4 feet flat surface",
         "powerSource": true,
-        "surfaceType": ["Concrete", "Wood"]
+        "surfaceType": ["Counter Top", "Table"]
       },
       "features": [
-        "3 Gallon Capacity Tank",
-        "Consistent Freeze",
-        "Easy Clean",
-        "Serving Cups"
+        "15L/3 Gallon Tank",
+        "Interior Bowl Light",
+        "Stainless Steel Body",
+        "Food-Grade PC Tank",
+        "360° Mixing Stirrer",
+        "Temperature Control",
+        "Antifreeze System",
+        "Large Discharge Faucet",
+        "Detachable Drip Tray",
+        "Energy Efficient",
+        "Low Noise Operation",
+        "50 Cups and 50 Straws Included",
+        "Choice of Mix Flavor"
       ],
-      "safetyGuidelines": "Adult operation only (21+). Keep away from water. Follow provided operating instructions. Valid ID required for rental.",
+      "safetyGuidelines": "Adult operation only (21+). Keep away from water. Follow provided operating instructions. Valid ID required for rental. Clean thoroughly after use.",
+      "weatherRestrictions": ["Indoor use only", "Keep away from water"]
+    },
+    {
+      "name": "30L Double Tank Slush Machine with Virgin Mix",
+      "slug": "30l-double-tank-slush-machine-virgin",
+      "description": "Superior commercial-grade slush machine featuring dual 15L tanks (30L total capacity) with virgin drink mix included. Features a premium 700W compressor with copper condenser for rapid cooling and energy efficiency. Food-grade PC containers and 3-layer stainless steel construction ensure durability and safety. Independent cooling and mixing controls, plus large discharge faucets for easy serving. Perfect for convenience stores, hotels, dessert shops, cafés, and events.",
+      "category": "Concessions",
+      "price": {
+        "base": 149.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1736717515/products/fr7g0snhjiutg6wysiga.jpg",
+          "alt": "Double Tank Slush Machine Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1736716482/products/kdjic5avxdnhi50hle58.jpg",
+          "alt": "Double Tank Slush Machine Side VIew",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["EXTRA"]
+        },
+        {
+          "name": "Capacity",
+          "value": "100 servings"
+        },
+        {
+          "name": "Power",
+          "value": "700W"
+        },
+        {
+          "name": "Tank Size",
+          "value": "15L x 2 tanks"
+        },
+        {
+          "name": "Temperature",
+          "value": "-2°C to -3°C"
+        }
+      ],
+      "dimensions": {
+        "length": 16.5,
+        "width": 22.0,
+        "height": 29.9,
+        "unit": "inches"
+      },
+      "capacity": 100,
+      "ageRange": {
+        "min": 18,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "24x24 inches flat surface",
+        "powerSource": true,
+        "surfaceType": ["Counter Top", "Table"]
+      },
+      "features": [
+        "Dual 15L Tanks",
+        "Premium Compressor",
+        "Independent Controls",
+        "Food-Grade Materials",
+        "Large Discharge Faucets",
+        "Virgin Drink Mix Included",
+        "Serving Cups Included"
+      ],
+      "safetyGuidelines": "Adult operation only. Keep away from water. Follow provided operating instructions. Clean thoroughly after use.",
+      "weatherRestrictions": ["Indoor use only", "Keep away from water"]
+    },
+    {
+      "name": "30L Double Tank Slush Machine with Alcoholic Mix",
+      "slug": "30l-double-tank-slush-machine-alcohol",
+      "description": "Superior commercial-grade slush machine featuring dual 15L tanks (30L total capacity) with alcoholic beverage mix included. Features a premium 700W compressor with copper condenser for rapid cooling and energy efficiency. Food-grade PC containers and 3-layer stainless steel construction ensure durability and safety. Independent cooling and mixing controls, plus large discharge faucets for easy serving. Perfect for bars, events, and adult parties.",
+      "category": "Concessions",
+      "price": {
+        "base": 174.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_auto,h_500,w_500/products/xdrswuqkfhlakfoes266",
+          "alt": "Double Tank Slush Machine Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1736716482/products/kdjic5avxdnhi50hle58.jpg",
+          "alt": "Double Tank Slush Machine Side VIew",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["EXTRA"]
+        },
+        {
+          "name": "Capacity",
+          "value": "100 servings"
+        },
+        {
+          "name": "Power",
+          "value": "700W"
+        },
+        {
+          "name": "Tank Size",
+          "value": "15L x 2 tanks"
+        },
+        {
+          "name": "Temperature",
+          "value": "-2°C to -3°C"
+        }
+      ],
+      "dimensions": {
+        "length": 16.5,
+        "width": 22.0,
+        "height": 29.9,
+        "unit": "inches"
+      },
+      "capacity": 100,
+      "ageRange": {
+        "min": 21,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "24x24 inches flat surface",
+        "powerSource": true,
+        "surfaceType": ["Counter Top", "Table"]
+      },
+      "features": [
+        "Dual 15L Tanks",
+        "Premium Compressor",
+        "Independent Controls",
+        "Food-Grade Materials",
+        "Large Discharge Faucets",
+        "Alcoholic Mix Included",
+        "Serving Cups Included"
+      ],
+      "safetyGuidelines": "Adult operation only (21+). Keep away from water. Follow provided operating instructions. Valid ID required for rental. Clean thoroughly after use.",
       "weatherRestrictions": ["Indoor use only", "Keep away from water"]
     },
     {
