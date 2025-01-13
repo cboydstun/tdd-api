@@ -1,5 +1,5 @@
-const toobusy = require('toobusy-js');
-const logger = require('./logger');
+const toobusy = require("toobusy-js");
+const logger = require("./logger");
 
 const tooBusyCheck = (req, res, next) => {
   if (toobusy()) {

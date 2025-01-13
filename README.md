@@ -146,6 +146,14 @@ npm run seed:products # Seed products
 - DELETE `/api/v1/contacts/:id` - Delete contact (Protected)
 - GET `/api/v1/contacts/available/:partyDate/:bouncer` - Check availability
 
+### Reviews
+
+- GET `/api/v1/reviews` - Get all reviews (optional query param: placeId)
+- GET `/api/v1/reviews/:id` - Get specific review (Protected)
+- POST `/api/v1/reviews` - Create new review (Protected)
+- PUT `/api/v1/reviews/:id` - Update review (Protected)
+- DELETE `/api/v1/reviews/:id` - Delete review (Protected)
+
 ### Health Check
 
 - GET `/api/health` - API health status

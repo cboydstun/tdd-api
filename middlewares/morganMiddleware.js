@@ -20,7 +20,7 @@ const morganMiddleware = morgan(
 
   // Options: in this case, I overwrote the stream and the skip logic.
   // See the methods above.
-  { stream, skip }
+  { stream, skip },
 );
 
 module.exports = morganMiddleware;
