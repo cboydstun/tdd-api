@@ -1151,7 +1151,13 @@
         "powerSource": true,
         "surfaceType": ["Grass", "Concrete", "Asphalt"]
       },
-      "features": ["Slide", "Ball Pit", "Large Bouncing Area", "Safety Netting", "White Theme"],
+      "features": [
+        "Slide",
+        "Ball Pit",
+        "Large Bouncing Area",
+        "Safety Netting",
+        "White Theme"
+      ],
       "safetyGuidelines": "Adult supervision required. Maximum 10 children at once. No shoes, sharp objects, or food inside. One at a time on slide.",
       "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
     },

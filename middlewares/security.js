@@ -4,7 +4,7 @@ const slowDown = require("express-slow-down");
 const xss = require("xss-clean");
 const hsts = require("hsts");
 const compression = require("compression");
-const logger = require('../utils/logger');
+const logger = require("../utils/logger");
 
 const ipRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -23,16 +23,16 @@ const speedLimiter = slowDown({
 });
 
 const allowedOrigins = [
-  process.env.CLIENT_URL || 'https://www.satxbounce.com',
-  'http://localhost:5173', // Vite development server
-  'http://127.0.0.1:5173',
-  'https://bounce-v2-ruby.vercel.app/'
+  process.env.CLIENT_URL || "https://www.satxbounce.com",
+  "http://localhost:5173", // Vite development server
+  "http://127.0.0.1:5173",
+  "https://bounce-v2-ruby.vercel.app/",
 ];
 
 const enhancedLoggingMiddleware = (req, res, next) => {
   const startTime = process.hrtime();
 
-  res.on('finish', () => {
+  res.on("finish", () => {
     const duration = process.hrtime(startTime);
     const durationInMs = duration[0] * 1000 + duration[1] / 1e6;
 
@@ -43,10 +43,10 @@ const enhancedLoggingMiddleware = (req, res, next) => {
       status: res.statusCode,
       duration: `${durationInMs.toFixed(3)}ms`,
       ip: req.ip,
-      userAgent: req.get('User-Agent') || 'Unknown',
-      referer: req.get('Referer') || 'Unknown',
-      origin: req.get('Origin') || 'Unknown',
-      contentLength: res.get('Content-Length') || 0,
+      userAgent: req.get("User-Agent") || "Unknown",
+      referer: req.get("Referer") || "Unknown",
+      origin: req.get("Origin") || "Unknown",
+      contentLength: res.get("Content-Length") || 0,
     };
 
     const logMessage = `${logData.method} ${logData.url} ${logData.status} ${logData.duration} - ${logData.ip} - ${logData.userAgent}`;
@@ -67,8 +67,10 @@ const trackBlockedAttempts = (req, res, next) => {
     const count = (blockedIPs.get(req.ip) || 0) + 1;
     blockedIPs.set(req.ip, count);
     if (count >= 5) {
-      logger.error(`Multiple blocked attempts from IP: ${req.ip}, Count: ${count}`);
-      return res.status(403).send('Access Denied');
+      logger.error(
+        `Multiple blocked attempts from IP: ${req.ip}, Count: ${count}`,
+      );
+      return res.status(403).send("Access Denied");
     }
   }
   next();
@@ -82,5 +84,5 @@ module.exports = {
   hsts,
   compression,
   enhancedLoggingMiddleware,
-  trackBlockedAttempts
+  trackBlockedAttempts,
 };
