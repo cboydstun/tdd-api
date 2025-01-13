@@ -8,7 +8,8 @@
     "test:watch": "jest --watch",
     "start": "nodemon server.js",
     "seed:blogs": "node ./blogSeed.js",
-    "seed:products": "node ./productSeed.js"
+    "seed:products": "node ./productSeed.js",
+    "seed:reviews": "node ./reviewSeed.js"
   },
   "repository": {
     "type": "git",

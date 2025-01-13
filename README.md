@@ -25,6 +25,7 @@ A robust, production-ready RESTful API built with Node.js and Express.js, featur
 
   - Blog posts CRUD operations
   - Products management
+  - Reviews management
   - Contact form handling
   - Email functionality
   - Lead management
@@ -145,6 +146,14 @@ npm run seed:products # Seed products
 - PUT `/api/v1/contacts/:id` - Update contact (Protected)
 - DELETE `/api/v1/contacts/:id` - Delete contact (Protected)
 - GET `/api/v1/contacts/available/:partyDate/:bouncer` - Check availability
+
+### Reviews
+
+- GET `/api/v1/reviews` - Get all reviews (optional query param: placeId)
+- GET `/api/v1/reviews/:id` - Get specific review (Protected)
+- POST `/api/v1/reviews` - Create new review (Protected)
+- PUT `/api/v1/reviews/:id` - Update review (Protected)
+- DELETE `/api/v1/reviews/:id` - Delete review (Protected)
 
 ### Health Check
 
