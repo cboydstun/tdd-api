@@ -25,7 +25,6 @@ A robust, production-ready RESTful API built with Node.js and Express.js, featur
 
   - Blog posts CRUD operations
   - Products management
-  - Reviews management
   - Contact form handling
   - Email functionality
   - Lead management
