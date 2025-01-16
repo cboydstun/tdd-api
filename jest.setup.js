@@ -37,3 +37,6 @@ jest.mock("./utils/logger", () => ({
   error: jest.fn(),
   warn: jest.fn(),
 }));
+
+// Mock PayPal SDK globally
+jest.mock("@paypal/paypal-server-sdk", () => require("./__tests__/mocks/paypal"));

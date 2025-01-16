@@ -1,7 +1,11 @@
 // __tests__/mocks/cloudinary.js
-const cloudinary = {
+jest.mock('cloudinary', () => ({
+  config: jest.fn(),
   v2: {
     config: jest.fn(),
+    api_key: "test-api-key",
+    api_secret: "test-api-secret",
+    cloud_name: "test-cloud-name",
     uploader: {
       upload: jest.fn().mockImplementation(() =>
         Promise.resolve({
@@ -14,6 +18,4 @@ const cloudinary = {
         .mockImplementation(() => Promise.resolve({ result: "ok" })),
     },
   },
-};
-
-module.exports = cloudinary;
+}));

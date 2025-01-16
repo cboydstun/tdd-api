@@ -137,27 +137,39 @@ const getProductBySlug = async (req, res) => {
 // POST /products - should create a new product
 const createProduct = async (req, res) => {
   try {
-    let productData;
-    try {
-      productData =
-        typeof req.body.productData === "string"
-          ? JSON.parse(req.body.productData)
-          : req.body.productData || req.body;
-    } catch (parseErr) {
-      return res.status(400).json({ error: "Invalid product data format" });
-    }
+    const productData = req.body;
 
-    // Validate required fields
-    const requiredFields = ["name", "description", "category", "price"];
+    // Basic required fields validation
+    const requiredFields = [
+      "name",
+      "description",
+      "category",
+      "price",
+      "dimensions",
+      "capacity",
+      "ageRange",
+      "setupRequirements.space",
+      "safetyGuidelines"
+    ];
     for (const field of requiredFields) {
-      if (!productData[field]) {
+      // Handle nested fields like setupRequirements.space
+      const value = field.includes('.')
+        ? field.split('.').reduce((obj, key) => obj && obj[key], productData)
+        : productData[field];
+      if (!value) {
         return res.status(400).json({ error: `${field} is required` });
       }
     }
 
-    // Validate complex fields
+    // Validate price since it's always required
     try {
       validatePrice(productData.price);
+    } catch (validationError) {
+      return res.status(400).json({ error: validationError.message });
+    }
+
+    // Validate all required fields
+    try {
       validateDimensions(productData.dimensions);
       validateCapacity(productData.capacity);
       validateAgeRange(productData.ageRange);
@@ -165,23 +177,17 @@ const createProduct = async (req, res) => {
       return res.status(400).json({ error: validationError.message });
     }
 
-    // Validate enums
-    if (
-      productData.rentalDuration &&
-      !["hourly", "half-day", "full-day", "weekend"].includes(
-        productData.rentalDuration,
-      )
-    ) {
-      return res.status(400).json({ error: "Invalid rental duration" });
+    // Validate enums if provided
+    if (productData.rentalDuration) {
+      if (!["hourly", "half-day", "full-day", "weekend"].includes(productData.rentalDuration)) {
+        return res.status(400).json({ error: "Invalid rental duration" });
+      }
     }
 
-    if (
-      productData.availability &&
-      !["available", "rented", "maintenance", "retired"].includes(
-        productData.availability,
-      )
-    ) {
-      return res.status(400).json({ error: "Invalid availability status" });
+    if (productData.availability) {
+      if (!["available", "rented", "maintenance", "retired"].includes(productData.availability)) {
+        return res.status(400).json({ error: "Invalid availability status" });
+      }
     }
 
     const sanitizeOptions = {
@@ -224,14 +230,23 @@ const createProduct = async (req, res) => {
     res.status(201).json(savedProduct);
   } catch (err) {
     console.error("Error creating product:", err);
+    console.error("Error details:", {
+      name: err.name,
+      message: err.message,
+      stack: err.stack,
+      errors: err.errors
+    });
+
     if (err.name === "ValidationError") {
-      return res
-        .status(400)
-        .json({ error: "Validation error", details: err.message });
+      return res.status(400).json({
+        error: "Validation error",
+        details: Object.values(err.errors || {}).map(e => e.message)
+      });
     }
+
     res.status(500).json({
       error: "An error occurred while creating the product",
-      details: err.message,
+      details: err.message
     });
   }
 };
@@ -247,17 +262,7 @@ const updateProduct = async (req, res) => {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    // Parse product data
-    let productData;
-    try {
-      productData =
-        typeof req.body.productData === "string"
-          ? JSON.parse(req.body.productData)
-          : req.body.productData || req.body;
-    } catch (parseErr) {
-      console.error("Error parsing product data:", parseErr);
-      return res.status(400).json({ error: "Invalid product data format" });
-    }
+    const productData = req.body;
 
     // Validate updated data if provided
     if (productData.price) {
@@ -377,27 +382,60 @@ const updateProduct = async (req, res) => {
       },
     };
 
-    // Prepare update data
-    const updateData = {
-      ...existingProduct.toObject(),
-      ...productData,
-      name: productData.name
-        ? sanitizeHtml(productData.name)
-        : existingProduct.name,
-      description: productData.description
-        ? sanitizeHtml(productData.description, sanitizeOptions)
-        : existingProduct.description,
-      category: productData.category
-        ? sanitizeHtml(productData.category)
-        : existingProduct.category,
-      images: [...updatedImages, ...newImages],
-    };
+    // Prepare update data with only the fields that should be updated
+    const updateData = {};
 
-    // Update the product
+    // Handle text fields with sanitization
+    if (productData.name) updateData.name = sanitizeHtml(productData.name);
+    if (productData.description) updateData.description = sanitizeHtml(productData.description, sanitizeOptions);
+    if (productData.category) updateData.category = sanitizeHtml(productData.category);
+    if (productData.safetyGuidelines) updateData.safetyGuidelines = sanitizeHtml(productData.safetyGuidelines);
+
+    // Handle nested objects
+    if (productData.price) {
+      updateData.price = {
+        base: productData.price.base,
+        currency: productData.price.currency || 'USD'
+      };
+    }
+
+    if (productData.dimensions) {
+      updateData.dimensions = {
+        length: productData.dimensions.length,
+        width: productData.dimensions.width,
+        height: productData.dimensions.height,
+        unit: productData.dimensions.unit || 'feet'
+      };
+    }
+
+    if (productData.ageRange) {
+      updateData.ageRange = {
+        min: productData.ageRange.min,
+        max: productData.ageRange.max
+      };
+    }
+
+    // Handle simple fields
+    if (productData.rentalDuration) updateData.rentalDuration = productData.rentalDuration;
+    if (productData.availability) updateData.availability = productData.availability;
+    if (productData.capacity) updateData.capacity = productData.capacity;
+
+    // Handle arrays and objects
+    if (productData.setupRequirements) updateData.setupRequirements = productData.setupRequirements;
+    if (productData.features) updateData.features = productData.features;
+    if (productData.weatherRestrictions) updateData.weatherRestrictions = productData.weatherRestrictions;
+    if (productData.specifications) updateData.specifications = productData.specifications;
+
+    // Handle images
+    if (updatedImages.length > 0 || newImages.length > 0) {
+      updateData.images = [...updatedImages, ...newImages];
+    }
+
+    // Update the product with only the changed fields
     const updatedProduct = await Product.findOneAndUpdate(
       { slug },
       updateData,
-      { new: true, runValidators: true },
+      { new: true, runValidators: true }
     );
 
     if (!updatedProduct) {

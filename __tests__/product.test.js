@@ -1,3 +1,7 @@
+// Import mocks first
+require("./mocks/cloudinary");
+require("./mocks/paypal");
+
 const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
@@ -7,8 +11,6 @@ const path = require("path");
 const fs = require("fs").promises;
 const slugify = require("slugify");
 
-// Mock Cloudinary
-jest.mock("cloudinary", () => require("./mocks/cloudinary"));
 
 // Mock specific fs operations for product controller
 jest.spyOn(fs, "unlink").mockResolvedValue(undefined);
