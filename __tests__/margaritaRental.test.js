@@ -30,11 +30,18 @@ const mockUser = {
 };
 
 // Valid rental data for testing
+// Helper to get future dates for testing
+const getFutureDate = (daysFromNow) => {
+    const date = new Date();
+    date.setDate(date.getDate() + daysFromNow);
+    return date;
+};
+
 const validRentalData = {
     machineType: "single",
     mixerType: "margarita",
-    rentalDate: new Date("2024-12-25"),
-    returnDate: new Date("2024-12-26"),
+    rentalDate: getFutureDate(1),
+    returnDate: getFutureDate(2),
     customer: {
         name: "John Doe",
         email: "john@example.com",
@@ -98,8 +105,8 @@ describe("Margarita Rental API Endpoints", () => {
         it("should check availability for given dates", async () => {
             const checkData = {
                 machineType: "single",
-                rentalDate: "2024-12-25",
-                returnDate: "2024-12-26"
+                rentalDate: validRentalData.rentalDate.toISOString(),
+                returnDate: validRentalData.returnDate.toISOString()
             };
 
             const response = await request(app)
@@ -115,8 +122,8 @@ describe("Margarita Rental API Endpoints", () => {
             await MargaritaRental.create({
                 ...validRentalData,
                 status: "confirmed",
-                price: 124.95, // Price for single tank with margarita mixer
-                capacity: 15, // Capacity for single tank
+                price: 124.95,
+                capacity: 15,
                 payment: {
                     paypalTransactionId: "test-transaction-id",
                     amount: 124.95,
@@ -126,8 +133,8 @@ describe("Margarita Rental API Endpoints", () => {
 
             const checkData = {
                 machineType: "single",
-                rentalDate: "2024-12-25",
-                returnDate: "2024-12-26"
+                rentalDate: validRentalData.rentalDate.toISOString(),
+                returnDate: validRentalData.returnDate.toISOString()
             };
 
             const response = await request(app)
@@ -150,6 +157,57 @@ describe("Margarita Rental API Endpoints", () => {
 
             expect(response.status).toBe(400);
         });
+
+        it("should reject past dates", async () => {
+            const pastDate = new Date();
+            pastDate.setDate(pastDate.getDate() - 1);
+
+            const checkData = {
+                machineType: "single",
+                rentalDate: pastDate.toISOString(),
+                returnDate: new Date().toISOString()
+            };
+
+            const response = await request(app)
+                .post("/api/v1/margarita-rentals/check-availability")
+                .send(checkData);
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe("Rental date cannot be in the past");
+        });
+
+        it("should reject return date before rental date", async () => {
+            const rentalDate = getFutureDate(2); // 2 days from now
+            const returnDate = getFutureDate(1); // 1 day from now
+
+            const checkData = {
+                machineType: "single",
+                rentalDate: rentalDate.toISOString(),
+                returnDate: returnDate.toISOString()
+            };
+
+            const response = await request(app)
+                .post("/api/v1/margarita-rentals/check-availability")
+                .send(checkData);
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe("Return date must be after rental date");
+        });
+
+        it("should handle invalid date formats", async () => {
+            const checkData = {
+                machineType: "single",
+                rentalDate: "invalid-date",
+                returnDate: "2024-12-26"
+            };
+
+            const response = await request(app)
+                .post("/api/v1/margarita-rentals/check-availability")
+                .send(checkData);
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe("Invalid date format");
+        });
     });
 
     describe("POST /api/v1/margarita-rentals/create-payment", () => {
@@ -165,7 +223,8 @@ describe("Margarita Rental API Endpoints", () => {
 
             expect(response.status).toBe(200);
             expect(response.body).toHaveProperty("orderId", "test-order-id");
-            expect(response.body).toHaveProperty("amount", 124.95); // Price for single tank with margarita mixer
+            expect(response.body).toHaveProperty("amount", 124.95);
+            expect(MargaritaRental.calculatePrice).toHaveBeenCalledWith("single", "margarita");
         });
 
         it("should validate machine and mixer types", async () => {
@@ -178,7 +237,29 @@ describe("Margarita Rental API Endpoints", () => {
                 .post("/api/v1/margarita-rentals/create-payment")
                 .send(invalidData);
 
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe("Invalid machine or mixer type");
+        });
+
+        it("should handle PayPal API errors", async () => {
+            // Mock PayPal API error
+            const paypal = require("@paypal/paypal-server-sdk");
+            paypal.payment.create = jest.fn((data, callback) => {
+                callback(new Error("PayPal API error"));
+            });
+
+            const paymentData = {
+                machineType: "single",
+                mixerType: "margarita"
+            };
+
+            const response = await request(app)
+                .post("/api/v1/margarita-rentals/create-payment")
+                .send(paymentData);
+
             expect(response.status).toBe(500);
+            expect(response.body.error).toBe("Failed to create payment");
+            expect(response.body.details).toBe("PayPal API error");
         });
     });
 
@@ -196,6 +277,35 @@ describe("Margarita Rental API Endpoints", () => {
             expect(response.body).toHaveProperty("transactionId", "test-transaction-id");
             expect(response.body).toHaveProperty("status", "COMPLETED");
         });
+
+        it("should handle PayPal capture errors", async () => {
+            // Mock PayPal API error
+            const paypal = require("@paypal/paypal-server-sdk");
+            paypal.payment.execute = jest.fn((orderId, data, callback) => {
+                callback(new Error("PayPal capture failed"));
+            });
+
+            const captureData = {
+                orderId: "test-order-id"
+            };
+
+            const response = await request(app)
+                .post("/api/v1/margarita-rentals/capture-payment")
+                .send(captureData);
+
+            expect(response.status).toBe(500);
+            expect(response.body.error).toBe("Failed to capture payment");
+            expect(response.body.details).toBe("PayPal capture failed");
+        });
+
+        it("should validate orderId", async () => {
+            const response = await request(app)
+                .post("/api/v1/margarita-rentals/capture-payment")
+                .send({});
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe("OrderId is required");
+        });
     });
 
     describe("POST /api/v1/margarita-rentals", () => {
@@ -207,8 +317,9 @@ describe("Margarita Rental API Endpoints", () => {
             expect(response.status).toBe(201);
             expect(response.body.machineType).toBe(validRentalData.machineType);
             expect(response.body.mixerType).toBe(validRentalData.mixerType);
-            expect(response.body.price).toBe(124.95); // Price for single tank with margarita mixer
-            expect(response.body.capacity).toBe(15); // Capacity for single tank
+            expect(response.body.price).toBe(124.95);
+            expect(response.body.capacity).toBe(15);
+            expect(MargaritaRental.calculatePrice).toHaveBeenCalledWith("single", "margarita");
         });
 
         it("should validate required fields", async () => {
@@ -222,6 +333,7 @@ describe("Margarita Rental API Endpoints", () => {
                 .send(invalidData);
 
             expect(response.status).toBe(400);
+            expect(response.body.error).toBe("All fields are required");
         });
 
         it("should validate machine availability", async () => {
@@ -229,8 +341,8 @@ describe("Margarita Rental API Endpoints", () => {
             await MargaritaRental.create({
                 ...validRentalData,
                 status: "confirmed",
-                price: 124.95, // Price for single tank with margarita mixer
-                capacity: 15, // Capacity for single tank
+                price: 124.95,
+                capacity: 15,
                 payment: {
                     paypalTransactionId: "test-transaction-id",
                     amount: 124.95,
@@ -246,6 +358,19 @@ describe("Margarita Rental API Endpoints", () => {
             expect(response.status).toBe(400);
             expect(response.body.error).toBe("Machine is not available for the selected dates");
         });
+
+        it("should handle database errors", async () => {
+            // Mock database error
+            jest.spyOn(MargaritaRental.prototype, 'save').mockRejectedValueOnce(new Error("Database error"));
+
+            const response = await request(app)
+                .post("/api/v1/margarita-rentals")
+                .send(validRentalData);
+
+            expect(response.status).toBe(500);
+            expect(response.body.error).toBe("Failed to create rental");
+            expect(response.body.details).toBe("Database error");
+        });
     });
 
     describe("GET /api/v1/margarita-rentals (Protected)", () => {
@@ -253,8 +378,8 @@ describe("Margarita Rental API Endpoints", () => {
             await MargaritaRental.create([
                 {
                     ...validRentalData,
-                    price: 124.95, // Price for single tank with margarita mixer
-                    capacity: 15, // Capacity for single tank
+                    price: 124.95,
+                    capacity: 15,
                     payment: {
                         paypalTransactionId: "test-transaction-id",
                         amount: 124.95,
@@ -264,8 +389,8 @@ describe("Margarita Rental API Endpoints", () => {
                 {
                     ...validRentalData,
                     machineType: "double",
-                    price: 174.95, // Price for double tank with margarita mixer
-                    capacity: 30, // Capacity for double tank
+                    price: 174.95,
+                    capacity: 30,
                     payment: {
                         paypalTransactionId: "test-transaction-id",
                         amount: 174.95,
@@ -281,14 +406,29 @@ describe("Margarita Rental API Endpoints", () => {
             expect(response.status).toBe(200);
             expect(response.body).toHaveLength(2);
         });
+
+        it("should handle database query errors", async () => {
+            // Mock database error with query chain
+            const mockSort = jest.fn().mockRejectedValueOnce(new Error("Database error"));
+            const mockFind = jest.fn().mockReturnValue({ sort: mockSort });
+            jest.spyOn(MargaritaRental, 'find').mockImplementation(mockFind);
+
+            const response = await request(app)
+                .get("/api/v1/margarita-rentals")
+                .set("Authorization", "Bearer test-token");
+
+            expect(response.status).toBe(500);
+            expect(response.body.error).toBe("Failed to fetch rentals");
+            expect(response.body.details).toBe("Database error");
+        });
     });
 
     describe("GET /api/v1/margarita-rentals/:id (Protected)", () => {
         it("should return a rental by id", async () => {
             const rental = await MargaritaRental.create({
                 ...validRentalData,
-                price: 124.95, // Price for single tank with margarita mixer
-                capacity: 15, // Capacity for single tank
+                price: 124.95,
+                capacity: 15,
                 payment: {
                     paypalTransactionId: "test-transaction-id",
                     amount: 124.95,
@@ -313,14 +453,23 @@ describe("Margarita Rental API Endpoints", () => {
 
             expect(response.status).toBe(404);
         });
+
+        it("should handle invalid ObjectId", async () => {
+            const response = await request(app)
+                .get("/api/v1/margarita-rentals/invalid-id")
+                .set("Authorization", "Bearer test-token");
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe("Invalid rental ID");
+        });
     });
 
     describe("PUT /api/v1/margarita-rentals/:id (Protected)", () => {
         it("should update rental status", async () => {
             const rental = await MargaritaRental.create({
                 ...validRentalData,
-                price: 124.95, // Price for single tank with margarita mixer
-                capacity: 15, // Capacity for single tank
+                price: 124.95,
+                capacity: 15,
                 payment: {
                     paypalTransactionId: "test-transaction-id",
                     amount: 124.95,
@@ -337,6 +486,49 @@ describe("Margarita Rental API Endpoints", () => {
             expect(response.body.status).toBe("confirmed");
         });
 
+        it("should validate status values", async () => {
+            const rental = await MargaritaRental.create({
+                ...validRentalData,
+                price: 124.95,
+                capacity: 15,
+                payment: {
+                    paypalTransactionId: "test-transaction-id",
+                    amount: 124.95,
+                    status: "completed"
+                }
+            });
+
+            const response = await request(app)
+                .put(`/api/v1/margarita-rentals/${rental._id}`)
+                .set("Authorization", "Bearer test-token")
+                .send({ status: "invalid-status" });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe("Invalid status value");
+        });
+
+        it("should prevent invalid status transitions", async () => {
+            const rental = await MargaritaRental.create({
+                ...validRentalData,
+                status: "completed",
+                price: 124.95,
+                capacity: 15,
+                payment: {
+                    paypalTransactionId: "test-transaction-id",
+                    amount: 124.95,
+                    status: "completed"
+                }
+            });
+
+            const response = await request(app)
+                .put(`/api/v1/margarita-rentals/${rental._id}`)
+                .set("Authorization", "Bearer test-token")
+                .send({ status: "pending" });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe("Invalid status transition");
+        });
+
         it("should return 404 for non-existent rental", async () => {
             const fakeId = new mongoose.Types.ObjectId();
 
@@ -346,6 +538,31 @@ describe("Margarita Rental API Endpoints", () => {
                 .send({ status: "confirmed" });
 
             expect(response.status).toBe(404);
+        });
+
+        it("should handle database update errors", async () => {
+            const rental = await MargaritaRental.create({
+                ...validRentalData,
+                price: 124.95,
+                capacity: 15,
+                payment: {
+                    paypalTransactionId: "test-transaction-id",
+                    amount: 124.95,
+                    status: "completed"
+                }
+            });
+
+            // Mock database error
+            jest.spyOn(MargaritaRental.prototype, 'save').mockRejectedValueOnce(new Error("Database error"));
+
+            const response = await request(app)
+                .put(`/api/v1/margarita-rentals/${rental._id}`)
+                .set("Authorization", "Bearer test-token")
+                .send({ status: "confirmed" });
+
+            expect(response.status).toBe(500);
+            expect(response.body.error).toBe("Failed to update rental status");
+            expect(response.body.details).toBe("Database error");
         });
     });
 });

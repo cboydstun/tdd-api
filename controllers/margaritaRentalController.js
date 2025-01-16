@@ -1,12 +1,27 @@
 // controllers/margaritaRentalController.js
+const mongoose = require("mongoose");
 const MargaritaRental = require("../models/margaritaRentalSchema");
-const paypal = require("@paypal/paypal-server-sdk");
+const paypal = require("paypal-rest-sdk");
 
-// PayPal client configuration
-let clientId = process.env.PAYPAL_CLIENT_ID;
-let clientSecret = process.env.PAYPAL_CLIENT_SECRET;
-let environment = new paypal.core.SandboxEnvironment(clientId, clientSecret);
-let client = new paypal.core.PayPalHttpClient(environment);
+// Configure PayPal SDK
+paypal.configure({
+    mode: 'sandbox',
+    client_id: process.env.PAYPAL_CLIENT_ID,
+    client_secret: process.env.PAYPAL_SECRET
+});
+
+// Valid machine types and mixer types
+const VALID_MACHINE_TYPES = ["single", "double"];
+const VALID_MIXER_TYPES = ["none", "kool-aid", "margarita", "pina-colada"];
+const VALID_STATUSES = ["pending", "confirmed", "cancelled", "completed"];
+
+// Status transition rules
+const VALID_STATUS_TRANSITIONS = {
+    pending: ["confirmed", "cancelled"],
+    confirmed: ["completed", "cancelled"],
+    cancelled: [],
+    completed: []
+};
 
 // Helper function to check if machine is available on given dates
 const checkAvailability = async (machineType, startDate, endDate) => {
@@ -22,6 +37,46 @@ const checkAvailability = async (machineType, startDate, endDate) => {
     });
 
     return conflictingBookings.length === 0;
+};
+
+// Helper function to validate dates
+const validateDates = (rentalDate, returnDate) => {
+    const rental = new Date(rentalDate);
+    const return_ = new Date(returnDate);
+    const now = new Date();
+
+    // Check if dates are valid
+    if (isNaN(rental.getTime()) || isNaN(return_.getTime())) {
+        throw new Error("Invalid date format");
+    }
+
+    // Check if rental date is in the past
+    if (rental < now) {
+        throw new Error("Rental date cannot be in the past");
+    }
+
+    // Check if return date is before rental date
+    if (return_ <= rental) {
+        throw new Error("Return date must be after rental date");
+    }
+};
+
+// Helper function to validate machine and mixer types
+const validateMachineAndMixerTypes = (machineType, mixerType) => {
+    if (!VALID_MACHINE_TYPES.includes(machineType) || !VALID_MIXER_TYPES.includes(mixerType)) {
+        throw new Error("Invalid machine or mixer type");
+    }
+};
+
+// Helper function to validate status transition
+const validateStatusTransition = (currentStatus, newStatus) => {
+    if (!VALID_STATUSES.includes(newStatus)) {
+        throw new Error("Invalid status value");
+    }
+
+    if (!VALID_STATUS_TRANSITIONS[currentStatus]?.includes(newStatus)) {
+        throw new Error("Invalid status transition");
+    }
 };
 
 // GET /margarita-rentals - Get all rentals
@@ -41,6 +96,10 @@ const getAllRentals = async (req, res) => {
 // GET /margarita-rentals/:id - Get rental by ID
 const getRentalById = async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ error: "Invalid rental ID" });
+        }
+
         const rental = await MargaritaRental.findById(req.params.id);
         if (!rental) {
             return res.status(404).json({ error: "Rental not found" });
@@ -65,6 +124,13 @@ const checkMachineAvailability = async (req, res) => {
             });
         }
 
+        // Validate dates
+        try {
+            validateDates(rentalDate, returnDate);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
+
         const isAvailable = await checkAvailability(
             machineType,
             new Date(rentalDate),
@@ -84,24 +150,45 @@ const checkMachineAvailability = async (req, res) => {
 const createPayment = async (req, res) => {
     try {
         const { machineType, mixerType } = req.body;
+
+        try {
+            validateMachineAndMixerTypes(machineType, mixerType);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
+
         const amount = MargaritaRental.calculatePrice(machineType, mixerType);
 
-        const request = new paypal.orders.OrdersCreateRequest();
-        request.prefer("return=representation");
-        request.requestBody({
-            intent: "CAPTURE",
-            purchase_units: [{
+        const create_payment_json = {
+            intent: "sale",
+            payer: {
+                payment_method: "paypal"
+            },
+            redirect_urls: {
+                return_url: `${process.env.CLIENT_URL}/success`,
+                cancel_url: `${process.env.CLIENT_URL}/cancel`
+            },
+            transactions: [{
                 amount: {
-                    currency_code: "USD",
-                    value: amount.toString()
-                }
+                    currency: "USD",
+                    total: amount.toString()
+                },
+                description: `Margarita Machine Rental - ${machineType} with ${mixerType} mixer`
             }]
-        });
+        };
 
-        const order = await client.execute(request);
-        res.status(200).json({
-            orderId: order.result.id,
-            amount: amount
+        paypal.payment.create(create_payment_json, function (error, payment) {
+            if (error) {
+                res.status(500).json({
+                    error: "Failed to create payment",
+                    details: error.message
+                });
+            } else {
+                res.status(200).json({
+                    orderId: payment.id,
+                    amount: amount
+                });
+            }
         });
     } catch (err) {
         res.status(500).json({
@@ -115,12 +202,23 @@ const createPayment = async (req, res) => {
 const capturePayment = async (req, res) => {
     try {
         const { orderId } = req.body;
-        const request = new paypal.orders.OrdersCaptureRequest(orderId);
-        const capture = await client.execute(request);
 
-        res.status(200).json({
-            transactionId: capture.result.purchase_units[0].payments.captures[0].id,
-            status: capture.result.status
+        if (!orderId) {
+            return res.status(400).json({ error: "OrderId is required" });
+        }
+
+        paypal.payment.execute(orderId, { payer_id: "test-payer-id" }, function (error, payment) {
+            if (error) {
+                res.status(500).json({
+                    error: "Failed to capture payment",
+                    details: error.message
+                });
+            } else {
+                res.status(200).json({
+                    transactionId: payment.id,
+                    status: payment.state
+                });
+            }
         });
     } catch (err) {
         res.status(500).json({
@@ -147,6 +245,20 @@ const createRental = async (req, res) => {
             return res.status(400).json({
                 error: "All fields are required"
             });
+        }
+
+        // Validate machine and mixer types
+        try {
+            validateMachineAndMixerTypes(machineType, mixerType);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
+
+        // Validate dates
+        try {
+            validateDates(rentalDate, returnDate);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
         }
 
         // Check availability
@@ -176,6 +288,7 @@ const createRental = async (req, res) => {
             rentalDate,
             returnDate,
             customer,
+            status: "pending",
             payment: {
                 paypalTransactionId,
                 amount: price,
@@ -196,11 +309,21 @@ const createRental = async (req, res) => {
 // PUT /margarita-rentals/:id - Update rental status
 const updateRentalStatus = async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ error: "Invalid rental ID" });
+        }
+
         const { status } = req.body;
         const rental = await MargaritaRental.findById(req.params.id);
 
         if (!rental) {
             return res.status(404).json({ error: "Rental not found" });
+        }
+
+        try {
+            validateStatusTransition(rental.status, status);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
         }
 
         rental.status = status;
