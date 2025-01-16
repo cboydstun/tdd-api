@@ -1,0 +1,246 @@
+{
+  "packages": [
+    {
+      "id": "kids-basic-party",
+      "name": "Kids Basic Party Package",
+      "description": "Perfect starter package for children's parties with basic entertainment and seating",
+      "items": [
+        {
+          "id": "6785613bbb296a2065af1f17",
+          "name": "Medium Castle",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f4b",
+          "name": "Tables and Chairs",
+          "quantity": 2
+        }
+      ],
+      "totalRetailPrice": 189.85,
+      "packagePrice": 159.95,
+      "savings": 29.9,
+      "savingsPercentage": 16,
+      "recommendedPartySize": {
+        "min": 10,
+        "max": 20
+      },
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "duration": "full-day",
+      "spaceRequired": "30x30 feet minimum",
+      "powerRequired": true
+    },
+    {
+      "id": "kids-deluxe-party",
+      "name": "Kids Deluxe Party Package",
+      "description": "Complete entertainment package for larger children's parties featuring bounce house, slide, and refreshments",
+      "items": [
+        {
+          "id": "6785613bbb296a2065af1f0f",
+          "name": "Large Inflatable Castle with Slide",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f4b",
+          "name": "Tables and Chairs",
+          "quantity": 3
+        },
+        {
+          "id": "6785613bbb296a2065af1f54",
+          "name": "Popcorn Machine",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f83",
+          "name": "Snow Cone Machine",
+          "quantity": 1
+        }
+      ],
+      "totalRetailPrice": 389.7,
+      "packagePrice": 299.95,
+      "savings": 89.75,
+      "savingsPercentage": 23,
+      "recommendedPartySize": {
+        "min": 20,
+        "max": 40
+      },
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "duration": "full-day",
+      "spaceRequired": "40x40 feet minimum",
+      "powerRequired": true
+    },
+    {
+      "id": "summer-splash",
+      "name": "Summer Splash Package",
+      "description": "Complete water party package perfect for hot summer days",
+      "items": [
+        {
+          "id": "6785613bbb296a2065af1f1d",
+          "name": "Green Junior Water Park",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f4b",
+          "name": "Tables and Chairs",
+          "quantity": 2
+        },
+        {
+          "id": "6785613bbb296a2065af1f83",
+          "name": "Snow Cone Machine",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f47",
+          "name": "4500W Generator",
+          "quantity": 1
+        }
+      ],
+      "totalRetailPrice": 369.7,
+      "packagePrice": 299.95,
+      "savings": 69.75,
+      "savingsPercentage": 19,
+      "recommendedPartySize": {
+        "min": 15,
+        "max": 30
+      },
+      "ageRange": {
+        "min": 4,
+        "max": 12
+      },
+      "duration": "full-day",
+      "spaceRequired": "35x35 feet minimum",
+      "powerRequired": true,
+      "seasonalRestrictions": "Temperature must be above 75°F"
+    },
+    {
+      "id": "adult-cocktail-party",
+      "name": "Adult Cocktail Party Package",
+      "description": "Premium package for sophisticated adult gatherings featuring frozen cocktails and seating",
+      "items": [
+        {
+          "id": "6785613cbb296a2065af1f7b",
+          "name": "30L Double Tank Slush Machine with Alcoholic Mix",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f4b",
+          "name": "Tables and Chairs",
+          "quantity": 4
+        }
+      ],
+      "totalRetailPrice": 254.75,
+      "packagePrice": 199.95,
+      "savings": 54.8,
+      "savingsPercentage": 22,
+      "recommendedPartySize": {
+        "min": 20,
+        "max": 40
+      },
+      "ageRange": {
+        "min": 21,
+        "max": 99
+      },
+      "duration": "full-day",
+      "spaceRequired": "20x20 feet minimum",
+      "powerRequired": true,
+      "additionalRequirements": "Valid ID required for rental"
+    },
+    {
+      "id": "carnival-concessions",
+      "name": "Carnival Concessions Package",
+      "description": "Complete concessions setup perfect for school events, festivals, and large gatherings",
+      "items": [
+        {
+          "id": "6785613bbb296a2065af1f58",
+          "name": "15L Slush Machine with Virgin Mix",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f54",
+          "name": "Popcorn Machine",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f4f",
+          "name": "Cotton Candy Machine",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f83",
+          "name": "Snow Cone Machine",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f4b",
+          "name": "Tables and Chairs",
+          "quantity": 2
+        }
+      ],
+      "totalRetailPrice": 289.7,
+      "packagePrice": 229.95,
+      "savings": 59.75,
+      "savingsPercentage": 21,
+      "recommendedPartySize": {
+        "min": 50,
+        "max": 100
+      },
+      "ageRange": {
+        "min": 3,
+        "max": 99
+      },
+      "duration": "full-day",
+      "spaceRequired": "30x30 feet minimum",
+      "powerRequired": true
+    },
+    {
+      "id": "wedding-elegance",
+      "name": "Wedding Elegance Package",
+      "description": "Sophisticated entertainment package perfect for wedding receptions and formal events",
+      "items": [
+        {
+          "id": "6785613bbb296a2065af1f61",
+          "name": "Large White Combo with Slide",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f73",
+          "name": "30L Double Tank Slush Machine with Virgin Mix",
+          "quantity": 1
+        },
+        {
+          "id": "6785613bbb296a2065af1f4b",
+          "name": "Tables and Chairs",
+          "quantity": 5
+        }
+      ],
+      "totalRetailPrice": 499.6,
+      "packagePrice": 399.95,
+      "savings": 99.65,
+      "savingsPercentage": 20,
+      "recommendedPartySize": {
+        "min": 30,
+        "max": 60
+      },
+      "ageRange": {
+        "min": 3,
+        "max": 99
+      },
+      "duration": "full-day",
+      "spaceRequired": "40x40 feet minimum",
+      "powerRequired": true
+    }
+  ],
+  "packagePolicies": {
+    "delivery": "Free delivery within 25 miles",
+    "setup": "Professional setup and takedown included",
+    "duration": "All packages are for full-day rental (8AM-8PM)",
+    "deposit": "50% deposit required at booking",
+    "weatherPolicy": "Rain date rescheduling available with 24-hour notice",
+    "cancellation": "Full refund available if cancelled 72 hours before event"
+  }
+}

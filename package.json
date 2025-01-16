@@ -10,7 +10,8 @@
     "format": "prettier --write .",
     "seed:blogs": "node ./blogSeed.js",
     "seed:products": "node ./productSeed.js",
-    "seed:reviews": "node ./reviewSeed.js"
+    "seed:reviews": "node ./reviewSeed.js",
+    "seed:packages": "node ./packageSeed.js"
   },
   "repository": {
     "type": "git",
