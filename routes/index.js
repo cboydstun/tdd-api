@@ -8,7 +8,6 @@ const userRouter = require("./userRouter");
 const contactRouter = require("./contactRouter");
 const productRouter = require("./productRouter");
 const reviewRouter = require("./reviewRouter");
-const margaritaRentalRouter = require("./margaritaRentalRouter");
 const packageRouter = require("./packageRouter");
 
 // Use the enhancedRequestLogging middleware for all routes
@@ -23,7 +22,6 @@ apiV1Router.use("/blogs", blogRouter);
 apiV1Router.use("/contacts", contactRouter);
 apiV1Router.use("/products", productRouter);
 apiV1Router.use("/reviews", reviewRouter);
-apiV1Router.use("/margarita-rentals", margaritaRentalRouter);
 apiV1Router.use("/packages", packageRouter);
 
 // Mount API v1 routes
