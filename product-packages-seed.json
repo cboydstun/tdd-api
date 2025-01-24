@@ -236,11 +236,11 @@
     }
   ],
   "packagePolicies": {
-    "delivery": "Free delivery within 25 miles",
+    "delivery": "Free delivery within Loop 1604",
     "setup": "Professional setup and takedown included",
     "duration": "All packages are for full-day rental (8AM-8PM)",
-    "deposit": "50% deposit required at booking",
+    "deposit": "No deposit required",
     "weatherPolicy": "Rain date rescheduling available with 24-hour notice",
-    "cancellation": "Full refund available if cancelled 72 hours before event"
+    "cancellation": "No deposit so there is no cancellation fee"
   }
 }

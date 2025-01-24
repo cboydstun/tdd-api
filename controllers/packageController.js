@@ -56,11 +56,11 @@ const getAllPackages = async (req, res) => {
 // GET /packages/:slug - Get package by slug
 const getPackageBySlug = async (req, res) => {
     try {
-        const package = await Package.findOne({ slug: req.params.slug });
-        if (!package) {
+        const packageItem = await Package.findOne({ slug: req.params.slug });
+        if (!packageItem) {
             return res.status(404).json({ error: "Package not found" });
         }
-        res.status(200).json(package);
+        res.status(200).json(packageItem);
     } catch (err) {
         console.error("Error fetching package:", err);
         res.status(500).json({
@@ -140,9 +140,9 @@ const createPackage = async (req, res) => {
 const updatePackage = async (req, res) => {
     try {
         const packageData = req.body;
-        const package = await Package.findOne({ slug: req.params.slug });
+        const packageItem = await Package.findOne({ slug: req.params.slug });
 
-        if (!package) {
+        if (!packageItem) {
             return res.status(404).json({ error: "Package not found" });
         }
 
@@ -151,14 +151,14 @@ const updatePackage = async (req, res) => {
             let newSlug = slugify(packageData.name, { lower: true, strict: true });
             let slugExists = await Package.findOne({
                 slug: newSlug,
-                _id: { $ne: package._id }
+                _id: { $ne: packageItem._id }
             });
             let counter = 1;
             while (slugExists) {
                 newSlug = slugify(`${packageData.name}-${counter}`, { lower: true, strict: true });
                 slugExists = await Package.findOne({
                     slug: newSlug,
-                    _id: { $ne: package._id }
+                    _id: { $ne: packageItem._id }
                 });
                 counter++;
             }
@@ -191,10 +191,10 @@ const updatePackage = async (req, res) => {
             packageData.savings || packageData.savingsPercentage) {
             try {
                 validatePrices(
-                    packageData.totalRetailPrice || package.totalRetailPrice,
-                    packageData.packagePrice || package.packagePrice,
-                    packageData.savings || package.savings,
-                    packageData.savingsPercentage || package.savingsPercentage
+                    packageData.totalRetailPrice || packageItem.totalRetailPrice,
+                    packageData.packagePrice || packageItem.packagePrice,
+                    packageData.savings || packageItem.savings,
+                    packageData.savingsPercentage || packageItem.savingsPercentage
                 );
             } catch (error) {
                 return res.status(400).json({ error: error.message });
@@ -226,16 +226,16 @@ const updatePackage = async (req, res) => {
 // DELETE /packages/:slug - Delete a package
 const deletePackage = async (req, res) => {
     try {
-        const package = await Package.findOne({ slug: req.params.slug });
+        const packageItem = await Package.findOne({ slug: req.params.slug });
 
-        if (!package) {
+        if (!packageItem) {
             return res.status(404).json({ error: "Package not found" });
         }
 
         await Package.deleteOne({ slug: req.params.slug });
         res.status(200).json({
             message: "Package successfully deleted",
-            deletedPackage: package
+            deletedPackage: packageItem
         });
     } catch (err) {
         console.error("Error deleting package:", err);
