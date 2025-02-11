@@ -3,14 +3,8 @@ const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const app = require("../app");
 const Blog = require("../models/blogSchema");
-const fs = require("fs").promises;
-
 // Mock Cloudinary
 jest.mock("cloudinary", () => require("./mocks/cloudinary"));
-
-// Mock specific fs operations
-jest.spyOn(fs, "unlink").mockResolvedValue(undefined);
-jest.spyOn(require("fs"), "unlinkSync").mockReturnValue(undefined);
 
 // Mock the JWT middleware
 jest.mock("../middlewares/jwtMiddleware", () => {
@@ -119,6 +113,11 @@ describe("Blog API Endpoints", () => {
         body: "New body",
         conclusion: "New conclusion",
         status: "draft",
+        images: JSON.stringify([{
+          url: "https://res.cloudinary.com/demo/image/upload/v1234/test.jpg",
+          public_id: "test",
+          secure_url: "https://res.cloudinary.com/demo/image/upload/v1234/test.jpg"
+        }])
       };
 
       const response = await request(app)
@@ -164,6 +163,11 @@ describe("Blog API Endpoints", () => {
         introduction: "Updated intro",
         body: "Updated body",
         conclusion: "Updated conclusion",
+        images: JSON.stringify([{
+          url: "https://res.cloudinary.com/demo/image/upload/v1234/test2.jpg",
+          public_id: "test2",
+          secure_url: "https://res.cloudinary.com/demo/image/upload/v1234/test2.jpg"
+        }])
       };
 
       const response = await request(app)

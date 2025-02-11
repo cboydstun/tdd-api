@@ -1,6 +1,4 @@
 // productController.js
-const fs = require("fs").promises;
-const path = require("path");
 const Product = require("../models/productSchema");
 const slugify = require("slugify");
 const sanitizeHtml = require("sanitize-html");
@@ -9,20 +7,17 @@ const cloudinary = require("cloudinary").v2;
 const VALID_DIMENSION_UNITS = ["feet", "meters", "inches"];
 
 // Helper function to upload image to Cloudinary
-const uploadToCloudinary = async (file) => {
+const uploadToCloudinary = async (imageData) => {
   try {
-    const result = await cloudinary.uploader.upload(file.path, {
+    const result = await cloudinary.uploader.upload(imageData, {
       folder: "products",
       resource_type: "auto",
     });
-    // Delete local file after upload
-    await fs.unlink(file.path);
     return {
-      filename: file.originalname,
+      filename: result.original_filename,
       url: result.secure_url,
       public_id: result.public_id,
-      mimetype: file.mimetype,
-      size: file.size,
+      size: result.bytes,
     };
   } catch (error) {
     console.error("Error uploading to Cloudinary:", error);
@@ -205,9 +200,9 @@ const createProduct = async (req, res) => {
 
     // Upload images to Cloudinary if present
     let uploadedImages = [];
-    if (req.files && req.files.length > 0) {
+    if (productData.images && Array.isArray(productData.images)) {
       uploadedImages = await Promise.all(
-        req.files.map((file) => uploadToCloudinary(file)),
+        productData.images.map((imageData) => uploadToCloudinary(imageData))
       );
     }
 
@@ -362,10 +357,10 @@ const updateProduct = async (req, res) => {
 
     // Upload new images to Cloudinary
     let newImages = [];
-    if (req.files && req.files.length > 0) {
-      console.log("Uploading new images:", req.files.length);
+    if (productData.images && Array.isArray(productData.images)) {
+      console.log("Uploading new images:", productData.images.length);
       newImages = await Promise.all(
-        req.files.map((file) => uploadToCloudinary(file)),
+        productData.images.map((imageData) => uploadToCloudinary(imageData))
       );
     }
 
@@ -542,7 +537,18 @@ const removeImage = async (req, res) => {
 
     // Remove image from product document
     const originalLength = product.images.length;
-    product.images = product.images.filter((img) => img !== imageToDelete);
+    product.images = product.images.filter((img) => {
+      // Compare by public_id if available
+      if (img.public_id && imageToDelete.public_id) {
+        return img.public_id !== imageToDelete.public_id;
+      }
+      // Compare by filename if available
+      if (img.filename && imageToDelete.filename) {
+        return img.filename !== imageToDelete.filename;
+      }
+      // Compare by URL as last resort
+      return img.url !== imageToDelete.url;
+    });
     console.log(
       `Removed ${originalLength - product.images.length} images from product`,
     );

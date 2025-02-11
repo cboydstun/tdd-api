@@ -30,7 +30,7 @@ const blogSchema = new Schema(
       },
     ],
     excerpt: { type: String, maxlength: 200 },
-    featuredImage: { type: String },
+    featuredImage: { type: String, default: "" },
     categories: [{ type: String, trim: true }],
     tags: [{ type: String, trim: true }],
     status: {
@@ -59,7 +59,7 @@ const blogSchema = new Schema(
       focusKeyword: { type: String },
     },
     readTime: { type: Number },
-    isFeature: { type: Boolean, default: false },
+    isFeature: { type: Boolean, default: false, required: true },
     relatedPosts: [{ type: Schema.Types.ObjectId, ref: "Blog" }],
   },
   { timestamps: true },

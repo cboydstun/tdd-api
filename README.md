@@ -32,10 +32,10 @@ A robust, production-ready RESTful API built with Node.js and Express.js, featur
 
 - **File Operations**
 
-  - File upload support with Multer
+  - Direct image uploads to Cloudinary
   - Static file serving
   - Upload size restrictions
-  - Cloudinary integration for media storage
+  - Cloud-based media storage and management
 
 - **Error Handling & Logging**
   - Centralized error handling
@@ -82,6 +82,9 @@ Required environment variables:
 - `JWT_SECRET`: Secret key for JWT
 - `CLIENT_URL`: Frontend application URL
 - `PORT`: API port (default: 8080)
+- `CLOUDINARY_CLOUD_NAME`: Your Cloudinary cloud name
+- `CLOUDINARY_API_KEY`: Your Cloudinary API key
+- `CLOUDINARY_API_SECRET`: Your Cloudinary API secret
 
 ## Running the Application
 

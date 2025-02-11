@@ -3,16 +3,10 @@ const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const app = require("../app");
 const Product = require("../models/productSchema");
-const path = require("path");
-const fs = require("fs").promises;
 const slugify = require("slugify");
 
 // Mock Cloudinary
 jest.mock("cloudinary", () => require("./mocks/cloudinary"));
-
-// Mock specific fs operations for product controller
-jest.spyOn(fs, "unlink").mockResolvedValue(undefined);
-jest.spyOn(require("fs"), "unlinkSync").mockReturnValue(undefined);
 
 // Mock the JWT middleware
 jest.mock("../middlewares/jwtMiddleware", () => {
@@ -25,21 +19,6 @@ jest.mock("../middlewares/jwtMiddleware", () => {
   });
 });
 
-// Mock the upload middleware
-jest.mock("../middlewares/uploadMiddleware", () => ({
-  array: () => (req, res, next) => {
-    req.files = [
-      {
-        filename: "test-image.jpg",
-        path: "/uploads/test-image.jpg",
-        originalname: "test-image.jpg",
-        mimetype: "image/jpeg",
-        size: 1024,
-      },
-    ];
-    next();
-  },
-}));
 
 let mongoServer;
 
@@ -63,13 +42,7 @@ const validProductData = {
   },
   rentalDuration: "full-day",
   availability: "available",
-  images: [
-    {
-      url: "https://example.com/bounce-castle.jpg",
-      alt: "Bounce Castle",
-      isPrimary: true,
-    },
-  ],
+  images: [], // Initialize with empty array since images are handled separately
   specifications: [
     {
       name: "Material",

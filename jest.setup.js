@@ -20,14 +20,6 @@ jest.mock("./middlewares/jwtMiddleware", () => (req, res, next) => {
   next();
 });
 
-// Mock upload middleware
-jest.mock("./middlewares/uploadMiddleware", () => ({
-  array: () => (req, res, next) => {
-    req.files = [];
-    next();
-  },
-}));
-
 // Mock too busy utility
 jest.mock("./utils/tooBusy", () => (req, res, next) => next());
 

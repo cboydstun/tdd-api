@@ -3,23 +3,21 @@ const Blog = require("../models/blogSchema");
 const slugify = require("slugify");
 const sanitizeHtml = require("sanitize-html");
 const cloudinary = require("cloudinary").v2;
-const fs = require("fs").promises;
 
 // Helper function to upload image to Cloudinary
-const uploadToCloudinary = async (file) => {
+const uploadToCloudinary = async (imageData) => {
   try {
-    const result = await cloudinary.uploader.upload(file.path, {
+    const result = await cloudinary.uploader.upload(imageData, {
       folder: "blogs",
       resource_type: "auto",
     });
-    // Delete local file after upload
-    await fs.unlink(file.path);
+    // Generate filename from public_id if original_filename is not available
+    const filename = result.original_filename || result.public_id.split('/').pop();
     return {
-      filename: file.originalname,
+      filename,
       url: result.secure_url,
       public_id: result.public_id,
-      mimetype: file.mimetype,
-      size: file.size,
+      size: result.bytes || 0,
     };
   } catch (error) {
     console.error("Error uploading to Cloudinary:", error);
@@ -128,12 +126,16 @@ const createBlog = async (req, res) => {
       ? sanitizeHtml(excerpt.substring(0, 197)) + "..."
       : sanitizeHtml(sanitizedIntroduction.substring(0, 197)) + "...";
 
-    // Upload images to Cloudinary if present
+    // Handle images from next-cloudinary
     let uploadedImages = [];
-    if (req.files && req.files.length > 0) {
-      uploadedImages = await Promise.all(
-        req.files.map((file) => uploadToCloudinary(file)),
-      );
+    if (req.body.images) {
+      const images = JSON.parse(req.body.images);
+      uploadedImages = images.map(image => ({
+        filename: image.public_id.split('/').pop(),
+        url: image.url,
+        public_id: image.public_id,
+        size: 0 // Size not available from next-cloudinary
+      }));
     }
 
     // Parse categories and tags from comma-separated strings
@@ -155,6 +157,18 @@ const createBlog = async (req, res) => {
       status,
       publishDate: status === "published" ? new Date() : null,
       images: uploadedImages,
+      isFeature: req.body.isFeature === "true",
+      meta: {
+        views: 0,
+        likes: 0,
+        shares: 0
+      },
+      seo: {
+        metaTitle: title,
+        metaDescription: truncatedExcerpt,
+        focusKeyword: title.toLowerCase()
+      },
+      readTime: Math.ceil((body.length + introduction.length + conclusion.length) / 1500) // Rough estimate of 5 minutes per 1500 chars
     });
 
     const savedBlog = await newBlog.save();
@@ -213,21 +227,38 @@ const updateBlog = async (req, res) => {
       );
     }
 
-    // Handle new image uploads to Cloudinary
-    let newImages = [];
-    if (req.files && req.files.length > 0) {
-      newImages = await Promise.all(
-        req.files.map((file) => uploadToCloudinary(file)),
-      );
+    // Handle images from request
+    let updatedImages = [];
+    if (req.body.images) {
+      // Images array is already parsed since we're not stringifying it in the frontend
+      const imagesArray = Array.isArray(req.body.images) ? req.body.images : [];
+
+      // Map each image to ensure consistent format
+      updatedImages = imagesArray.map(image => ({
+        filename: image.public_id ? image.public_id.split('/').pop() : image.filename,
+        url: image.url,
+        public_id: image.public_id,
+        size: image.size || 0
+      }));
+    } else {
+      // If no images in request, keep existing images
+      updatedImages = blog.images;
     }
 
-    // Parse categories and tags from comma-separated strings
-    const categoriesArray = categories
-      ? categories.split(",").map((cat) => cat.trim())
-      : blog.categories;
-    const tagsArray = tags
-      ? tags.split(",").map((tag) => tag.trim())
-      : blog.tags;
+    console.log('Received images:', req.body.images);
+    console.log('Updated images:', updatedImages);
+
+    // Handle categories and tags which can be arrays or comma-separated strings
+    const categoriesArray = Array.isArray(categories)
+      ? categories
+      : categories
+        ? categories.split(",").map((cat) => cat.trim())
+        : blog.categories;
+    const tagsArray = Array.isArray(tags)
+      ? tags
+      : tags
+        ? tags.split(",").map((tag) => tag.trim())
+        : blog.tags;
 
     const sanitizeOptions = {
       allowedTags: sanitizeHtml.defaults.allowedTags.concat([
@@ -254,9 +285,11 @@ const updateBlog = async (req, res) => {
     if (status) blog.status = status;
     if (categoriesArray) blog.categories = categoriesArray;
     if (tagsArray) blog.tags = tagsArray;
+    if (req.body.isFeature !== undefined) blog.isFeature = req.body.isFeature === "true";
+    if (req.body.featuredImage !== undefined) blog.featuredImage = req.body.featuredImage;
 
-    // Add new images
-    blog.images = [...blog.images, ...newImages];
+    // Update the blog's images with the processed images array
+    blog.images = updatedImages;
 
     const updatedBlog = await blog.save();
     res.status(200).json(updatedBlog);
