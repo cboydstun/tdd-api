@@ -1,8 +1,8 @@
 {
   "products": [
     {
-      "name": "Large Inflatable Castle with Slide",
-      "slug": "large-inflatable-castle-with-slide",
+      "name": "Red Inflatable Castle with Slide",
+      "slug": "red-large-inflatable-castle-with-slide",
       "description": "An impressive castle-themed bounce house featuring a thrilling slide attachment. Perfect for royal celebrations and active play, this bouncer combines the magic of a castle with the excitement of sliding fun.",
       "category": "Bounce Houses",
       "price": {
@@ -55,7 +55,51 @@
       "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
     },
     {
-      "name": "Large Castle",
+      "name": "Blue Inflatable Castle with Slide",
+      "slug": "blue-large-inflatable-castle-with-slide",
+      "description": "An awesome castle-themed bounce house featuring a thrilling slide attachment. Perfect for royal celebrations and active play, this bouncer combines the magic of a castle with the excitement of sliding fun.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 249.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/w_1000,ar_1:1,c_fill,g_auto/v1743019332/1000007994_ocsmew.jpg",
+          "alt": "Blue Castle with Slide Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 25,
+        "width": 15,
+        "height": 15,
+        "unit": "feet"
+      },
+      "capacity": 10,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "30x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Slide", "Large Bouncing Area", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 10 children at once. No shoes, sharp objects, or food inside.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "Crayola Castle",
       "slug": "large-castle",
       "description": "A spacious castle-themed bounce house perfect for multiple children to enjoy simultaneously. Features medieval-inspired design elements and plenty of bouncing space.",
       "category": "Bounce Houses",
@@ -68,7 +112,7 @@
       "images": [
         {
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/eipgpncv4edtvaovx6yb.jpg",
-          "alt": "Castle with Slide Front View",
+          "alt": "Crayola Castle Front View",
           "isPrimary": true
         }
       ],
@@ -112,7 +156,7 @@
       "images": [
         {
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/tsupopd4y0voxanhw8ja.jpg",
-          "alt": "Castle with Slide Front View",
+          "alt": "Medium Castle Front View",
           "isPrimary": true
         }
       ],
@@ -156,7 +200,7 @@
       "images": [
         {
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/in8jdevacukdhfw2sxrv.jpg",
-          "alt": "Castle with Slide Front View",
+          "alt": "Junior Bounce Front View",
           "isPrimary": true
         }
       ],
@@ -178,7 +222,7 @@
         "max": 10
       },
       "setupRequirements": {
-        "space": "24x17 feet flat surface",
+        "space": "20x20 feet flat surface",
         "powerSource": true,
         "surfaceType": ["Grass"]
       },
@@ -191,7 +235,7 @@
       ]
     },
     {
-      "name": "Green Junior Water Park",
+      "name": "Green Junior Playground",
       "slug": "green-junior-water-park",
       "description": "Ultimate junior water park experience featuring dual slides, water sprays, ball pit pool, and an exciting tunnel. This green and orange themed inflatable combines multiple play elements including bodyboarding, splash zones, and a slip slide for maximum entertainment.",
       "category": "Water Slides",
@@ -204,7 +248,7 @@
       "images": [
         {
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_auto,h_500,w_500/products/green-junior/qp64eavwnctdfdfhi9tl",
-          "alt": "Mega Water Adventure Park Front View",
+          "alt": "Green Junior Playground Front View",
           "isPrimary": true
         }
       ],
@@ -234,7 +278,7 @@
         "max": 12
       },
       "setupRequirements": {
-        "space": "21x21 feet flat surface",
+        "space": "20x20 feet flat surface",
         "powerSource": true,
         "surfaceType": ["Grass"]
       },
@@ -333,7 +377,7 @@
       "images": [
         {
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/fh1s4w0p3pyysl0lrbzi.jpg",
-          "alt": "Castle with Slide Front View",
+          "alt": "Tropical Combo Front View",
           "isPrimary": true
         }
       ],
@@ -355,7 +399,7 @@
         "max": 12
       },
       "setupRequirements": {
-        "space": "25x20 feet flat surface",
+        "space": "30x20 feet flat surface",
         "powerSource": true,
         "surfaceType": ["Grass"]
       },
@@ -386,7 +430,7 @@
       "images": [
         {
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733554346/products/rtwuzqa7a6l56ovjmiss.jpg",
-          "alt": "Castle with Slide Front View",
+          "alt": "Lime Waterslide Front View",
           "isPrimary": true
         }
       ],
@@ -457,6 +501,59 @@
       },
       "setupRequirements": {
         "space": "35x25 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": [
+        "Water Slide",
+        "Extended Length",
+        "Splash Pool",
+        "Safety Rails"
+      ],
+      "safetyGuidelines": "Adult supervision required. One slider at a time. No running on wet surfaces. No horseplay on stairs.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F"
+      ]
+    },
+    {
+      "name": "Wet Bounce House with Waterslide and Pool Combo",
+      "slug": "wet-bounce-house-with-waterslide-and-pool-combo",
+      "description": "Ultimate water play combo unit featuring a bounce house, water slide, and splash pool. Perfect for summer parties and active entertainment.",
+      "category": "Water Slides",
+      "price": {
+        "base": 299.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/w_1000,ar_1:1,c_fill,g_auto/v1743019329/1000007995_s9fdau.jpg",
+          "alt": "Wet Bounce House with Slide Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "WET"
+        }
+      ],
+      "dimensions": {
+        "length": 30,
+        "width": 15,
+        "height": 18,
+        "unit": "feet"
+      },
+      "capacity": 8,
+      "ageRange": {
+        "min": 6,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "40x30 feet flat surface",
         "powerSource": true,
         "surfaceType": ["Grass"]
       },
@@ -640,8 +737,8 @@
         }
       ],
       "dimensions": {
-        "length": 25,
-        "width": 15,
+        "length": 20,
+        "width": 20,
         "height": 15,
         "unit": "feet"
       },
@@ -651,7 +748,7 @@
         "max": 12
       },
       "setupRequirements": {
-        "space": "25x30 feet flat surface",
+        "space": "25x25 feet flat surface",
         "powerSource": true,
         "surfaceType": ["Grass", "Concrete", "Asphalt"]
       },
@@ -770,7 +867,7 @@
       "images": [
         {
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733554346/products/qhpxa4jm9wbic5w1qmxf.jpg",
-          "alt": "Castle with Slide Front View",
+          "alt": "Front View",
           "isPrimary": true
         }
       ],
@@ -874,7 +971,7 @@
       "images": [
         {
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/gggcfopwjz162ehliomh.jpg",
-          "alt": "Castle with Slide Front View",
+          "alt": "Tables and Chairs View",
           "isPrimary": true
         }
       ],
@@ -907,6 +1004,64 @@
       "features": ["Portable", "Weather Resistant", "Easy Setup"],
       "safetyGuidelines": "Ensure stable placement on flat surface. Do not stand on chairs or table. Maximum weight capacity 300 lbs per table, 250 lbs per chair.",
       "weatherRestrictions": ["Secure or store indoors during high winds"]
+    },
+    {
+      "name": "Children's Table and Chair Set",
+      "slug": "childrens-table-chair-set",
+      "description": "Height-adjustable table and six chairs suitable for boys and girls aged 2-12. The tabletop is paintable and easy to clean, making it perfect for family learning and daily use.",
+      "category": "Party Equipment",
+      "price": {
+        "base": 29.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1743019535/kids-tables-chairs-satx-bounce_fqpd4z.jpg",
+          "alt": "Children's Table and Chair Set - Wood Color",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["EXTRA"]
+        },
+        {
+          "name": "Set Contents",
+          "value": "1 table / 6 chairs"
+        },
+        {
+          "name": "Material",
+          "value": "HDPE (High-Density Polyethylene)"
+        }
+      ],
+      "dimensions": {
+        "length": 48,
+        "width": 30,
+        "height": 20,
+        "unit": "inches"
+      },
+      "capacity": 6,
+      "ageRange": {
+        "min": 2,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "Flat surface",
+        "powerSource": false,
+        "surfaceType": ["Indoor", "Wood", "Tile", "Carpet"]
+      },
+      "features": [
+        "Height Adjustable",
+        "Waterproof Tabletop",
+        "Crack Resistant",
+        "Ergonomic Chair Design",
+        "Non-slip Seat Surface"
+      ],
+      "safetyGuidelines": "Ensure stable placement on a flat surface. Do not stand on chairs or table. Maximum weight capacity: 330 lbs for table, 220 lbs per chair.",
+      "weatherRestrictions": ["Recommended for indoor use"]
     },
     {
       "name": "Cotton Candy Machine",
@@ -979,7 +1134,7 @@
       "images": [
         {
           "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/cybljbcbc4aoh99higs7.jpg",
-          "alt": "Castle with Slide Front View",
+          "alt": "Popcorn machine front view",
           "isPrimary": true
         }
       ],
