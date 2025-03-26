@@ -777,7 +777,7 @@
       "specifications": [
         {
           "name": "Type",
-          "value": "DRY"
+          "value": "EXTRA"
         }
       ],
       "dimensions": {
@@ -826,7 +826,7 @@
       "specifications": [
         {
           "name": "Type",
-          "value": ["DRY", "WET"]
+          "value": ["DRY"]
         }
       ],
       "dimensions": {
@@ -1174,9 +1174,9 @@
       "weatherRestrictions": ["Indoor use only", "Keep away from water"]
     },
     {
-      "name": "15L Slush Machine with Virgin Mix",
-      "slug": "15l-slushy-machine",
-      "description": "Professional-grade 15L/3 gallon slushy machine with advanced features. Stainless steel construction with food-grade PC tank and two-layer ABS lid ensure durability and easy maintenance. Features precise temperature control (26.6°F to 28.4°F), powerful 500W compressor for rapid cooling, and illuminated tank to showcase vibrant beverages. Perfect for events, parties, and commercial use.",
+      "name": "15L Single Tank Slush Machine",
+      "slug": "15l-single-tank-slushy-machine",
+      "description": "Superior commercial-grade slush machine featuring a single 15L tank (about 4 gallons). Provides ~50 8oz servings or ~25 16oz servings. Virgin Kool-Aid mixer and premium alcholic mixers available for an additional fee. Features a premium 700W compressor with copper condenser for rapid cooling and energy efficiency. Food-grade PC containers and 3-layer stainless steel construction ensure durability and safety. Independent cooling and mixing controls, plus large discharge faucets for easy serving. Perfect for birthday parties, church events, office celebrations, or any other get together!",
       "category": "Concessions",
       "price": {
         "base": 99.95,
@@ -1208,7 +1208,7 @@
         },
         {
           "name": "Capacity",
-          "value": "15L / 3 US gallons"
+          "value": "15L / 4 US gallons"
         },
         {
           "name": "Power",
@@ -1235,12 +1235,12 @@
         "max": 99
       },
       "setupRequirements": {
-        "space": "4x4 feet flat surface",
+        "space": "2x2 feet flat surface",
         "powerSource": true,
         "surfaceType": ["Metal", "Wood", "Counter Top"]
       },
       "features": [
-        "15L/3 Gallon Tank",
+        "15L/4 Gallon Tank",
         "Interior Bowl Light",
         "Stainless Steel Body",
         "Food-Grade PC Tank",
@@ -1317,115 +1317,12 @@
       "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
     },
     {
-      "name": "15L Slush Machine with Alcoholic Mix",
-      "slug": "15l-slush-machine-alcoholic-mix",
-      "description": "Professional-grade 15L/3 gallon frozen margarita machine with advanced features. Stainless steel construction with food-grade PC tank and two-layer ABS lid ensure durability and easy maintenance. Features precise temperature control (26.6°F to 28.4°F), powerful 500W compressor for rapid cooling, and illuminated tank to showcase your frozen cocktails. Includes your choice of one gallon of margarita mix, pina colada mix, or strawberry daiquiri mix. Perfect for adult parties and events.",
+      "name": "30L Double Tank Slush Machine",
+      "slug": "30l-double-tank-slush-machine-virgin",
+      "description": "Superior commercial-grade slush machine featuring dual 15L tanks (30L total capacity). Provides ~100 8oz servings or ~50 16oz servings. Virgin Kool-Aid mixer and premium alcholic mixers available for an additional fee. Features a premium 700W compressor with copper condenser for rapid cooling and energy efficiency. Food-grade PC containers and 3-layer stainless steel construction ensure durability and safety. Independent cooling and mixing controls, plus large discharge faucets for easy serving. Perfect for birthday parties, church events, office celebrations, or any other get together!",
       "category": "Concessions",
       "price": {
         "base": 124.95,
-        "currency": "USD"
-      },
-      "rentalDuration": "full-day",
-      "availability": "available",
-      "images": [
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_crop,ar_1:1/v1734553319/1000007636_jhrpow.jpg",
-          "alt": "Margarita Machine Front View",
-          "isPrimary": true
-        },
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553319/1000007632_wjtbkp.jpg",
-          "alt": "Margarita Machine Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553319/1000007631_zhicwe.jpg",
-          "alt": "Margarita Machine Detail View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553318/1000007633_dnvqhy.jpg",
-          "alt": "Margarita Machine Front View",
-          "isPrimary": true
-        },
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553318/1000007635_h3i34c.jpg",
-          "alt": "Margarita Machine Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1734553316/1000007634_kapj8p.jpg",
-          "alt": "Margarita Machine Detail View",
-          "isPrimary": false
-        }
-      ],
-      "specifications": [
-        {
-          "name": "Type",
-          "value": ["EXTRA"]
-        },
-        {
-          "name": "Capacity",
-          "value": "15L / 3 US gallons"
-        },
-        {
-          "name": "Power",
-          "value": "500W"
-        },
-        {
-          "name": "Temperature Range",
-          "value": "26.6°F to 28.4°F (-3°C to -2°C)"
-        },
-        {
-          "name": "Preparation Time",
-          "value": "50 minutes"
-        },
-        {
-          "name": "Included Mix Options",
-          "value": "Choice of Margarita, Pina Colada, or Strawberry Daiquiri (1 gallon)"
-        }
-      ],
-      "dimensions": {
-        "length": 2,
-        "width": 2,
-        "height": 3,
-        "unit": "feet"
-      },
-      "capacity": 50,
-      "ageRange": {
-        "min": 21,
-        "max": 99
-      },
-      "setupRequirements": {
-        "space": "4x4 feet flat surface",
-        "powerSource": true,
-        "surfaceType": ["Counter Top", "Table"]
-      },
-      "features": [
-        "15L/3 Gallon Tank",
-        "Interior Bowl Light",
-        "Stainless Steel Body",
-        "Food-Grade PC Tank",
-        "360° Mixing Stirrer",
-        "Temperature Control",
-        "Antifreeze System",
-        "Large Discharge Faucet",
-        "Detachable Drip Tray",
-        "Energy Efficient",
-        "Low Noise Operation",
-        "50 Cups and 50 Straws Included",
-        "Choice of Mix Flavor"
-      ],
-      "safetyGuidelines": "Adult operation only (21+). Keep away from water. Follow provided operating instructions. Valid ID required for rental. Clean thoroughly after use.",
-      "weatherRestrictions": ["Indoor use only", "Keep away from water"]
-    },
-    {
-      "name": "30L Double Tank Slush Machine with Virgin Mix",
-      "slug": "30l-double-tank-slush-machine-virgin",
-      "description": "Superior commercial-grade slush machine featuring dual 15L tanks (30L total capacity) with virgin drink mix included. Features a premium 700W compressor with copper condenser for rapid cooling and energy efficiency. Food-grade PC containers and 3-layer stainless steel construction ensure durability and safety. Independent cooling and mixing controls, plus large discharge faucets for easy serving. Perfect for convenience stores, hotels, dessert shops, cafés, and events.",
-      "category": "Concessions",
-      "price": {
-        "base": 149.95,
         "currency": "USD"
       },
       "rentalDuration": "full-day",
@@ -1493,26 +1390,21 @@
       "weatherRestrictions": ["Indoor use only", "Keep away from water"]
     },
     {
-      "name": "30L Double Tank Slush Machine with Alcoholic Mix",
-      "slug": "30l-double-tank-slush-machine-alcohol",
-      "description": "Superior commercial-grade slush machine featuring dual 15L tanks (30L total capacity) with alcoholic beverage mix included. Features a premium 700W compressor with copper condenser for rapid cooling and energy efficiency. Food-grade PC containers and 3-layer stainless steel construction ensure durability and safety. Independent cooling and mixing controls, plus large discharge faucets for easy serving. Perfect for bars, events, and adult parties.",
+      "name": "45L Triple Tank Slush Machine",
+      "slug": "45l-triple-tank-slush-machine",
+      "description": "Superior commercial-grade slush machine featuring triple 15L tanks (45L total capacity or about 12 gallons). Provides ~150 8oz servings or ~75 16oz servings. Virgin Kool-Aid mixer and premium alcholic mixers available for an additional fee. Features a premium 700W compressor with copper condenser for rapid cooling and energy efficiency. Food-grade PC containers and 3-layer stainless steel construction ensure durability and safety. Independent cooling and mixing controls, plus large discharge faucets for easy serving. Perfect for birthday parties, church events, office celebrations, or any other get together!",
       "category": "Concessions",
       "price": {
-        "base": 174.95,
+        "base": 149.95,
         "currency": "USD"
       },
       "rentalDuration": "full-day",
       "availability": "available",
       "images": [
         {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_auto,h_500,w_500/products/xdrswuqkfhlakfoes266",
-          "alt": "Double Tank Slush Machine Front View",
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1743027748/719aZsDi9GL._AC_SL1500__zlkcmr.jpg",
+          "alt": "Triple Tank Slush Machine Front View",
           "isPrimary": true
-        },
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1736716482/products/kdjic5avxdnhi50hle58.jpg",
-          "alt": "Double Tank Slush Machine Side VIew",
-          "isPrimary": false
         }
       ],
       "specifications": [
@@ -1530,7 +1422,7 @@
         },
         {
           "name": "Tank Size",
-          "value": "15L x 2 tanks"
+          "value": "15L x 3 tanks"
         },
         {
           "name": "Temperature",
@@ -1539,30 +1431,30 @@
       ],
       "dimensions": {
         "length": 16.5,
-        "width": 22.0,
+        "width": 32.0,
         "height": 29.9,
         "unit": "inches"
       },
-      "capacity": 100,
+      "capacity": 150,
       "ageRange": {
-        "min": 21,
+        "min": 18,
         "max": 99
       },
       "setupRequirements": {
-        "space": "24x24 inches flat surface",
+        "space": "36x24 inches flat surface",
         "powerSource": true,
         "surfaceType": ["Counter Top", "Table"]
       },
       "features": [
-        "Dual 15L Tanks",
+        "Triple 15L Tanks",
         "Premium Compressor",
         "Independent Controls",
         "Food-Grade Materials",
         "Large Discharge Faucets",
-        "Alcoholic Mix Included",
+        "Virgin Drink Mix Included",
         "Serving Cups Included"
       ],
-      "safetyGuidelines": "Adult operation only (21+). Keep away from water. Follow provided operating instructions. Valid ID required for rental. Clean thoroughly after use.",
+      "safetyGuidelines": "Adult operation only. Keep away from water. Follow provided operating instructions. Clean thoroughly after use.",
       "weatherRestrictions": ["Indoor use only", "Keep away from water"]
     },
     {
