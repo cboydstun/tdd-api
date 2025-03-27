@@ -491,7 +491,7 @@
       "dimensions": {
         "length": 30,
         "width": 20,
-        "height": 18,
+        "height": 24,
         "unit": "feet"
       },
       "capacity": 4,
@@ -500,7 +500,7 @@
         "max": 14
       },
       "setupRequirements": {
-        "space": "35x25 feet flat surface",
+        "space": "40x20 feet flat surface",
         "powerSource": true,
         "surfaceType": ["Grass"]
       },
@@ -571,6 +571,154 @@
       ]
     },
     {
+      "name": "Pink Bounce Castle",
+      "slug": "pink-bounce-castle",
+      "description": "Charming pink and purple-themed bounce house perfect for princess parties and pink-themed celebrations. Features feminine design elements and spacious bouncing area.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 199.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/zr58ftg7pbp0hjg9vkpy.jpg",
+          "alt": "Pink Bouncer Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 15,
+        "width": 15,
+        "height": 12,
+        "unit": "feet"
+      },
+      "capacity": 8,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "20x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Pink Theme", "Bouncing Area", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 8 children at once. No shoes, sharp objects, or food inside.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "Arch Bouncer",
+      "slug": "arch-bouncer",
+      "description": "Distinctive arched design bounce house offering unique aesthetic appeal and plenty of jumping space. Perfect for special events and parties.",
+      "category": "Bounce Houses",
+      "price": {
+        "base": 199.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/j2is6zp87y3bbwtqkbfq.jpg",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 15,
+        "width": 15,
+        "height": 12,
+        "unit": "feet"
+      },
+      "capacity": 8,
+      "ageRange": {
+        "min": 3,
+        "max": 12
+      },
+      "setupRequirements": {
+        "space": "20x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": ["Arched Design", "Bouncing Area", "Safety Netting"],
+      "safetyGuidelines": "Adult supervision required. Maximum 8 children at once. No shoes, sharp objects, or food inside.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
+      "name": "Large White Combo with Slide",
+      "slug": "large-white-combo-with-slide",
+      "description": "Elegant white-themed combo unit featuring a spacious bounce area and thrilling slide. Perfect for weddings, formal events, and celebrations requiring a sophisticated touch while providing maximum entertainment.",
+      "category": "Combo Units",
+      "price": {
+        "base": 249.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/t_white-bouncer-500-500/products/white-combo/w7ej5favoxhb0b0ggkl9",
+          "alt": "Large White Combo Front View",
+          "isPrimary": true
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_auto,h_500,w_500/products/white-combo/fnojvnbh9iqovxll9pup",
+          "alt": "Large White Combo Side View",
+          "isPrimary": false
+        },
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_auto,h_500,w_500/products/white-combo/tjcif6rvnq1fq7sg31cs",
+          "alt": "Large White Combo Aerial View",
+          "isPrimary": false
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "DRY"
+        }
+      ],
+      "dimensions": {
+        "length": 16,
+        "width": 14,
+        "height": 10.5,
+        "unit": "feet"
+      },
+      "capacity": 5,
+      "ageRange": {
+        "min": 3,
+        "max": 8
+      },
+      "setupRequirements": {
+        "space": "30x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass", "Concrete", "Asphalt"]
+      },
+      "features": [
+        "Slide",
+        "Ball Pit",
+        "Large Bouncing Area",
+        "Safety Netting",
+        "White Theme"
+      ],
+      "safetyGuidelines": "Adult supervision required. Maximum 10 children at once. No shoes, sharp objects, or food inside. One at a time on slide.",
+      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
+    },
+    {
       "name": "White Bouncer",
       "slug": "white-bouncer",
       "description": "Classic white bounce house suitable for any event theme. Clean design and reliable construction make it perfect for various celebrations.",
@@ -615,52 +763,8 @@
       "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
     },
     {
-      "name": "Arch Bounce",
-      "slug": "arch-bounce",
-      "description": "Distinctive arched design bounce house offering unique aesthetic appeal and plenty of jumping space. Perfect for special events and parties.",
-      "category": "Bounce Houses",
-      "price": {
-        "base": 199.95,
-        "currency": "USD"
-      },
-      "rentalDuration": "full-day",
-      "availability": "available",
-      "images": [
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553625/products/j2is6zp87y3bbwtqkbfq.jpg",
-          "alt": "Castle with Slide Front View",
-          "isPrimary": true
-        }
-      ],
-      "specifications": [
-        {
-          "name": "Type",
-          "value": "DRY"
-        }
-      ],
-      "dimensions": {
-        "length": 15,
-        "width": 15,
-        "height": 12,
-        "unit": "feet"
-      },
-      "capacity": 8,
-      "ageRange": {
-        "min": 3,
-        "max": 12
-      },
-      "setupRequirements": {
-        "space": "20x20 feet flat surface",
-        "powerSource": true,
-        "surfaceType": ["Grass", "Concrete", "Asphalt"]
-      },
-      "features": ["Arched Design", "Bouncing Area", "Safety Netting"],
-      "safetyGuidelines": "Adult supervision required. Maximum 8 children at once. No shoes, sharp objects, or food inside.",
-      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
-    },
-    {
-      "name": "Balloon Bounce",
-      "slug": "balloon-bounce",
+      "name": "Balloon Bouncer",
+      "slug": "balloon-bouncer",
       "description": "Festive balloon-themed bounce house perfect for birthday parties and celebrations. Colorful design and reliable construction ensure hours of fun.",
       "category": "Bounce Houses",
       "price": {
@@ -854,6 +958,246 @@
       ]
     },
     {
+      "name": "Sunburst Tropical Water Slide",
+      "slug": "sunburst-tropical-waterslide",
+      "description": "Awesome sunurst tropical waterslide for your hot summer day! Includes a climbing ladder, slide, and splash pool.",
+      "category": "Water Slides",
+      "price": {
+        "base": 349.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/t_Square%20Aspect/1000008019_s5gyov",
+          "alt": "Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "WET"
+        }
+      ],
+      "dimensions": {
+        "length": 30,
+        "width": 20,
+        "height": 15,
+        "unit": "feet"
+      },
+      "capacity": 4,
+      "ageRange": {
+        "min": 5,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "40x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": ["Water Slide", "Splash Pool", "Safety Rails"],
+      "safetyGuidelines": "Adult supervision required. One slider at a time. No running on wet surfaces. No horseplay on stairs.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F"
+      ]
+    },
+    {
+      "name": "Tropical Water Slide",
+      "slug": "tropical-waterslide",
+      "description": "Our funnest tropical waterslide to make the sunny day great! Unit includes a climbing ladder, slide, and splash pool.",
+      "category": "Water Slides",
+      "price": {
+        "base": 349.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/t_Square%20Aspect/1000008017_asog9w",
+          "alt": "Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "WET"
+        }
+      ],
+      "dimensions": {
+        "length": 30,
+        "width": 20,
+        "height": 15,
+        "unit": "feet"
+      },
+      "capacity": 4,
+      "ageRange": {
+        "min": 5,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "40x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": ["Water Slide", "Splash Pool", "Safety Rails"],
+      "safetyGuidelines": "Adult supervision required. One slider at a time. No running on wet surfaces. No horseplay on stairs.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F"
+      ]
+    },
+    {
+      "name": "Tropical Bounce House and Waterslide Combo",
+      "slug": "tropical-bounce-house-and-waterslide-combo",
+      "description": "This tropical bounce house and waterslide combo is perfect for your summer party! Includes a bouncing area, climbing ladder, slide, and splash pool.",
+      "category": "Water Slides",
+      "price": {
+        "base": 349.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/t_Square%20Aspect/1000008021_pdo1qk",
+          "alt": "Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "WET"
+        }
+      ],
+      "dimensions": {
+        "length": 30,
+        "width": 20,
+        "height": 15,
+        "unit": "feet"
+      },
+      "capacity": 4,
+      "ageRange": {
+        "min": 5,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "40x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": ["Water Slide", "Splash Pool", "Safety Rails"],
+      "safetyGuidelines": "Adult supervision required. One slider at a time. No running on wet surfaces. No horseplay on stairs.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F"
+      ]
+    },
+    {
+      "name": "Blue Double Lane Waterslide",
+      "slug": "blue-double-lane-waterslide",
+      "description": "Our double lane waterslide is perfect for your summer party! Includes two sliding lanes, climbing ladder, and splash pool.",
+      "category": "Water Slides",
+      "price": {
+        "base": 399.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/t_Square%20Aspect/1000008018_ksppyh",
+          "alt": "Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "WET"
+        }
+      ],
+      "dimensions": {
+        "length": 30,
+        "width": 25,
+        "height": 15,
+        "unit": "feet"
+      },
+      "capacity": 4,
+      "ageRange": {
+        "min": 5,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "40x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": ["Water Slide", "Splash Pool", "Safety Rails"],
+      "safetyGuidelines": "Adult supervision required. One slider at a time. No running on wet surfaces. No horseplay on stairs.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F"
+      ]
+    },
+    {
+      "name": "Pink Waterslide",
+      "slug": "pink-waterslide",
+      "description": "This pink waterslide is perfect for your summer party! Includes a sliding lane, climbing ladder, and splash pool.",
+      "category": "Water Slides",
+      "price": {
+        "base": 349.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_scale,h_512,w_512/1000008020_q99pli",
+          "alt": "Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": "WET"
+        }
+      ],
+      "dimensions": {
+        "length": 30,
+        "width": 25,
+        "height": 15,
+        "unit": "feet"
+      },
+      "capacity": 4,
+      "ageRange": {
+        "min": 5,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "40x20 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Grass"]
+      },
+      "features": ["Water Slide", "Splash Pool", "Safety Rails"],
+      "safetyGuidelines": "Adult supervision required. One slider at a time. No running on wet surfaces. No horseplay on stairs.",
+      "weatherRestrictions": [
+        "No use in rain",
+        "Wind speeds under 15mph",
+        "Temperature above 75°F"
+      ]
+    },
+    {
       "name": "Blue Water Slide",
       "slug": "blue-waterslide",
       "description": "Refreshing blue water slide perfect for summer fun. Features smooth sliding surface and safe landing area.",
@@ -889,7 +1233,7 @@
         "max": 14
       },
       "setupRequirements": {
-        "space": "25x15 feet flat surface",
+        "space": "30x20 feet flat surface",
         "powerSource": true,
         "surfaceType": ["Grass"]
       },
@@ -1121,6 +1465,62 @@
       "weatherRestrictions": ["Indoor use only", "Keep away from moisture"]
     },
     {
+      "name": "Snow Cone Machine",
+      "slug": "snow-cone-machine",
+      "description": "Refreshing snow cone machine perfect for summer events. Produces approximately 50 servings of fluffy shaved ice for sweet treats.",
+      "category": "Concessions",
+      "price": {
+        "base": 49.95,
+        "currency": "USD"
+      },
+      "rentalDuration": "full-day",
+      "availability": "available",
+      "images": [
+        {
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/hunacmolrw05vcbwiddx.png",
+          "alt": "Castle with Slide Front View",
+          "isPrimary": true
+        }
+      ],
+      "specifications": [
+        {
+          "name": "Type",
+          "value": ["EXTRA"]
+        },
+        {
+          "name": "Capacity",
+          "value": "~50 servings"
+        }
+      ],
+      "dimensions": {
+        "length": 2,
+        "width": 2,
+        "height": 2.5,
+        "unit": "feet"
+      },
+      "capacity": 50,
+      "ageRange": {
+        "min": 18,
+        "max": 99
+      },
+      "setupRequirements": {
+        "space": "4x4 feet flat surface",
+        "powerSource": true,
+        "surfaceType": ["Concrete", "Wood"]
+      },
+      "features": [
+        "Ice Shaver",
+        "Syrup Dispensers",
+        "Serving Cups",
+        "Ice Scoop"
+      ],
+      "safetyGuidelines": "Adult operation only. Keep hands away from ice shaver. Follow provided operating instructions.",
+      "weatherRestrictions": [
+        "Indoor use recommended",
+        "Protect from direct sunlight"
+      ]
+    },
+    {
       "name": "Popcorn Machine",
       "slug": "popcorn-machine",
       "description": "Professional popcorn machine capable of serving over 100 guests. Perfect for adding a classic concession stand touch to any event.",
@@ -1257,66 +1657,6 @@
       "weatherRestrictions": ["Indoor use only", "Keep away from water"]
     },
     {
-      "name": "Large White Combo with Slide",
-      "slug": "large-white-combo-with-slide",
-      "description": "Elegant white-themed combo unit featuring a spacious bounce area and thrilling slide. Perfect for weddings, formal events, and celebrations requiring a sophisticated touch while providing maximum entertainment.",
-      "category": "Combo Units",
-      "price": {
-        "base": 249.95,
-        "currency": "USD"
-      },
-      "rentalDuration": "full-day",
-      "availability": "available",
-      "images": [
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/t_white-bouncer-500-500/products/white-combo/w7ej5favoxhb0b0ggkl9",
-          "alt": "Large White Combo Front View",
-          "isPrimary": true
-        },
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_auto,h_500,w_500/products/white-combo/fnojvnbh9iqovxll9pup",
-          "alt": "Large White Combo Side View",
-          "isPrimary": false
-        },
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_auto,h_500,w_500/products/white-combo/tjcif6rvnq1fq7sg31cs",
-          "alt": "Large White Combo Aerial View",
-          "isPrimary": false
-        }
-      ],
-      "specifications": [
-        {
-          "name": "Type",
-          "value": "DRY"
-        }
-      ],
-      "dimensions": {
-        "length": 16,
-        "width": 14,
-        "height": 10.5,
-        "unit": "feet"
-      },
-      "capacity": 5,
-      "ageRange": {
-        "min": 3,
-        "max": 8
-      },
-      "setupRequirements": {
-        "space": "30x20 feet flat surface",
-        "powerSource": true,
-        "surfaceType": ["Grass", "Concrete", "Asphalt"]
-      },
-      "features": [
-        "Slide",
-        "Ball Pit",
-        "Large Bouncing Area",
-        "Safety Netting",
-        "White Theme"
-      ],
-      "safetyGuidelines": "Adult supervision required. Maximum 10 children at once. No shoes, sharp objects, or food inside. One at a time on slide.",
-      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
-    },
-    {
       "name": "30L Double Tank Slush Machine",
       "slug": "30l-double-tank-slush-machine-virgin",
       "description": "Superior commercial-grade slush machine featuring dual 15L tanks (30L total capacity). Provides ~100 8oz servings or ~50 16oz servings. Virgin Kool-Aid mixer and premium alcholic mixers available for an additional fee. Features a premium 700W compressor with copper condenser for rapid cooling and energy efficiency. Food-grade PC containers and 3-layer stainless steel construction ensure durability and safety. Independent cooling and mixing controls, plus large discharge faucets for easy serving. Perfect for birthday parties, church events, office celebrations, or any other get together!",
@@ -1402,7 +1742,7 @@
       "availability": "available",
       "images": [
         {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1743027748/719aZsDi9GL._AC_SL1500__zlkcmr.jpg",
+          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/c_scale,h_512,w_512/719aZsDi9GL._AC_SL1500__zlkcmr",
           "alt": "Triple Tank Slush Machine Front View",
           "isPrimary": true
         }
@@ -1456,106 +1796,6 @@
       ],
       "safetyGuidelines": "Adult operation only. Keep away from water. Follow provided operating instructions. Clean thoroughly after use.",
       "weatherRestrictions": ["Indoor use only", "Keep away from water"]
-    },
-    {
-      "name": "Snow Cone Machine",
-      "slug": "snow-cone-machine",
-      "description": "Refreshing snow cone machine perfect for summer events. Produces approximately 50 servings of fluffy shaved ice for sweet treats.",
-      "category": "Concessions",
-      "price": {
-        "base": 49.95,
-        "currency": "USD"
-      },
-      "rentalDuration": "full-day",
-      "availability": "available",
-      "images": [
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/hunacmolrw05vcbwiddx.png",
-          "alt": "Castle with Slide Front View",
-          "isPrimary": true
-        }
-      ],
-      "specifications": [
-        {
-          "name": "Type",
-          "value": ["EXTRA"]
-        },
-        {
-          "name": "Capacity",
-          "value": "~50 servings"
-        }
-      ],
-      "dimensions": {
-        "length": 2,
-        "width": 2,
-        "height": 2.5,
-        "unit": "feet"
-      },
-      "capacity": 50,
-      "ageRange": {
-        "min": 18,
-        "max": 99
-      },
-      "setupRequirements": {
-        "space": "4x4 feet flat surface",
-        "powerSource": true,
-        "surfaceType": ["Concrete", "Wood"]
-      },
-      "features": [
-        "Ice Shaver",
-        "Syrup Dispensers",
-        "Serving Cups",
-        "Ice Scoop"
-      ],
-      "safetyGuidelines": "Adult operation only. Keep hands away from ice shaver. Follow provided operating instructions.",
-      "weatherRestrictions": [
-        "Indoor use recommended",
-        "Protect from direct sunlight"
-      ]
-    },
-    {
-      "name": "Inflatable Pink Bounce Castle",
-      "slug": "inflatable-pink-bounce-castle",
-      "description": "Charming pink-themed bounce house perfect for princess parties and pink-themed celebrations. Features feminine design elements and spacious bouncing area.",
-      "category": "Bounce Houses",
-      "price": {
-        "base": 199.95,
-        "currency": "USD"
-      },
-      "rentalDuration": "full-day",
-      "availability": "available",
-      "images": [
-        {
-          "url": "https://res.cloudinary.com/do1lvdlpm/image/upload/v1733553624/products/zr58ftg7pbp0hjg9vkpy.jpg",
-          "alt": "Pink Bouncer Front View",
-          "isPrimary": true
-        }
-      ],
-      "specifications": [
-        {
-          "name": "Type",
-          "value": "DRY"
-        }
-      ],
-      "dimensions": {
-        "length": 15,
-        "width": 15,
-        "height": 12,
-        "unit": "feet"
-      },
-      "capacity": 8,
-      "ageRange": {
-        "min": 3,
-        "max": 12
-      },
-      "setupRequirements": {
-        "space": "20x20 feet flat surface",
-        "powerSource": true,
-        "surfaceType": ["Grass", "Concrete", "Asphalt"]
-      },
-      "features": ["Pink Theme", "Bouncing Area", "Safety Netting"],
-      "safetyGuidelines": "Adult supervision required. Maximum 8 children at once. No shoes, sharp objects, or food inside.",
-      "weatherRestrictions": ["No use in rain", "Wind speeds under 15mph"]
     }
   ]
 }
